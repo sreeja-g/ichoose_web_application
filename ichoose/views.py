@@ -30,7 +30,7 @@ def product_grid(request):
         'product': products,
         'product_wish':product_wish,'count_cart':count_cart,
         'cart_price':cart_price,
-    }
+    } 
     return render(request, 'shop.html',context)
 
 
