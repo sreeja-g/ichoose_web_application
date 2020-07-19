@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load staticfiles %}
+    <!-- Basic -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">   
+   
+    <!-- Mobile Metas -->
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+ 
+     <!-- Site Metas -->
+    
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Site Icons -->
+    <link rel="shortcut icon" href="{% static 'images/favicon.ico'%}" type="image/x-icon" />
+    <link rel="apple-touch-icon" href="{% static 'images/apple-touch-icon.png'%}">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <!-- Site CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <!-- ALL VERSION CSS -->
+    <link rel="stylesheet" href="{% static 'css/versions.css'%}">
+    <!-- Responsive CSS -->
+    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+<style>
+    
+            .modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(248, 238, 238); /* Fallback color */
+  background-color: rgba(247, 245, 245, 0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 50%;
+  position: relative;
+  left:90px;
+  right:100px;
+  height:40%
+}
+
+/* The Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+</style>
+</head>
+<body class="seo_version">
+
+    
+
+    <!-- Start header -->
+   
+    
+	<header class="top-navbar">
+		<nav class="navbar navbar-expand-lg navbar-light bg-light">
+			<div class="container">
+				<a class="navbar-brand" href="">
+					<img src="{% static 'images/logo-seo.png' %}" alt="" />
+				</a>
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbars-seo" aria-controls="navbars-rs-food" aria-expanded="false" aria-label="Toggle navigation">
+				  <span class="navbar-toggler-icon"></span>
+                </button>
+                <div >
+            <button  style="
+                    display: inline-block;
+                    background-color: #4b758d;
+                    border-radius: 10px;
+                    border: 1px double #cccccc;
+                    color: #eeeeee;
+                    text-align: center;
+                    font-size: 15px;
+                    padding: 5px;
+                    width: 80px;
+                    -webkit-transition: all 0.5s;
+                    -moz-transition: all 0.5s;
+                    -o-transition: all 0.5s;
+                    transition: all 0.5s;
+                    cursor: pointer;
+                    margin: 5px;
+                    
+                  "  id="myBtn" >SHOW WALLET</button>
+            </div>
+                    
+                    <div id="myModal" class="modal">
+
+                
+                    <div class="modal-content">
+                        <span class="close">&times;</span>
+                        <center>
+                        <h2 style="color: #4b81a5;"><b>Hello {{user}} you have {{price}} rupees in your wallet</b></h2>
+                    </center>
+                    </div>
+
+                    </div>
+			
+					<ul class="navbar-nav ml-auto">
+						<li class="nav-item"><a class="nav-link" href="{%url 'loan_interface:home'%}">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{%url 'loan_interface:wallet'%}">add money</a></li>
+                        <li class="nav-item"><a class="nav-link" href="">Add Cards</a></li>
+                        <li class="nav-item"><a class="nav-link" href="">view card</a></li>
+                       
+                        <li class="nav-item"><a class="nav-link" href="">Edit Profile</a></li>
+						
+					</ul>
+				</div>
+			</div>
+		</nav>
+	</header>
+	<!-- End header -->
+    
+    <div class="all-page-title" style="background-image:url(static/css/images/logo_01.png);">
+		<!--Page -->
+        <div class="page-info">
+            <div class="container">
+            	<div class="inner-container">
+                    
+                </div>
+            </div>
+        </div>
+        <!--End Page-->
+        <div class="container text-center">
+           
+			<h1>Add Cards, help others, gain benifits</h1>
+        </div>
+    </div><!-- end section -->
+   
+    <div id="pricing" class="section wb">
+        <div class="container">
+            <div class="section-title text-center">
+                <h3>ABOUT US</h3>
+                <p class="lead">Get the red carpet treatment just $39 per month! It is estimated that 3.5 million established by personal blogs.<br> From each other, we share paid WordPress themes WP Service...</p>
+            </div><!-- end title -->
+</div>
+            
+    
+
+    <div class="all-page-title" style="background-color:rgb(21, 121, 146);width:100%;right:100px;left:0px;position:relative;">
+		<!--Page -->
+        <div class="page-info">
+            <div class="container">
+            	<div class="inner-container">
+                    
+                </div>
+            </div>
+        </div>
+        <!--End Page-->
+        <div class="container text-center">
+           
+			<h1>Add Cards, help others, gain benifits</h1>
+        </div>
+    </div
+    <footer class="pt-5 pb-4" id="contact" style="background-color:  #d5dcdf;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-6 col-sm-6 mt-2 mb-4">
+                    <h5 class="mb-4 font-weight-bold">ABOUT US</h5>
+                    <p class="mb-4">Etiam laoreet in ex quis efficitur.</p>
+                    <ul class="f-address">
+                        <li>
+                            <div class="row">
+                                <div class="col-1"><i class="fas fa-map-marker"></i></div>
+                                <div class="col-10">
+                                    <h6 class="font-weight-bold mb-0">Address:</h6>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="row">
+                                <div class="col-1"><i class="far fa-envelope"></i></div>
+                                <div class="col-10">
+                                    <h6 class="font-weight-bold mb-0">Have any questions?</h6>
+                                    <p><a href="#">Support@userthemes.com</a></p>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="row">
+                                <div class="col-1"><i class="fas fa-phone-volume"></i></div>
+                                <div class="col-10">
+                                    <h6 class="font-weight-bold mb-0">Address:</h6>
+                                    <p><a href="#">+XX (0) XX XX-XXXX-XXXX</a></p>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6 mt-2 mb-4">
+                    <h5 class="mb-4 font-weight-bold">FRESH TWEETS</h5>
+                    <ul class="f-address">
+                        <li>
+                            <div class="row">
+                                <div class="col-1"><i class="fab fa-twitter"></i></div>
+                                <div class="col-10">
+                                    <p class="mb-0"><a href="#">@userthemesrel </a> HTML Version Out Now</p>
+                                    <label>10 Mins Ago</label>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="row">
+                                <div class="col-1"><i class="fab fa-twitter"></i></div>
+                                <div class="col-10">
+                                    <p class="mb-0"><a href="#">@userthemesrel </a> HTML Version Out Now</p>
+                                    <label>10 Mins Ago</label>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="row">
+                                <div class="col-1"><i class="fab fa-twitter"></i></div>
+                                <div class="col-10">
+                                    <p class="mb-0"><a href="#">@userthemesrel </a> HTML Version Out Now</p>
+                                    <label>10 Mins Ago</label>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6 mt-2 mb-4">
+                    <h5 class="mb-4 font-weight-bold">LATEST UPDATES</h5>
+                    <ul class="recent-post">
+                        <li>
+                            <label class="mr-3">28 <br><span>APR</span></label>
+                            <span>Rendomised words which dont look eveable.</span>
+                        </li>
+                        <li>
+                            <label class="mr-3">29 <br><span>APR</span></label>
+                            <span>Rendomised words which dont look eveable.</span>
+                        </li>
+                        <li>
+                            <label class="mr-3">30 <br><span>APR</span></label>
+                            <span>Rendomised words which dont look eveable.</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6 mt-2 mb-4">
+                    <h5 class="mb-4 font-weight-bold">CONNECT WITH US</h5>
+                    <div class="input-group">
+                          <input type="text" class="form-control" placeholder="Your Email Address">
+                          <span class="input-group-addon" id="basic-addon2"><i class="fas fa-check"></i></span>
+                    </div>
+                    <ul class="social-pet mt-4">
+                        <li><a href="#" title="facebook"><i class="fab fa-facebook-f"></i></a></li>
+                        <li><a href="#" title="twitter"><i class="fab fa-twitter"></i></a></li>
+                        <li><a href="#" title="google-plus"><i class="fab fa-google-plus-g"></i></a></li>
+                        <li><a href="#" title="instagram"><i class="fab fa-instagram"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Copyright -->
+    <section class="copyright">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 ">
+                    <div class="text-center text-white">
+                        &copy; 2018 Your Company. All Rights Reserved.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+	
+    
+    <a href="#" id="scroll-to-top" class="dmtop global-radius"><i class="fa fa-angle-up"></i></a>
+
+    <!-- ALL JS FILES -->
+    <script src="js/all.js"></script>
+    <!-- ALL PLUGINS -->
+    <script src="js/custom.js"></script>
+	<script src="js/tippy.all.min.js"></script>
+	<script>
+		tippy('.btn-a')
+    </script>
+    <script>
+    var modal = document.getElementById("myModal");
+
+    // Get the button that opens the modal
+    var btn = document.getElementById("myBtn");
+    
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+    
+    // When the user clicks the button, open the modal 
+    btn.onclick = function() {
+      modal.style.display = "block";
+    }
+    
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+      modal.style.display = "none";
+    }
+    
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+</script>
+
+</body>
+</html>

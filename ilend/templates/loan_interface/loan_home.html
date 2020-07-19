@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+	{% load staticfiles %}
+    <!-- Basic -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">   
+   
+    <!-- Mobile Metas -->
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+ 
+     <!-- Site Metas -->
+    <title>Ichoose</title>  
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Site Icons -->
+    <link rel="shortcut icon" href="{% static 'ilend/images/favicon.ico' %}" type="image/x-icon" />
+    <link rel="apple-touch-icon" href="{% static 'ilend/images/apple-touch-icon.png' %}">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'ilend/css/bootstrap.min.css' %}">
+    <!-- Site CSS -->
+    <link rel="stylesheet" href="{% static 'ilend/style.css' %}">
+    <!-- ALL VERSION CSS -->
+    <link rel="stylesheet" href="{% static 'ilend/css/versions.css' %}">
+    <!-- Responsive CSS -->
+    <link rel="stylesheet" href="{% static 'ilend/css/responsive.css' %}">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'ilend/css/custom.css' %}">
+	
+	<script src="{% static 'ilend/js/modernizr.custom.79639.js' %}"></script>
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+	
+    
+</head>
+<body class="seo_version">
+
+	
+	<!-- END LOADER -->
+	
+	<!-- Start header -->
+	<header class="top-navbar">
+		<nav class="navbar navbar-expand-lg navbar-light bg-light">
+			<div class="container">
+				
+{#					<img src="{% static 'ilend/images/logo-seo.png' %}" alt="" />#}
+
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbars-seo" aria-controls="navbars-rs-food" aria-expanded="false" aria-label="Toggle navigation">
+				  <span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="collapse navbar-collapse" id="navbars-seo">
+					
+					<ul class="navbar-nav ml-auto">
+						<li class="nav-item active"><a class="nav-link" href="{%url 'loan_interface:home'%}">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{%url 'loan_interface:wallet'%}">add money</a></li>
+                        <li class="nav-item"><a class="nav-link"  href="{%url 'loan_interface:displaycard'%}" >Add Cards</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{%url 'loan_interface:viewcard'%}">view card</a></li>
+                       
+                        <li class="nav-item"><a class="nav-link" href="">Edit Profile</a></li>
+						
+					</ul>
+				</div>
+			</div>
+		</nav>
+	</header>
+	<!-- End header -->
+    
+    <div id="slider" class="sl-slider-wrapper">
+
+		<div class="sl-slider">
+		
+			<div class="sl-slide" data-orientation="horizontal" data-slice1-rotation="-25" data-slice2-rotation="-25" data-slice1-scale="2" data-slice2-scale="2">
+				<div class="sl-slide-inner">
+					<div class="bg-img bg-img-1"></div>
+					<h2>Best lenders platform</h2>
+					<blockquote>
+					<a href="#" class="bttn-new">create your cards Today</a>
+					
+					</blockquote>
+					<blockquote>
+					<div class="text-center" style="position:absolute; right:10px; height:1px;width:400px">
+						<div class="service-widget">
+							
+							<h3 style="color: darkorange;">  offline wallet</h3>
+							<p style="color:rgb(39, 36, 36)"><b> Hello {{user}} you have {{price}} rupees in your wallet</b> </p>
+						</div><!-- end service -->
+
+					</div><!-- end col -->
+				</blockquote>
+				</div>
+			</div>
+			
+			
+		</div><!-- /sl-slider -->
+
+		
+	</div><!-- /slider-wrapper -->
+
+    		
+    <div id="services" class="section lb">
+        <div class="container-fluid">
+			<div class="container">
+				<div class="section-title text-center">
+					<h3 style="color:darkorange;">IChoose Services</h3>
+					<p class="lead" style="color:black ;"><b>We offer unlimited solutions to all your business needs. 
+						The Main Services which we offer pooling service for the people who want to start business and customers can order their own customized product.</b></p>
+				</div><!-- end title -->
+			</div>
+            <div class="row text-center">
+				<div class="owl-services-seo owl-carousel owl-theme">
+					<div class="text-center">
+						<div class="service-widget">
+							<div class="post-media wow fadeIn">
+								<img src="{% static 'ilend/images/im1.jpg' %}" alt="" class="img-fluid img-rounded">
+							</div>
+							<h3 style="color: darkorange;">Pooling service</h3>
+							<p><b>We will offer a loan to a person by reducing the amount from everlender so that profit/loss will be shared equally among themselves.</b></p>
+						</div><!-- end service -->
+					</div><!-- end col -->
+
+					<div class="text-center">
+						<div class="service-widget">
+							<div class="post-media wow fadeIn">
+								<img src="{% static 'ilend/images/im2.jpg' %}" alt="" class="img-fluid img-rounded">
+							</div>
+							<h3 style="color: darkorange;">  offline wallet</h3>
+							<p><b> we will offer a offline wallet service so that customers can store amount safely within the Website</b> </p>
+						</div><!-- end service -->
+					</div><!-- end col -->
+
+					<div class="text-center">
+						<div class="service-widget">
+							<div class="post-media wow fadeIn">
+								<img src="{% static 'ilend/images/im3.jpg' %}" alt="" class="img-fluid img-rounded">
+							</div>
+							<h3 style="color: darkorange;">own customization service</h3>
+							<p><b> customers can order their own customization products</b></p>
+						</div><!-- end service -->
+					</div><!-- end col -->
+					
+					
+
+						</div><!-- end col -->
+            </div><!-- end row -->
+        </div><!-- end container -->
+    </div><!-- end section -->
+
+  
+               
+
+    
+    
+
+    <div id="support" class="section db" style='background-color:darkorange;'>
+        <div class="container">
+            <div class="row">
+                <div id="logo-carousel" class="owl-carousel">
+					<div> <img src="{% static 'ilend/images/logo_01.png' %}" alt=""> </div>
+					<div> <img src="{% static 'ilend/images/logo_02.png' %}" alt=""> </div>
+					<div> <img src="{% static 'ilend/images/logo_03.png' %}" alt=""> </div>
+					<div> <img src="{% static 'ilend/images/logo_04.png' %}" alt=""> </div>
+					<div> <img src="{% static 'ilend/images/logo_05.png' %}" alt=""> </div>
+					<div> <img src="{% static 'ilend/images/logo_06.png' %}" alt=""> </div>
+					<div> <img src="{% static 'ilend/images/logo_01.png' %}" alt=""> </div>
+					<div> <img src="{% static 'ilend/images/logo_02.png' %}" alt=""> </div>
+				</div>
+            </div><!-- end row -->
+        </div><!-- end container -->
+    </div><!-- end section -->
+	
+	<footer class="footer" style="background-color:black">
+        <div class="container" >
+            <div class="row">
+                <div class="col-lg-4 col-md-6 col-xs-12">
+                    <div class="widget clearfix">
+                        <div class="widget-title">
+                            <img src="{% static 'ilend/images/logo-light.png' %}" alt="">
+                        </div>
+                        <h3 style="color: aliceblue;"><b> I choose is an E-Commerce Website which provides platform to buyers ,sellers,lenders.Sellers can start their business with zero inverstment with the help of lenders</b></h3>
+                        
+                    </div><!-- end clearfix -->
+                </div><!-- end col -->
+				
+				<div class="col-lg-2 col-md-6 col-xs-12">
+                    <div class="widget clearfix">
+                        <div class="widget-title">
+                            <h3 style="color:white">Information</h3>
+                        </div >
+                        <ul class="footer-links" >
+                            <li><a href="#" style="color:darkorange">Home</a></li>
+                            <li><a href="#" style="color:darkorange">about</a></li>
+                            <li><a href="#" style="color:darkorange">services</a></li>
+							<li><a href="#" style="color:darkorange">contact</a></li>
+							<li><a href="#" style="color:darkorange">Faq</a></li>
+							
+                        </ul><!-- end links -->
+                    </div><!-- end clearfix -->
+                </div><!-- end col -->
+
+                <div class="col-lg-3 col-md-6 col-xs-12">
+                    <div class="widget clearfix">
+						<div class="widget-title">
+							<h3 style="color:white"> Services</h3>
+						</div>
+						<p style="color:darkorange">Main services offered are offline wallet service, pooling service,customization service</p>
+						<div class="news-box">
+							
+						</div>
+						
+                        <div class="widget-title">
+                            <h3 style="color:white">Social</h3>
+                        </div>
+                        <ul class="footer-links social-md">
+                            <li><a class="fb btn-a" title="Facebook" data-tippy-animation="scale" href="#"><i class="fa fa-facebook"></i></a></li>
+                            <li><a class="gi btn-a" title="Github" data-tippy-animation="scale" href="#"><i class="fa fa-github"></i> </a></li>
+                            <li><a class="tw btn-a" title="Twitter" data-tippy-animation="scale" href="#"><i class="fa fa-twitter"></i> </a></li>
+                            <li><a class="dr btn-a" title="Dribbble" data-tippy-animation="scale" href="#"><i class="fa fa-dribbble"></i> </a></li>
+                            <li><a class="pi btn-a" title="Pinterest" data-tippy-animation="scale" href="#"><i class="fa fa-pinterest"></i> </a></li>
+                        </ul><!-- end links -->
+                    </div><!-- end clearfix -->
+                </div><!-- end col -->
+				
+				<div class="col-lg-3 col-md-6 col-xs-12">
+                    <div class="widget clearfix">
+                        <div class="widget-title">
+                            <h3 style="color:white">Contact Details</h3>
+                        </div>
+
+                        <ul class="footer-links">
+                            <li ><a href="mailto:#" style="color:darkorange">info@yoursite.com</a></li>
+                            <li><a href="#" style="color:darkorange">www.yoursite.com</a></li>
+                            <li style="color:darkorange"> PO Box 16122 Collins Street West Victoria 8007 Australia</li>
+                            <li style="color:darkorange">+61 3 8376 6284</li>
+                        </ul><!-- end links -->
+                    </div><!-- end clearfix -->
+                </div><!-- end col -->
+				
+            </div><!-- end row -->
+        </div><!-- end container -->
+    </footer><!-- end footer -->
+	
+    <a href="#" id="scroll-to-top" class="dmtop global-radius" style="background-color: darkorange;"><i class="fa fa-angle-up"></i></a>
+
+    <!-- ALL JS FILES -->
+    <script src="{% static 'ilend/js/all.js' %}"></script>
+    <!-- ALL PLUGINS -->
+	<script src="{% static 'ilend/js/tippy.all.min.js' %}"></script>
+    <script src="{% static 'ilend/js/custom.js' %}"></script>
+	
+	<script src="{% static 'ilend/js/jquery.ba-cond.min.js' %}"></script>
+	<script src="{% static 'ilend/js/jquery.slitslider.js' %}"></script>
+	<script type="text/javascript">	
+			$(function() {
+			
+				var Page = (function() {
+
+					var $nav = $( '#nav-dots > span' ),
+						slitslider = $( '#slider' ).slitslider( {
+							onBeforeChange : function( slide, pos ) {
+
+								$nav.removeClass( 'nav-dot-current' );
+								$nav.eq( pos ).addClass( 'nav-dot-current' );
+
+							}
+						} ),
+
+						init = function() {
+
+							initEvents();
+							
+						},
+						initEvents = function() {
+
+							$nav.each( function( i ) {
+							
+								$( this ).on( 'click', function( event ) {
+									
+									var $dot = $( this );
+									
+									if( !slitslider.isActive() ) {
+
+										$nav.removeClass( 'nav-dot-current' );
+										$dot.addClass( 'nav-dot-current' );
+									
+									}
+									
+									slitslider.jump( i + 1 );
+									return false;
+								
+								} );
+								
+							} );
+
+						};
+
+						return { init : init };
+
+				})();
+
+				Page.init();
+			
+			});
+		</script>
+		
+		<script>
+			tippy('.btn-a')
+		</script>
+
+
+</body>
+</html>

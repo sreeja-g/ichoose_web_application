@@ -1,0 +1,82 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="au theme template">
+    <meta name="author" content="Hau Nguyen">
+    <meta name="keywords" content="au theme template">
+
+    <!-- Title Page-->
+    <title>Email Sent</title>
+
+    <!-- Fontfaces CSS-->
+    <link href="{% static 'isell/css/font-face.css' %}" rel="stylesheet" media="all">
+    <link href="{% static 'isell/vendor/font-awesome-4.7/css/font-awesome.min.css' %}" rel="stylesheet" media="all">
+    <link href="{% static 'isell/vendor/font-awesome-5/css/fontawesome-all.min.css' %}" rel="stylesheet" media="all">
+    <link href="{% static 'isell/vendor/mdi-font/css/material-design-iconic-font.min.css' %}" rel="stylesheet" media="all">
+
+    <!-- Bootstrap CSS-->
+    <link href="{% static 'isell/vendor/bootstrap-4.1/bootstrap.min.css' %}" rel="stylesheet" media="all">
+
+    <!-- Vendor CSS-->
+    <link href="{% static 'isell/vendor/animsition/animsition.min.css' %}" rel="stylesheet" media="all">
+    <link href="{% static 'isell/vendor/bootstrap-progressbar/bootstrap-progressbar-3.3.4.min.css' %}" rel="stylesheet" media="all">
+    <link href="{% static 'isell/vendor/wow/animate.css' %}" rel="stylesheet" media="all">
+    <link href="{% static 'isell/vendor/css-hamburgers/hamburgers.min.css' %}" rel="stylesheet" media="all">
+    <link href="{% static 'isell/vendor/slick/slick.css' %}" rel="stylesheet" media="all">
+    <link href="{% static 'isell/vendor/select2/select2.min.css' %}" rel="stylesheet" media="all">
+    <link href="{% static 'isell/vendor/perfect-scrollbar/perfect-scrollbar.css' %}" rel="stylesheet" media="all">
+
+    <!-- Main CSS-->
+    <link href="{% static 'isell/css/theme.css' %}" rel="stylesheet" media="all">
+
+</head>
+
+<body class="animsition">
+    <div class="page-wrapper">
+        <div class="page-content--bge5" style="padding-top: 100px">
+            <div class="container"  >
+                    <div class="login-content" style=" width: 100%;font-size: large">
+
+
+                        You have been sent an email for verification. Please click on the link sent to proceed for resetting your password.
+                        <a class="au-btn au-btn--blue " style="float: right" href="{% url 'registration:index' %}">Back</a><br><br>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Jquery JS-->
+    <script src="{% static 'isell/vendor/jquery-3.2.1.min.js' %}"></script>
+    <!-- Bootstrap JS-->
+    <script src="{% static 'isell/vendor/bootstrap-4.1/popper.min.js' %}"></script>
+    <script src="{% static 'isell/vendor/bootstrap-4.1/bootstrap.min.js' %}"></script>
+    <!-- Vendor JS       -->
+    <script src="{% static 'isell/vendor/slick/slick.min.js' %}">
+    </script>
+    <script src="{% static 'isell/vendor/wow/wow.min.js' %}"></script>
+    <script src="{% static 'isell/vendor/animsition/animsition.min.js' %}"></script>
+    <script src="{% static 'isell/vendor/bootstrap-progressbar/bootstrap-progressbar.min.js' %}">
+    </script>
+    <script src="{% static 'isell/vendor/counter-up/jquery.waypoints.min.js' %}"></script>
+    <script src="{% static 'isell/vendor/counter-up/jquery.counterup.min.js' %}">
+    </script>
+    <script src="{% static 'isell/vendor/circle-progress/circle-progress.min.js' %}"></script>
+    <script src="{% static 'isell/vendor/perfect-scrollbar/perfect-scrollbar.js' %}"></script>
+    <script src="{% static 'isell/vendor/chartjs/Chart.bundle.min.js' %}"></script>
+    <script src="{% static 'isell/vendor/select2/select2.min.js' %}">
+    </script>
+
+    <!-- Main JS-->
+    <script src="{% static 'isell/js/main.js' %}"></script>
+
+</body>
+
+</html>
+<!-- end document-->

@@ -1,0 +1,6 @@
+Django
+djongo
+django-nonrel-enuff
+requests
+social-auth-app-django
+QueryableList

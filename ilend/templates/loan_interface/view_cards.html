@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load staticfiles %}
+  
+    
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300i,400" rel="stylesheet">
+        <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">   
+   
+    <!-- Mobile Metas -->
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+ 
+     <!-- Site Metas -->
+  <title>ichoose</title> 
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Site Icons -->
+    <link rel="shortcut icon" href="{% static 'ilend/images/favicon.ico'%}" type="image/x-icon" />
+    <link rel="apple-touch-icon" href="{% static 'ilend/images/apple-touch-icon.png'%}">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'ilend/css/bootstrap.min.css' %}">
+    <!-- Site CSS -->
+    <link rel="stylesheet" href="{% static 'ilend/style.css' %}">
+    <!-- ALL VERSION CSS -->
+    <link rel="stylesheet" href="{% static 'ilend/css/versions.css'%}">
+    <!-- Responsive CSS -->
+    <link rel="stylesheet" href="{% static 'ilend/css/responsive.css' %}">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'ilend/css/custom.css' %}">
+     
+     <style>
+         .container1 {
+  position: absolute;
+  height: 300px;
+  width: 600px;
+  top:120px;
+  left: calc(50% - 300px);
+  display: flex;
+}
+.container2 {
+  position: absolute;
+  height: 300px;
+  width: 600px;
+  top:440px;
+  left: calc(50% - 300px);
+  display: flex;
+}
+
+.card {
+  display: flex;
+  height: 280px;
+  width: 200px;
+  background-color: #17141d;
+  border-radius: 10px;
+  box-shadow: -1rem 0 3rem #000;
+/*   margin-left: -50px; */
+  transition: 0.4s ease-out;
+  position: relative;
+  left: 0px;
+}
+
+.card:not(:first-child) {
+    margin-left: -50px;
+}
+
+.card:hover {
+  transform: translateY(-20px);
+  transition: 0.4s ease-out;
+}
+
+.card:hover ~ .card {
+  position: relative;
+  left: 50px;
+  transition: 0.4s ease-out;
+}
+
+.title {
+  color: white;
+  font-weight: 300;
+  position: absolute;
+  left: 20px;
+  top: 15px;
+}
+
+.bar {
+  position: absolute;
+  top: 100px;
+  left: 20px;
+  height: 5px;
+  width: 150px;
+}
+
+
+.emptybar {
+  background-color: #2e3033;
+  width: 100%;
+  height: 100%;
+}
+
+.filledbar {
+  position: absolute;
+  top: 0px;
+  z-index: 3;
+  width: 0px;
+  height: 100%;
+  background: rgb(0,154,217);
+  background: linear-gradient(90deg, rgba(0,154,217,1) 0%, rgba(217,147,0,1) 65%, rgba(255,186,0,1) 100%);
+  transition: 0.6s ease-out;
+}
+
+.card:hover .filledbar {
+  width: 120px;
+  transition: 0.4s ease-out;
+}
+
+.circle {
+  position: absolute;
+  top: 150px;
+  left: calc(50% - 60px);
+}
+
+.stroke {
+  stroke: white;
+  stroke-dasharray: 360;
+  stroke-dashoffset: 360;
+  transition: 0.6s ease-out;
+}
+
+svg {
+  fill: #17141d;
+  stroke-width: 2px;
+}
+
+.card:hover .stroke {
+  stroke-dashoffset: 100;
+  transition: 0.6s ease-out;
+}
+     </style> 
+    
+
+
+</head>
+<body class="seo_version">
+
+    
+
+    <!-- Start header -->
+	<header class="top-navbar">
+		<nav class="navbar navbar-expand-lg navbar-light bg-light">
+			<div class="container">
+				<a class="navbar-brand" href="">
+{#					<img src="{% static 'ilend/images/logo-seo.png' %}" alt="" />#}
+				</a>
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbars-seo" aria-controls="navbars-rs-food" aria-expanded="false" aria-label="Toggle navigation">
+				  <span class="navbar-toggler-icon"></span>
+                </button>
+                <div >
+                
+                    
+				<div class="collapse navbar-collapse" id="navbars-seo">
+					<ul class="navbar-nav ml-auto">
+						<li class="nav-item"><a class="nav-link" href="{%url 'loan_interface:home'%}">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{%url 'loan_interface:wallet'%}">add money</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{%url 'loan_interface:displaycard'%}">Add Cards</a></li>
+                        <li class="nav-item active"><a class="nav-link" href="{%url 'loan_interface:viewcard'%}">view card</a></li>
+                       
+                        <li class="nav-item"><a class="nav-link" href="">Edit Profile</a></li>
+						
+					</ul>
+				</div>
+			</div>
+		</nav>
+  </header>
+   
+
+    <div class="container1"  >
+        <div class="card">
+          <h3 class="title">25/-</h3>
+          
+          <div class="bar">
+           
+            <div class="emptybar"></div>
+            <div class="filledbar"></div>
+           <h3 class="title">cards :{{context.25}} 
+           <br>
+            underloan:0 
+           </h3> 
+          
+          </div>
+         
+          <div class="circle">
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+            <circle class="stroke" cx="60" cy="60" r="50"/>
+          </svg>
+          </div>
+        </div>
+        <div class="card">
+          <h3 class="title">50/-</h3>
+          <div class="bar">
+            <div class="emptybar"></div>
+            <div class="filledbar"></div>
+            <h3 class="title">cards :{{context.50}}
+              <br>
+            underloan:0 
+            </h3>
+            
+          </div>
+          <div class="circle">
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+            <circle class="stroke" cx="60" cy="60" r="50"/>
+          </svg>
+          </div>
+        </div>
+        <div class="card">
+          <h3 class="title">75/-</h3>
+          <div class="bar">
+            <div class="emptybar"></div>
+            <div class="filledbar"></div>
+            <h3 class="title">cards :{{context.75}}
+              <br>
+            underloan:0 
+            </h3>
+            
+          </div>
+          <div class="circle">
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+            <circle class="stroke" cx="60" cy="60" r="50"/>
+          </svg>
+          </div>
+        </div>
+        <div class="card">
+          <h3 class="title">100/-</h3>
+          <div class="bar">
+            <div class="emptybar"></div>
+            <div class="filledbar"></div>
+            <h3 class="title">cards :{{context.100}}
+              <br>
+            underloan:0 
+            </h3>
+            
+            
+          </div>
+          <div class="circle">
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+            <circle class="stroke" cx="60" cy="60" r="50"/>
+          </svg>
+          </div>
+        </div>
+       
+      </div>
+      <div class="container2">
+        <div class="card">
+          <h3 class="title">125/-</h3>
+          <div class="bar">
+            <div class="emptybar"></div>
+            <div class="filledbar"></div>
+            <h3 class="title">cards :{{context.125}}
+              <br>
+            underloan:0 
+            </h3>
+            
+          </div>
+          <div class="circle">
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+            <circle class="stroke" cx="60" cy="60" r="50"/>
+          </svg>
+          </div>
+        </div>
+        <div class="card">
+          <h3 class="title">150/-</h3>
+          <div class="bar">
+            <div class="emptybar"></div>
+            <div class="filledbar"></div>
+            <h3 class="title">cards :{{context.150}}
+              <br>
+            underloan:0 
+            </h3>
+            
+          </div>
+          <div class="circle">
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+            <circle class="stroke" cx="60" cy="60" r="50"/>
+          </svg>
+          </div>
+        </div>
+        <div class="card">
+          <h3 class="title">175/-</h3>
+          <div class="bar">
+            <div class="emptybar"></div>
+            <div class="filledbar"></div>
+            <h3 class="title">cards :{{context.175}}
+              <br>
+            underloan:0 
+            </h3>
+            
+          </div>
+          <div class="circle">
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+            <circle class="stroke" cx="60" cy="60" r="50"/>
+          </svg>
+          </div>
+        </div>
+        <div class="card">
+          <h3 class="title">200/-</h3>
+          <div class="bar">
+            <div class="emptybar"></div>
+            <div class="filledbar"></div>
+            <h3 class="title">cards :{{context.200}}
+              <br>
+            underloan:0 
+            </h3>
+            
+          </div>
+          <div class="circle">
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+            <circle class="stroke" cx="60" cy="60" r="50"/>
+          </svg>
+          </div>
+        </div>
+       
+      </div>
+
+      <footer class="footer" style="background-color:black; position: relative;top:800px;">
+        <div class="container" >
+            <div class="row">
+                <div class="col-lg-4 col-md-6 col-xs-12">
+                    <div class="widget clearfix">
+                        <div class="widget-title">
+                            <img src="{% static 'ilend/images/logo-light.png' %}" alt="">
+                        </div>
+                        <h3 style="color: aliceblue;"><b> I choose is an E-Commerce Website which provides platform to buyers ,sellers,lenders.Sellers can start their business with zero inverstment with the help of lenders</b></h3>
+                        
+                    </div><!-- end clearfix -->
+                </div><!-- end col -->
+				
+				<div class="col-lg-2 col-md-6 col-xs-12">
+                    <div class="widget clearfix">
+                        <div class="widget-title">
+                            <h3 style="color:white">Information</h3>
+                        </div >
+                        <ul class="footer-links" >
+                            <li><a href="#" style="color:darkorange">Home</a></li>
+                            <li><a href="#" style="color:darkorange">about</a></li>
+                            <li><a href="#" style="color:darkorange">services</a></li>
+							<li><a href="#" style="color:darkorange">contact</a></li>
+							<li><a href="#" style="color:darkorange">Faq</a></li>
+							
+                        </ul><!-- end links -->
+                    </div><!-- end clearfix -->
+                </div><!-- end col -->
+
+                <div class="col-lg-3 col-md-6 col-xs-12">
+                    <div class="widget clearfix">
+						<div class="widget-title">
+							<h3 style="color:white"> Services</h3>
+						</div>
+						<p style="color:darkorange">Main services offered are offline wallet service, pooling service,customization service</p>
+						<div class="news-box">
+							
+						</div>
+						
+                        <div class="widget-title">
+                            <h3 style="color:white">Social</h3>
+                        </div>
+                        <ul class="footer-links social-md">
+                            <li><a class="fb btn-a" title="Facebook" data-tippy-animation="scale" href="#"><i class="fa fa-facebook"></i></a></li>
+                            <li><a class="gi btn-a" title="Github" data-tippy-animation="scale" href="#"><i class="fa fa-github"></i> </a></li>
+                            <li><a class="tw btn-a" title="Twitter" data-tippy-animation="scale" href="#"><i class="fa fa-twitter"></i> </a></li>
+                            <li><a class="dr btn-a" title="Dribbble" data-tippy-animation="scale" href="#"><i class="fa fa-dribbble"></i> </a></li>
+                            <li><a class="pi btn-a" title="Pinterest" data-tippy-animation="scale" href="#"><i class="fa fa-pinterest"></i> </a></li>
+                        </ul><!-- end links -->
+                    </div><!-- end clearfix -->
+                </div><!-- end col -->
+				
+				<div class="col-lg-3 col-md-6 col-xs-12">
+                    <div class="widget clearfix">
+                        <div class="widget-title">
+                            <h3 style="color:white">Contact Details</h3>
+                        </div>
+
+                        <ul class="footer-links">
+                            <li ><a href="mailto:#" style="color:darkorange">info@yoursite.com</a></li>
+                            <li><a href="#" style="color:darkorange">www.yoursite.com</a></li>
+                            <li style="color:darkorange"> PO Box 16122 Collins Street West Victoria 8007 Australia</li>
+                            <li style="color:darkorange">+61 3 8376 6284</li>
+                        </ul><!-- end links -->
+                    </div><!-- end clearfix -->
+                </div><!-- end col -->
+				
+            </div><!-- end row -->
+        </div><!-- end container -->
+    </footer><!-- end footer -->
+	
+    <a href="#" id="scroll-to-top" class="dmtop global-radius" style="background-color: darkorange;"><i class="fa fa-angle-up"></i></a>
+
+    <!-- ALL JS FILES -->
+    <script src="{% static 'ilend/js/all.js' %}"></script>
+    <!-- ALL PLUGINS -->
+	<script src="{% static 'ilend/js/tippy.all.min.js' %}"></script>
+    <script src="{% static 'ilend/js/custom.js' %}"></script>
+	
+	<script src="{% static 'ilend/js/jquery.ba-cond.min.js' %}"></script>
+	<script src="{% static 'ilend/js/jquery.slitslider.js' %}"></script>
+	<script type="text/javascript">	
+			$(function() {
+			
+				var Page = (function() {
+
+					var $nav = $( '#nav-dots > span' ),
+						slitslider = $( '#slider' ).slitslider( {
+							onBeforeChange : function( slide, pos ) {
+
+								$nav.removeClass( 'nav-dot-current' );
+								$nav.eq( pos ).addClass( 'nav-dot-current' );
+
+							}
+						} ),
+
+						init = function() {
+
+							initEvents();
+							
+						},
+						initEvents = function() {
+
+							$nav.each( function( i ) {
+							
+								$( this ).on( 'click', function( event ) {
+									
+									var $dot = $( this );
+									
+									if( !slitslider.isActive() ) {
+
+										$nav.removeClass( 'nav-dot-current' );
+										$dot.addClass( 'nav-dot-current' );
+									
+									}
+									
+									slitslider.jump( i + 1 );
+									return false;
+								
+								} );
+								
+							} );
+
+						};
+
+						return { init : init };
+
+				})();
+
+				Page.init();
+			
+			});
+		</script>
+		
+		<script>
+			tippy('.btn-a')
+		</script>
+
+
+    <script src="{% static 'vendor1/jquery/jquery-3.2.1.min.js' %}"></script>
+    <!--===============================================================================================-->
+        <script src="{% static 'vendor1/bootstrap/js/popper.js' %}"></script>
+        <script src="{% static 'vendor1/bootstrap/js/bootstrap.min.js' %}"></script>
+    <!--===============================================================================================-->
+        <script src="{% static 'vendor1/select2/select2.min.js' %}"></script>
+    <!--===============================================================================================-->
+        <script src="{% static 'vendor1/tilt/tilt.jquery.min.js' %}"></script>
+        <script >
+            $('.js-tilt').tilt({
+                scale: 1.1
+            })
+        </script>
+    <!--===============================================================================================-->
+        <script src="{% static 'js1/main.js' %}"></script>
+        
+
+
+</body>
+</html>

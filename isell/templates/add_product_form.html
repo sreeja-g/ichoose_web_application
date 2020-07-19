@@ -1,0 +1,530 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <!-- Required meta tags-->
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <meta name="description" content="au theme template">
+      <meta name="author" content="Hau Nguyen">
+      <meta name="keywords" content="au theme template">
+      <!-- Title Page-->
+      <title>ISell</title>
+      <!-- Fontfaces CSS-->
+      <link rel="icon" href="{% static 'img/favicon.png' %}" type="image/png">
+      <link href="{% static 'isell/css/font-face.css' %}" rel="stylesheet" media="all">
+      <link href="{% static 'isell/vendor/font-awesome-4.7/css/font-awesome.min.css' %}" rel="stylesheet" media="all">
+      <link href="{% static 'isell/vendor/font-awesome-5/css/fontawesome-all.min.css' %}" rel="stylesheet" media="all">
+      <link href="{% static 'isell/vendor/mdi-font/css/material-design-iconic-font.min.css' %}" rel="stylesheet" media="all">
+      <!-- Bootstrap CSS-->
+      <link href="{% static 'isell/vendor/bootstrap-4.1/bootstrap.min.css' %}" rel="stylesheet" media="all">
+      <!-- Vendor CSS-->
+      <link href="{% static 'isell/vendor/animsition/animsition.min.css' %}" rel="stylesheet" media="all">
+      <link href="{% static 'isell/vendor/bootstrap-progressbar/bootstrap-progressbar-3.3.4.min.css' %}" rel="stylesheet" media="all">
+      <link href="{% static 'isell/vendor/wow/animate.css' %}" rel="stylesheet" media="all">
+      <link href="{% static 'isell/vendor/css-hamburgers/hamburgers.min.css' %}" rel="stylesheet" media="all">
+      <link href="{% static 'isell/vendor/slick/slick.css' %}" rel="stylesheet" media="all">
+      <link href="{% static 'isell/vendor/select2/select2.min.css' %}" rel="stylesheet" media="all">
+      <link href="{% static 'isell/vendor/perfect-scrollbar/perfect-scrollbar.css' %}" rel="stylesheet" media="all">
+      <!-- Main CSS-->
+      <link href="{% static 'isell/css/theme.css' %}" rel="stylesheet" media="all">
+      <style>
+      </style>
+   </head>
+   <body class="animsition">
+      <div class="page-wrapper" style="padding-bottom:0px">
+      <!-- HEADER DESKTOP-->
+      <header class="header-desktop3 d-none d-lg-block">
+         <div class="section__content section__content--p35">
+            <div class="header3-wrap">
+               <div class="header__logo" style="margin-left: 100px">
+                  <div class="logo">
+                     <a href="{% url 'isell:isell_home' %}" style="color:#ddd;font-size:xx-large;font-family:Candara"><i class="fa fa-shopping-cart" aria-hidden="true" style="color:#e37e06;font-size:xx-large"></i>&nbsp; ISell</a>
+                  </div>
+               </div>
+               <div class="header__navbar">
+                  <ul class="list-unstyled">
+                     <li class="has-sub">
+                        <a href="{% url 'isell:isell_home' %}" style="font-size: large;">
+                        <i class="fas fa-tachometer-alt"></i>Dashboard
+                        <span class="bot-line"></span>
+                        </a>
+                     </li>
+                     <li>
+                        <a href="{% url 'isell:add_products' %}" style="font-size: large;">
+                        <i class="fas fa-rupee-sign"></i>
+                        <span class="bot-line" ></span>
+                        Add Products</a>
+                     </li>
+                     <li class="has-sub">
+                        <a href="#" style="font-size: large;">
+                        <i class="fas fa-copy"></i>
+                        <span class="bot-line"></span>
+                        History</a>
+                        <ul class="header3-sub-list list-unstyled">
+                           <li>
+                              <a href="{% url 'isell:delivered_products' %}">Delivered products</a>
+                           </li>
+                           <li>
+                              <a href="{% url 'isell:applied_loans' %}">Applied loans</a>
+                           </li>
+                        </ul>
+                     </li>
+                     <li>
+                        <a href="#" style="font-size: large;">
+                        <i class="fas fa-line-chart"></i>
+                        <span class="bot-line"></span>Statistics</a>
+                     </li>
+                     <li>
+                        <a href="#" style="font-size: large;">
+                        <i class="fas fa-home"></i>
+                        <span class="bot-line"></span>Home</a>
+                     </li>
+                  </ul>
+               </div>
+               <div class="header__tool">
+                  <div class="header-button-item has-noti js-item-menu">
+                            <i class="zmdi zmdi-notifications"></i>
+
+                            <div class="notifi-dropdown notifi-dropdown--no-bor js-dropdown">
+                                <div class="notifi__title">
+                                    <p>customization requests</p>
+                                </div>
+                                <form method="post" action="{% url 'isell:customization_requests' %}">{% csrf_token %}
+                                        <input type="hidden" name="req_code" value="1">
+                                    <button>
+                                <div class="notifi__item">
+
+                                    <div class="bg-c1 img-cir img-40">
+                                        <i class="zmdi zmdi-email-open"></i>
+                                    </div>
+                                    <div class="content">
+                                        <p>You got <span style="color: red">{{ count }} unanswered</span> requests</p>
+                                        <span class="date">{{date}}</span>
+                                    </div>
+
+                                </div></button></form>
+
+                                <div class="notifi__footer" style="text-align: center;">
+                                    <form method="post" action="{% url 'isell:customization_requests' %}">{% csrf_token %}<input type="hidden" name="req_code" value="0"><button onclick="this.form.submit()" ><a style="color: #e37e06;font-size: medium">All requests</a></button></form>
+
+                                </div>
+                            </div>
+                        </div>
+                  <div class="account-wrap">
+                            <div class="account-item account-item--style2 clearfix js-item-menu">
+                                <div class="image" style="border-radius: 0;padding: 3px">
+                                    <i class="fas fa-user" style="font-size: xx-large;color: #afafaf;"></i>
+                                </div>
+                                <div class="content" >
+                                    <a class="js-acc-btn" style="font-size: large" href="#">{{request.user}}</a>
+                                </div>
+                                <div class="account-dropdown js-dropdown">
+                                    <div class="info clearfix">
+
+                                            <h4 class="name">{{request.user}}</h4>
+                                            <span class="email">{{request.user.email}}</span>
+
+                                    </div>
+                                    <div class="account-dropdown__body">
+
+                                        <div class="account-dropdown__item">
+                                            <a href="#">
+                                                <i class="zmdi zmdi-account"></i>Account</a>
+                                        </div>
+                                        <div class="account-dropdown__item">
+                                            <a href="{% url 'registration:logout' %}">
+                                            <i class="zmdi zmdi-power"></i>Logout</a>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+               </div>
+            </div>
+         </div>
+      </header>
+      <!-- END HEADER DESKTOP-->
+      <!-- PAGE CONTENT-->
+      <div class="page-content--bgf7">
+         <!-- BREADCRUMB-->
+         <!-- END BREADCRUMB-->
+         <!-- WELCOME-->
+         <section class="welcome p-t-10" style="padding-bottom: 30px">
+            <div class="container"style="margin-top: 4vh">
+               <div class="row">
+                  <div class="col-md-12">
+                     <h1 class="title-4">Hey
+                        <span>{{request.user}}!!</span>  &nbsp;We wish you get more customers!!
+                     </h1>
+                     <hr class="line-seprate">
+                  </div>
+               </div>
+            </div>
+         </section>
+         <div class="col-lg-6" style="margin-left: 21% ">
+            <div class="card" style="width: 1000px">
+               <div class="card-header" style="font-size: x-large">
+                  <strong>Add a Product</strong>
+               </div>
+               <div class="card-body card-block">
+                  <form action="{% url 'isell:add_new_product' %}"  method="post" enctype="multipart/form-data" class="form-horizontal">
+                     {% csrf_token %}
+                     <div class="row form-group">
+                        <div class="col col-md-3">
+                           <label for="text-input" class=" form-control-label" style="font-weight: bold">Product Title</label>
+                        </div>
+                        <div class="col-12 col-md-9">
+                           <input type="text" id="product_title" name="product_title" required placeholder="Think unique (IPhone)" class="form-control">
+                        </div>
+                     </div>
+                     <div class="row form-group">
+                        <div class="col col-md-3">
+                           <label for="textarea-input" class=" form-control-label" style="font-weight: bold">Product Description</label>
+                        </div>
+                        <div class="col-12 col-md-9">
+                           <textarea name="product_description" id="product_description" required rows="9" placeholder="This helps you get more customers" class="form-control"></textarea>
+                        </div>
+                     </div>
+                     <div class="row form-group">
+                        <div class="col col-md-3">
+                           <label for="select" class=" form-control-label" style="font-weight: bold">Select a wider Category</label>
+                        </div>
+                        <div class="col-12 col-md-9">
+                           <select name="product_category_1" id="product_category_1" class="form-control" required>
+                              <option value="1">Option #1</option>
+                              <option value="2">Option #2</option>
+                              <option value="3">Option #3</option>
+                           </select>
+                        </div>
+                     </div>
+                     <div class="row form-group">
+                        <div class="col col-md-3">
+                           <label for="select" class=" form-control-label" style="font-weight: bold">Be more precise</label>
+                        </div>
+                        <div class="col-12 col-md-9">
+                           <select name="product_category_2" id="product_category_2" class="form-control" required>
+                              <option value="1">Option #1</option>
+                              <option value="2">Option #2</option>
+                              <option value="3">Option #3</option>
+                           </select>
+                        </div>
+                     </div>
+                     <br>
+                     <hr>
+                     <br>
+                     <div style="font-size: x-large;font-weight: bold">PRODUCT TYPES</div>
+                     <br>
+                     <br>
+                     <div class="row form-group" id="add_product_type">
+                        <div class="product_type_box" style="padding:30px;border: lightgray 2px solid;width: 100%;border-radius: 60px">
+                           <label for="select" class=" form-control-label" style="font-weight: bold;padding: 3px;font-size:large">ADD A PRODUCT TYPE</label>
+                           <span id='close' onclick='this.parentNode.parentNode.removeChild(this.parentNode); return false;'><i class="fa fa-times" style="float: right;font-size:large"></i></span>
+                           <div class="row form-group product_type">
+                               <div class="col col-md-3">
+                                 <label for="text-input" class=" form-control-label" style="font-weight: bold" >Product/Model Name</label>
+                              </div>
+                              <div class="col-12 col-md-9">
+                                 <input type="text" id="product_type_name" name="product_type_name"  required class="form-control product_type_name" placeholder="IPhone 8">
+                              </div>
+                               <div class="col col-md-3">
+                                 <label for="text-input" class=" form-control-label" style="font-weight: bold" >Product Details</label>
+                              </div>
+                              <div class="col-12 col-md-9">
+                                  <textarea  id="product_type_detail" name="product_type_detail"  required class="form-control product_type_detail" placeholder="eg: IPhone 8 has ... new feature ... "></textarea>
+                              </div>
+                               <div class="col col-md-3" style="height: 20px">
+
+                              </div>
+                              <div class="col-12 col-md-9" style="height: 20px">
+
+                              </div>
+                              <div class="col col-md-3">
+                                 <label for="select" class=" form-control-label" style="font-weight: bold"  >color</label>
+                              </div>
+                              <div class="col-12 col-md-9 product_type_color">
+                                 <input type="color" id="product_type_color" style="height: 30px;width:50px;float: left;" required name="product_type_color" placeholder="give color" class="form-control product_type_color_val" ><i class="fa fa-times-circle product_type_color_cross" style="color: red;float: left" onclick="this.parentNode.getElementsByClassName('product_type_color_val')[0].remove();this.remove();">&emsp;</i>
+                                 <button type="button" style="font-size: large;font-weight: bold;float: right;border: lightgray 2px solid;border-radius: 80px;padding: 4px;margin-bottom:50px;color: darkgray" onclick="add_colors(this)">add colors</button>
+                                 <input type="hidden" value=1 class="product_type_colors_num" name="product_type_colors_num">
+                              </div>
+                              <div class="col col-md-3">
+                                 <label for="text-input" class=" form-control-label" style="font-weight: bold" >size</label>
+                              </div>
+                              <div class="col-12 col-md-9">
+                                 <input type="text" id="product_type_size" name="product_type_size"  required class="form-control product_type_size" placeholder="eg: XS,S,M,L or 4,5,6,(meter)">
+                              </div>
+                              <div class="col col-md-3">
+                                 <label for="text-input" class=" form-control-label" style="font-weight: bold">price</label>
+                              </div>
+                              <div class="col-12 col-md-9">
+                                 <input type="number" id="product_type_price" name="product_type_price" placeholder="price" required class="form-control product_type_price" step="0.01">
+                              </div>
+                              <div class="col col-md-3">
+                                 <label for="text-input" class=" form-control-label" style="font-weight: bold">discount value <br>(in percent)</label>
+                              </div>
+                              <div class="col-12 col-md-9">
+                                 <input type="number" id="product_type_disc_price" name="product_type_disc_price" value=0 placeholder="discount price" required class="form-control product_type_disc_price" step="0.01">
+                              </div>
+                               <div class="col col-md-3">
+                                 <label for="text-input" class=" form-control-label" style="font-weight: bold">expected delivery after order(in days)</label>
+                              </div>
+                              <div class="col-12 col-md-9">
+                                 <input type="number" id="product_delivery_days" name="product_delivery_days" placeholder="eg: 2 for 2 days after order is placed" required class="form-control product_delivery_days">
+                              </div>
+                              <div class="col-12 col-md-9"><br>
+                                 <label for="files">Select images</label>
+                                 <input type="file" class="product_type_images" style="font-size: large;font-weight: bold;float: right;border: lightgray 2px solid;padding: 4px;color: darkgray;"  name="product_type_images" multiple ><br>
+                                 <br>
+                              </div>
+                              <input type="hidden" value=1 class="product_type_new_type_len">
+                               <div class="col-0 col-md-40 product_type_new_type" style="clear: both" >
+                                    <div class="product_type_each_new_type" style="clear: both">
+                                     <div class="field_type" style="padding: 5px;float: left">
+                                        <input type="text" name="product_type_new_key" placeholder="eg: material" class="form-control product_type_new_key" style="width: 350px;float: left">
+                                     </div>
+                                     <div class="field_value" style="padding: 5px;float: left">
+                                        <input type="text" name="product_type_new_value" placeholder="eg: leather" class="form-control product_type_new_value" style="width:350px;float: left">
+                                     </div>
+                                     <div class="field_cross" style="padding: 5px;float: left">
+                                        <i class="fa fa-times-circle product_type_cross" style="clear: right" onclick="this.parentNode.parentNode.remove();"></i>
+                                     </div>
+                                  </div>
+                               </div>
+
+
+                              <button type="button" value=1 style="height:60px;font-size: large;font-weight: bold;clear:both;border: lightgray 2px solid;border-radius: 80px;padding: 4px;color: darkgray" onclick="add_type(this)"><i class="fa fa-plus" style="font-size:large"></i> add field</button>
+                           </div>
+                        </div>
+                     </div>
+                     <br>
+                     <div class="row form-group" >
+                        <button type="button" style="font-size: large;font-weight: bold;float: right;border: lightgray 2px solid;padding: 4px;color: darkgray;width: 100%" onclick="add_element_product()"><i class="fa fa-plus" style="font-size:large"></i> add new type</button>
+                     </div>
+                     <br>
+
+                     <div class="row form-group">
+                        <div class="col col-md-3">
+                           <label for="textarea-input" class=" form-control-label" style="font-weight: bold">Any additional information</label>
+                        </div>
+                        <div class="col-12 col-md-9">
+                           <textarea name="additional_information" id="additional_information" required rows="9" placeholder="This helps your customers get you better" class="form-control"></textarea>
+                        </div>
+                     </div>
+                     <br>
+                     <hr>
+                     <br>
+                     <div style="font-size: x-large;font-weight: bold">CUSTOMIZATION</div>
+                     <br>
+                     <br>
+                     <input type="hidden" value=1 class="add_customization_type_new_type_len">
+                     <div class="row form-group" id="Customization">
+                        <div class="Customization_type" style="padding:30px;border: lightgray 2px solid;width: 100%;border-radius: 60px">
+                           <label for="select" class=" form-control-label" style="font-weight: bold;padding: 3px;font-size:large">Give customizations possible to the product</label>
+                           <br>
+
+
+                            <div class="col-0 col-md-40 customization_type_new_type"  >
+                                    <div class="customization_type_each_new_type" style="clear: both">
+                                     <div class="custom_type" style="padding: 5px;float: left">
+                                        <input type="text" name="add_customization_type_new_key" placeholder="eg: color" class="form-control add_customization_type_new_key" style="width: 350px;float: left">
+                                     </div>
+                                     <div class="custom_value" style="padding: 5px;float: left">
+                                        <input type="text" name="add_customization_type_new_value" placeholder="eg: red,blue,green" class="form-control add_customization_type_new_value" style="width:350px;float: left">
+                                     </div>
+                                     <div class="custom_cross" style="padding: 5px;float: left">
+                                        <i class="fa fa-times-circle custom_type_cross" style="clear: right" onclick="this.parentNode.parentNode.remove();"></i>
+                                     </div>
+                                  </div>
+                               </div>
+
+                            <button type="button" value=1 style="height:60px;font-size: large;font-weight: bold;clear:both;border: lightgray 2px solid;border-radius: 80px;padding: 4px;color: darkgray;float: right" onclick="add_custom_type(this)"><i class="fa fa-plus" style="font-size:large"></i> add custom type</button>
+
+
+
+                        </div>
+                     </div>
+                     <br>
+                     <div class="row form-group">
+                        <div class="col col-md-3">
+                           <label for="textarea-input" class=" form-control-label" style="font-weight: bold">Any additional information regarding customization</label>
+                        </div>
+                        <div class="col-12 col-md-9">
+                           <textarea name="additional_customization_information" id="additional_customization_information" required rows="9" placeholder="Tell your options to your customers in a better way" class="form-control"></textarea>
+                        </div>
+                     </div>
+                     <br><br>
+                     <input type="hidden" id="final_data_value" name="data">
+                     <input type="hidden" value=0 id="product_type_images_num" name="product_type_images_num">
+                     <div id="images_final" style="display: none"></div>
+                     <button onclick="data_final()" style="font-size: large;font-weight: bold;float: right;border: lightgray 2px solid;padding: 4px;color: darkgray;width:100%" >submit</button>
+                     <br><br><br>
+                  </form>
+
+
+
+
+               </div>
+            </div>
+         </div>
+      </div>
+
+
+
+
+
+      <!-- Jquery JS-->
+      <script>
+          console.log(document.getElementsByClassName('product_type_new_type')[0])
+         function data_final() {
+
+             document.getElementById('images_final').innerHTML=""
+             document.getElementById('product_type_images_num').value=0
+            document.getElementById('final_data_value').value=""
+
+             var data={}
+             var data={'product_title':document.getElementById('product_title').value,'product_description':document.getElementById('product_description').value,'product_category_1':document.getElementById('product_category_1').value,'product_category_2':document.getElementById('product_category_2').value,'additional_information':document.getElementById('additional_information').value,'additional_customization_information':document.getElementById('additional_customization_information').value,}
+
+             var prod_types=[];
+             var prod_types_given=document.getElementsByClassName('product_type')
+
+             var new_type_count=0;
+             var color_count=0;
+             for (var i = 0; i < prod_types_given.length; i++) {
+                 var each_prod_types={};
+
+                 each_prod_types['product_name'] = document.getElementsByClassName('product_type_name')[i].value
+                 each_prod_types['product_detail'] = document.getElementsByClassName('product_type_detail')[i].value
+                 each_prod_types['color']=[]
+                 console.log(parseInt(document.getElementsByClassName('product_type_colors_num')[i].value))
+                 console.log(document.getElementsByClassName('product_type_color_val'))
+                 for(var j=0;j<parseInt(document.getElementsByClassName('product_type_colors_num')[i].value);j++){
+                     each_prod_types['color'].push(document.getElementsByClassName('product_type_color_val')[color_count+j].value)
+                 }
+                 color_count+=parseInt(document.getElementsByClassName('product_type_colors_num')[i].value)
+                 console.log(each_prod_types['color'])
+                 if (document.getElementsByClassName('product_type_size')[i].value != ""){
+                     each_prod_types['size'] = document.getElementsByClassName('product_type_size')[i].value
+                 }
+                 each_prod_types['price']=document.getElementsByClassName('product_type_price')[i].value
+                 each_prod_types['disc_price']=document.getElementsByClassName('product_type_disc_price')[i].value
+
+                 each_prod_types['product_delivery_days']=document.getElementsByClassName('product_delivery_days')[i].value
+                 console.log(document.getElementsByClassName('product_type_images'))
+
+                 var image_elmnt_each=document.getElementsByClassName('product_type_images')[i]
+                 var cln_image_elmnt_each = image_elmnt_each.cloneNode(true);
+                 cln_image_elmnt_each.setAttribute('name','product_type_images_'+i)
+
+                 document.getElementById('images_final').appendChild(cln_image_elmnt_each)
+
+
+                 console.log(document.getElementById('images_final'))
+                 for (var j = 0; j < parseInt(document.getElementsByClassName('product_type_new_type_len')[i].value); j++) {
+                     if(document.getElementsByClassName('product_type_new_key')[new_type_count + j].value != "") {
+                         each_prod_types[document.getElementsByClassName('product_type_new_key')[new_type_count + j].value] = document.getElementsByClassName('product_type_new_value')[new_type_count + j].value
+                     }
+                 }
+                 new_type_count+=parseInt(document.getElementsByClassName('product_type_new_type_len')[i].value)
+                 prod_types.push(each_prod_types)
+             }
+             console.log(prod_types)
+             data['product_types']=prod_types
+
+             cust_types={}
+             console.log(parseInt(document.getElementsByClassName('add_customization_type_new_type_len')[0].value))
+             for (var i = 0; i < parseInt(document.getElementsByClassName('add_customization_type_new_type_len')[0].value); i++) {
+                 if(document.getElementsByClassName('add_customization_type_new_key')[i].value != "") {
+                     cust_types[document.getElementsByClassName('add_customization_type_new_key')[i].value] = document.getElementsByClassName('add_customization_type_new_value')[i].value
+                 }
+             }
+             data['customization_types']=cust_types
+             console.log(JSON.stringify(data))
+             console.log(prod_types_given.length)
+             document.getElementById('product_type_images_num').value=prod_types_given.length
+             document.getElementById('final_data_value').value=JSON.stringify(data)
+         }
+
+         function add_element_product() {
+             var elmnt = document.getElementsByClassName("product_type_box")[0];
+             var cln = elmnt.cloneNode(true);
+             document.getElementById("add_product_type").appendChild(cln);
+         }
+
+         function add_type(x) {
+             console.log("product_type_each_new_type")
+             var elmnt=document.getElementsByClassName("product_type_each_new_type")[0]
+             var cln = elmnt.cloneNode(true);
+
+             for (var i = 0; i < cln.getElementsByClassName("field_type")[0].childNodes.length; i++) {
+                  cln.getElementsByClassName("field_type")[0].childNodes[i].value = "";
+             }
+             for (var i = 0; i < cln.getElementsByClassName("field_value")[0].childNodes.length; i++) {
+                  cln.getElementsByClassName("field_value")[0].childNodes[i].value = "";
+             }
+
+
+             x.parentNode.getElementsByClassName('product_type_new_type')[0].appendChild(cln);
+
+             x.parentNode.getElementsByClassName('product_type_new_type_len')[0].value=parseInt(x.parentNode.getElementsByClassName('product_type_new_type_len')[0].value)+1
+                console.log(document.getElementsByClassName('product_type_new_type')[0])
+         }
+
+         function add_custom_type(x) {
+
+
+             var elmnt=document.getElementsByClassName("customization_type_each_new_type")[0]
+             var cln = elmnt.cloneNode(true);
+
+             for (var i = 0; i < cln.getElementsByClassName("custom_type")[0].childNodes.length; i++) {
+                  cln.getElementsByClassName("custom_type")[0].childNodes[i].value = "";
+             }
+             for (var i = 0; i < cln.getElementsByClassName("custom_value")[0].childNodes.length; i++) {
+                  cln.getElementsByClassName("custom_value")[0].childNodes[i].value = "";
+             }
+
+
+             x.parentNode.getElementsByClassName('customization_type_new_type')[0].appendChild(cln);
+
+             document.getElementsByClassName('add_customization_type_new_type_len')[0].value=parseInt(document.getElementsByClassName('add_customization_type_new_type_len')[0].value)+1
+
+         }
+         function add_colors(x) {
+             var color_elmnt = document.getElementsByClassName("product_type_color_val")[0];
+             var cln_elmnt = color_elmnt.cloneNode(true);
+             console.log(cln_elmnt)
+
+             var color_cross_elmnt = document.getElementsByClassName("product_type_color_cross")[0];
+             var cln_cross_elmnt = color_cross_elmnt.cloneNode(true);
+             cln_cross_elmnt.onclick = function() {cln_elmnt.remove();cln_cross_elmnt.remove()};
+             console.log(cln_cross_elmnt)
+
+             x.parentNode.appendChild(cln_elmnt);
+             x.parentNode.appendChild(cln_cross_elmnt);
+
+             x.parentNode.getElementsByClassName('product_type_colors_num')[0].value=parseInt(x.parentNode.getElementsByClassName('product_type_colors_num')[0].value)+1
+
+
+         }
+
+      </script>
+      <script src="{% static 'isell/vendor/jquery-3.2.1.min.js' %}"></script>
+      <!-- Bootstrap JS-->
+      <script src="{% static 'isell/vendor/bootstrap-4.1/popper.min.js' %}"></script>
+      <script src="{% static 'isell/vendor/bootstrap-4.1/bootstrap.min.js' %}"></script>
+      <!-- Vendor JS       -->
+      <script src="{% static 'isell/vendor/slick/slick.min.js' %}"></script>
+      <script src="{% static 'isell/vendor/wow/wow.min.js' %}"></script>
+      <script src="{% static 'isell/vendor/animsition/animsition.min.js' %}"></script>
+      <script src="{% static 'isell/vendor/bootstrap-progressbar/bootstrap-progressbar.min.js' %}"></script>
+      <script src="{% static 'isell/vendor/counter-up/jquery.waypoints.min.js' %}"></script>
+      <script src="{% static 'isell/vendor/counter-up/jquery.counterup.min.js' %}"></script>
+      <script src="{% static 'isell/vendor/circle-progress/circle-progress.min.js' %}"></script>
+      <script src="{% static 'isell/vendor/perfect-scrollbar/perfect-scrollbar.js' %}"></script>
+      <script src="{% static 'isell/vendor/chartjs/Chart.bundle.min.js' %}"></script>
+      <script src="{% static 'isell/vendor/select2/select2.min.js' %}"></script>
+      <!-- Main JS-->
+      <script src="{% static 'isell/js/main.js' %}"></script>
+   </body>
+</html>
+<!-- end document-->

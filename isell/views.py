@@ -1,0 +1,520 @@
+from django.shortcuts import render,redirect
+from django.contrib.auth.decorators import login_required,user_passes_test
+from isell.models import seller_verification_process,sellers,product
+from ichoose.models import buyers,customization,order,ratings_comments,loan
+from django.core.files.storage import FileSystemStorage
+from django.urls import reverse
+import datetime,json
+from django.contrib import messages
+
+
+def test_verification(user):
+    if user.verification_status==True:
+        return True
+    else:
+        return False
+
+def test_verification_application(user):
+    if user.verification_applied==False:
+        return True
+    else:
+        return False
+
+
+
+@login_required(login_url='/login/')
+def isell_home(request):
+
+    seller=sellers.objects.filter(seller=request.user)
+    pending_orders=[]
+    try:
+        for each in seller[0].order_list:
+            if each.delivery_status==False:
+                pending_orders.append(each)
+    except:
+        pass
+    count = 0
+    try:
+        for each in seller[0].customization_requests_list:
+            if each.accept_status == False and each.reject_status == False:
+                count += 1
+    except:
+        pass
+    return render(request, 'index3.html',{'pending_orders':pending_orders,'count':count,'date':datetime.datetime.now()})
+
+
+
+@login_required(login_url='/login/')
+@user_passes_test(test_verification_application,login_url='/isell/home/')
+def verification_request(request):
+    if request.method == 'POST':
+
+        user=request.user
+
+        name = request.POST.get('name')
+        ph_number = request.POST.get('ph_number')
+        address_line_1 = request.POST.get('address_line_1')
+        address_line_2 = request.POST.get('address_line_2')
+        city = request.POST.get('city')
+        state = request.POST.get('state')
+        pincode = request.POST.get('pincode')
+        purpose = request.POST.get('purpose')
+        images = request.FILES.getlist('images')
+        files = request.FILES.getlist('files')
+
+        verification_process = seller_verification_process(seller=user)
+        verification_process.name=name
+        verification_process.phone_number=ph_number
+        verification_process.address_line_1=address_line_1
+        verification_process.address_line_2=address_line_2
+        verification_process.city=city
+        verification_process.state=state
+        verification_process.pincode=pincode
+        verification_process.purpose=purpose
+        verification_process.images=[]
+        verification_process.files=[]
+
+        for each in images:
+            fs = FileSystemStorage()
+            fs.save('seller_images/'+each.name, each)
+            verification_process.images.append('seller_images/'+each.name)
+
+        for each in files:
+            fs = FileSystemStorage()
+            fs.save('seller_files/' + each.name, each)
+            verification_process.files.append('seller_files/' + each.name)
+
+        verification_process.save()
+        user.verification_applied=True
+        #________________del_________________
+        user.verification_status = True
+        sellers.objects.create(seller=user)
+        # _________________________________
+        user.save()
+
+        return redirect(reverse('isell:isell_home'))
+
+    else:
+
+        return render(request,'verification_request.html')
+
+
+@login_required(login_url='/login/')
+@user_passes_test(test_verification,login_url='/isell/home/')
+def add_products(request):
+    user = request.user
+
+    products = product.objects.filter(seller=sellers.objects.get(seller=user)).order_by('-date_of_post') if len(product.objects.filter(seller=sellers.objects.get(seller=user))) > 0 else []
+
+    count = 0
+    seller = sellers.objects.get(seller=user)
+    for each in seller.customization_requests_list:
+        if each.accept_status == False and each.reject_status == False :
+            count+=1
+
+    return render(request, 'add_products.html', {'products': products,'count':count,'date':datetime.datetime.now()})
+
+
+
+@login_required(login_url='/login/')
+@user_passes_test(test_verification,login_url='/isell/home/')
+def add_new_product(request):
+    if request.method == 'POST':
+
+        user = request.user
+        data = json.loads(request.POST.get('data'))
+
+        product_title=data['product_title']
+        product_description= data['product_description']
+        product_category_1 = data['product_category_1']
+        product_category_2 =  data['product_category_2']
+        product_details= data['product_types']
+        additional_information =  data['additional_information']
+        product_customisation_available = [data['customization_types']]
+        additional_customization_information = data['additional_customization_information']
+        date_of_post = datetime.datetime.now()
+
+        for i in range(len(product_details)):
+
+            new_product = product(seller=sellers.objects.get(seller=user))
+
+            new_product.date_of_post = date_of_post
+
+            new_product.product_title = product_title
+            new_product.category_1 = product_category_1
+            new_product.category_2 = product_category_2
+            new_product.product_description = product_description
+
+            new_product.product_name = product_details[i]['product_name']
+            new_product.product_detail = product_details[i]['product_detail']
+            new_product.product_color = product_details[i]['color']
+            new_product.product_size = product_details[i]['size']
+            new_product.product_price = float(product_details[i]['price'])
+            new_product.product_discount = float(product_details[i]['disc_price'])
+            new_product.product_final_price = round((float(product_details[i]['price']) - (
+                    float(product_details[i]['price']) * float(product_details[i]['disc_price']) / 100)), 2)
+
+            ex_keys = ['product_name', 'product_detail', 'color', 'size', 'price', 'disc_price']
+            for each in ex_keys:
+                del(product_details[i][each])
+
+            new_product.product_remaining_details = [product_details[i]]
+            new_product.additional_information = additional_information
+
+            new_product.product_customisation_available = product_customisation_available
+            new_product.additional_customization_information = additional_customization_information
+
+            new_product.save()
+
+            image_list = []
+            images = request.FILES.getlist('product_type_images_' + str(i))
+            print(images)
+            for each in images:
+                fs = FileSystemStorage()
+                fs.save('seller_product_images/' + str(new_product.pk) + "/" + str(i) + "/" + each.name, each)
+                image_list.append('seller_product_images/' + str(new_product.pk) + "/" + str(i) + "/" + each.name)
+
+            new_product.images=image_list
+
+            new_product.save()
+
+        return redirect(reverse('isell:add_products'))
+
+    else:
+
+        count = 0
+        seller = sellers.objects.get(seller=request.user)
+        for each in seller.customization_requests_list:
+            if each.accept_status == False and each.reject_status == False:
+                count += 1
+
+        return render(request, 'add_product_form.html',{'count':count,'date':datetime.datetime.now()})
+
+
+@login_required(login_url='/login/')
+@user_passes_test(test_verification,login_url='/isell/home/')
+def edit_product(request):
+    if request.method == 'POST':
+
+        user = request.user
+        data = json.loads(request.POST.get('data'))
+
+        product_title = data['product_title']
+        product_description = data['product_description']
+        product_category_1 = data['product_category_1']
+        product_category_2 = data['product_category_2']
+        product_details = data['product_types']
+        additional_information = data['additional_information']
+        product_customisation_available = [data['customization_types']]
+        additional_customization_information = data['additional_customization_information']
+        date_of_post = datetime.datetime.now()
+
+        for i in range(1):
+
+            new_product = product.objects.get(pk=int(request.POST.get('product_pk')))
+
+            new_product.date_of_post = date_of_post
+
+            new_product.product_title = product_title
+            new_product.category_1 = product_category_1
+            new_product.category_2 = product_category_2
+            new_product.product_description = product_description
+
+            new_product.product_name = product_details[i]['product_name']
+            new_product.product_detail = product_details[i]['product_detail']
+            new_product.product_color = product_details[i]['color']
+            new_product.product_size = product_details[i]['size']
+            new_product.product_price = float(product_details[i]['price'])
+            new_product.product_discount = float(product_details[i]['disc_price'])
+            new_product.product_final_price = round((float(product_details[i]['price']) - (
+                    float(product_details[i]['price']) * float(product_details[i]['disc_price']) / 100)), 2)
+
+            ex_keys = ['product_name', 'product_detail', 'color', 'size', 'price', 'disc_price']
+            for each in ex_keys:
+                del (product_details[i][each])
+
+            new_product.product_remaining_details = [product_details[i]]
+            new_product.additional_information = additional_information
+
+            new_product.product_customisation_available = product_customisation_available
+            new_product.additional_customization_information = additional_customization_information
+
+            new_product.save()
+
+            image_list = []
+            images = request.FILES.getlist('product_type_images_' + str(i))
+            print(images)
+            for each in images:
+                fs = FileSystemStorage()
+                fs.save('seller_product_images/' + str(new_product.pk) + "/" + str(i) + "/" + each.name, each)
+                image_list.append('seller_product_images/' + str(new_product.pk) + "/" + str(i) + "/" + each.name)
+
+            new_product.images = image_list
+
+            new_product.save()
+
+        return redirect(reverse('isell:add_products'))
+
+    else:
+
+        product_to_edit = product.objects.get(pk=int(request.GET.get('product_pk')))
+
+        count = 0
+        seller = sellers.objects.get(seller=request.user)
+        for each in seller.customization_requests_list:
+            if each.accept_status == False and each.reject_status == False:
+                count += 1
+
+        return render(request, 'edit_product_form.html', {'product_to_edit': product_to_edit,'count': count, 'date': datetime.datetime.now()})
+
+
+
+@login_required(login_url='/login/')
+@user_passes_test(test_verification,login_url='/isell/home/')
+def remove_product(request):
+
+    product.objects.get(pk=int(request.GET.get('product_pk'))).delete()
+
+    return redirect(reverse('isell:add_products'))
+
+
+
+@login_required(login_url='/login/')
+@user_passes_test(test_verification,login_url='/isell/home/')
+def show_product(request):
+    product_details = product.objects.filter(pk=int(request.GET.get('product_no')))
+    if len(product_details)!=1:
+        messages.error(request, 'Sorry!! You have already deleted that product ')
+        return redirect(reverse('isell:add_products'))
+    count = 0
+    seller = sellers.objects.get(seller=request.user)
+    for each in seller.customization_requests_list:
+        if each.accept_status == False and each.reject_status == False:
+            count += 1
+
+    buyer_usernames=[]
+    for each in product_details[0].ratings_comments:
+        buyer_usernames.append(buyers.objects.get(pk=each.buyer_id).buyer.username)
+
+    data=zip(buyer_usernames,product_details[0].ratings_comments)
+
+    return render(request, 'show_product.html', {'product_details': product_details[0],'data':data,'count': count, 'date': datetime.datetime.now(),'buyer_usernames':buyer_usernames})
+
+@login_required(login_url='/login/')
+@user_passes_test(test_verification,login_url='/isell/home/')
+def delivered_products(request):
+    seller = sellers.objects.get(seller=request.user)
+    delivered_orders = []
+
+    for each in seller.order_list:
+        if each.delivery_status == True:
+            delivered_orders.append(each)
+    count=0
+    for each in seller.customization_requests_list:
+        if each.accept_status == False and each.reject_status == False:
+            count += 1
+
+    return render(request, 'delivered_products.html', {'delivered_orders': delivered_orders,'count': count, 'date': datetime.datetime.now()})
+
+@login_required(login_url='/login/')
+@user_passes_test(test_verification,login_url='/isell/home/')
+def applied_loans(request):
+    seller = sellers.objects.get(seller=request.user)
+    applied_loans = seller.loan_list
+
+    count = 0
+    for each in seller.customization_requests_list:
+        if each.accept_status == False and each.reject_status == False:
+            count += 1
+
+    return render(request, 'applied_loans.html', {'applied_loans': applied_loans,'count': count, 'date': datetime.datetime.now()})
+
+
+@login_required(login_url='/login/')
+@user_passes_test(test_verification,login_url='/isell/home/')
+def show_order(request):
+    user=request.user
+    seller = sellers.objects.get(seller=request.user)
+    order_details=None
+    for each in seller.order_list:
+        if each.order_id==int(request.GET.get('order_pk')):
+            order_details=each
+    buyer=buyers.objects.get(id=order_details.buyer_id).buyer
+
+    count = 0
+    for each in seller.customization_requests_list:
+        if each.accept_status == False and each.reject_status == False:
+            count += 1
+
+    return render(request,'show_order.html',{'order_details':order_details,'buyer_name':buyer.username,'buyer_email':buyer.email,'buyer_mobile':buyer.mobile,'count': count, 'date': datetime.datetime.now()})
+
+@login_required(login_url='/login/')
+@user_passes_test(test_verification,login_url='/isell/home/')
+def customization_requests(request):
+
+    seller=sellers.objects.get(seller=request.user)
+
+    if request.method == 'POST':
+
+        if request.POST.get('req_code')=="1":
+            data=[]
+            for each in seller.customization_requests_list:
+                if each.accept_status == False and each.reject_status == False:
+                    data.append(each)
+
+        elif request.POST.get('req_code')=="2":
+            data=[]
+            for each in seller.customization_requests_list:
+                if each.accept_status == False and each.reject_status == True:
+                    data.append(each)
+        elif request.POST.get('req_code')=="3":
+            data=[]
+            for each in seller.customization_requests_list:
+                if each.accept_status == True and each.reject_status == False:
+                    data.append(each)
+        else:
+            data = seller.customization_requests_list
+    else:
+        data = seller.customization_requests_list
+
+    count = 0
+
+    for each in seller.customization_requests_list:
+        if each.accept_status == False and each.reject_status == False:
+            count += 1
+
+    return render(request, 'customization_requests.html',{'data':data,'req_code':request.POST.get('req_code'),'count':count,'date':datetime.datetime.now()})
+
+@login_required(login_url='/login/')
+@user_passes_test(test_verification,login_url='/isell/home/')
+def accept_reject_customization_requests(request):
+    if request.method=='POST':
+        cust = customization.objects.get(pk=int(request.POST.get('cust_id')))
+        if request.POST.get('value')=='0':
+            cust.accept_status=False
+            cust.reject_status=True
+            cust.accepted_details=[None]
+            cust.save()
+        elif request.POST.get('value')=='1':
+            cust.accept_status=True
+            cust.reject_status=False
+            if len(cust.accepted_details)==0:
+                cust.accepted_details=cust.customization_details
+            cust.save()
+    return redirect('http://127.0.0.1:8000/isell/customization_requests/')
+
+
+@login_required(login_url='/login/')
+@user_passes_test(test_verification,login_url='/isell/home/')
+def reply_customization_requests(request):
+    if request.method == 'POST':
+        cust = customization.objects.get(pk=int(request.POST.get('cust_id')))
+        accepted_values={}
+        for i in range(len(cust.customization_details[0])):
+            if request.POST.get('key_val_'+str(i)) != None:
+                accepted_values[request.POST.get('key_val_'+str(i))]=cust.customization_details[0][request.POST.get('key_val_'+str(i))]
+        if accepted_values!={}:
+            cust.accepted_details=[accepted_values]
+            cust.accept_status=True
+            cust.reject_status=False
+        else:
+            cust.accepted_details = [None]
+            cust.accept_status = False
+            cust.reject_status = True
+        cust.save()
+    return redirect('http://127.0.0.1:8000/isell/customization_requests/')
+
+
+
+@login_required(login_url='/login/')
+@user_passes_test(test_verification,login_url='/isell/home/')
+def write_reply(request):
+
+    ratings_and_comments_=ratings_comments.objects.get(pk=int(request.GET.get('rc_id')))
+    ratings_and_comments_.reply=request.GET.get('my_reply')
+    ratings_and_comments_.reply_timestamp=datetime.datetime.now()
+    ratings_and_comments_.save()
+
+    product_details = product.objects.filter(pk=ratings_and_comments_.product.id)
+    if len(product_details) != 1:
+        messages.error(request, 'Sorry!! You have already deleted that product ')
+        return redirect(reverse('isell:add_products'))
+    count = 0
+    seller = sellers.objects.get(seller=request.user)
+    for each in seller.customization_requests_list:
+        if each.accept_status == False and each.reject_status == False:
+            count += 1
+
+    buyer_usernames = []
+    for each in product_details[0].ratings_comments:
+        buyer_usernames.append(buyers.objects.get(pk=each.buyer_id).buyer.username)
+
+    data = zip(buyer_usernames, product_details[0].ratings_comments)
+
+    return render(request, 'show_product.html',
+                  {'product_details': product_details[0], 'data': data, 'count': count, 'date': datetime.datetime.now(),
+                   'buyer_usernames': buyer_usernames})
+
+
+@login_required(login_url='/login/')
+@user_passes_test(test_verification,login_url='/isell/home/')
+def loan_details(request):
+    user = request.user
+    seller = sellers.objects.get(seller=request.user)
+    order_details = None
+    for each in seller.order_list:
+        if each.order_id == int(request.GET.get('order_pk')):
+            order_details = each
+    buyer = buyers.objects.get(id=order_details.buyer_id).buyer
+
+    count = 0
+    for each in seller.customization_requests_list:
+        if each.accept_status == False and each.reject_status == False:
+            count += 1
+
+    loan_details=loan.objects.get(order=order.objects.get(pk=int(request.GET.get('order_pk'))))
+
+    return render(request, 'show_loan_details.html',
+                  {'order_details': order_details, 'buyer_name': buyer.username, 'buyer_email': buyer.email,
+                   'buyer_mobile': buyer.mobile, 'count': count, 'date': datetime.datetime.now(),'loan_details':loan_details})
+
+from ilend.views import loan_taken
+
+@login_required(login_url='/login/')
+@user_passes_test(test_verification,login_url='/isell/home/')
+def apply_loan(request):
+    user = request.user
+    seller_details = sellers.objects.filter(seller=request.user)[0]
+
+    orders = seller_details.order_list
+    pending_orders = []
+
+    for each in orders:
+        if each.delivery_status == False:
+            pending_orders.append(each)
+
+    if request.method == 'POST':
+        order_id = int(request.POST.get('order_pk'))
+        amount = int(request.POST.get('amount'))
+        (acceptance, amount) = loan_taken(order_id, amount, True)
+
+
+    else:
+        order_id = int(request.GET.get('order_pk'))
+        (acceptance, amount) = loan_taken(order_id, 0, False)
+
+
+    count = 0
+    try:
+        for each in seller_details.customization_requests_list:
+            if each.accept_status == False and each.reject_status == False:
+                count += 1
+    except:
+        pass
+
+    return render(request, 'index3.html',
+                  {'pending_orders': pending_orders, 'order_id': order_id, 'acceptance': acceptance, 'amount': amount, 'count': count, 'date': datetime.datetime.now()})
+
+
+
+

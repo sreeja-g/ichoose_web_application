@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load staticfiles %}
+    <!-- Basic -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">   
+   
+    <!-- Mobile Metas -->
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+ 
+     <!-- Site Metas -->
+     <title>Ichoose</title>  
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="{% static 'ilend/images/favicon.ico' %}" type="image/x-icon" />
+    <link rel="apple-touch-icon" href="{% static 'ilend/images/apple-touch-icon.png' %}">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'ilend/css/bootstrap.min.css' %}">
+    <!-- Site CSS -->
+    <link rel="stylesheet" href="{% static 'ilend/style.css' %}">
+    <!-- ALL VERSION CSS -->
+    <link rel="stylesheet" href="{% static 'ilend/css/versions.css' %}">
+    <!-- Responsive CSS -->
+    <link rel="stylesheet" href="{% static 'ilend/css/responsive.css' %}">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'ilend/css/custom.css' %}">
+    <script src="{% static 'ilend/js/modernizr.custom.79639.js' %}"></script>
+    <!--===============================================================================================-->	
+	<link rel="icon" type="image/png" href="{% static 'ilend/images1/icons/favicon.ico' %}"/>
+<!--===============================================================================================-->
+	
+<!--===============================================================================================-->
+	
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static 'ilend/vendor1/animate/animate.css' %}">
+<!--===============================================================================================-->	
+	<link rel="stylesheet" type="text/css" href="{% static 'ilend/vendor1/css-hamburgers/hamburgers.min.css' %}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static 'ilend/vendor1/select2/select2.min.css' %}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static 'ilend/css1/util.css'%}">
+	<link rel="stylesheet" type="text/css" href="{% static 'ilend/css1/main.css' %}">
+
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+<style>
+    .wrapper {
+  position: relative;
+  perspective: 40em;
+  display: grid;
+  transform-style: preserve-3d;
+}
+
+.card {
+  grid-area: 1 / 1;
+  height: 200px;
+  width: 400px;
+  transform: translateX(10px) rotateY(25deg) rotateX(10deg);
+  background:white;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 30px;
+  color: #000;
+  text-transform: uppercase;
+  font-size: 60px;
+  font-weight: 900;
+  backface-visibility: hidden;
+  box-shadow: 0 10px 30px -3px rgba(0,0,0,.1);
+}
+
+h1 {
+  font-size: 60px;
+  font-weight: 900;
+}
+
+.card .enclosed {
+  background: #000;
+  line-height: 1;
+  color: darkorange;
+  padding: 0 5px;
+  display: inline-block;
+  transform: translate(-1px, 1px) scale(0.75);
+  transform-origin: right center;
+}
+
+.wrapper:before {
+  --bw: 9px;
+  grid-area: 1 / 1;
+  content: '';
+  backface-visibility: hidden;
+  height: 100%;
+  width: 100%;
+  margin-top: calc(-1 * var(--bw));
+  margin-left: calc(-1 * var(--bw));
+  background: transparent;
+  transform: translateX(-60px) rotateY(-30deg) rotateX(15deg) scale(1.03);
+  pointer-events: none;
+  border: var(--bw) solid #000;
+  box-sizing: content-box;
+}
+
+
+.wrapper:hover > div,
+.wrapper:hover:before {
+  transform: none;
+}
+
+
+.wrapper > div,
+.wrapper:before {
+  will-change: transform;
+  transition: .3s transform cubic-bezier(.25,.46,.45,1);
+}
+
+
+
+
+</style>
+<body class="seo_version">
+
+    
+
+    <!-- Start header -->
+	<header class="top-navbar">
+		<nav class="navbar navbar-expand-lg navbar-light bg-light">
+			<div class="container">
+				<a class="navbar-brand" href="">
+					<img src="{% static 'images/logo-seo.png' %}" alt="" />
+				</a>
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbars-seo" aria-controls="navbars-rs-food" aria-expanded="false" aria-label="Toggle navigation">
+				  <span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="collapse navbar-collapse" id="navbars-seo">
+					<ul class="navbar-nav ml-auto">
+						<li class="nav-item"><a class="nav-link" href="{%url 'loan_interface:home'%}" style="font-family: Arial, Helvetica, sans-serif;"  ><b>Home</b></a></li>
+                        <li class="nav-item"><a class="nav-link" href="{%url 'loan_interface:wallet'%}" style="font-family: Arial, Helvetica, sans-serif;" ><b>add money</b></a></li>
+                        <li class="nav-item active"><a class="nav-link" href="{%url 'loan_interface:displaycard'%}" style="font-family: Arial, Helvetica, sans-serif;" ><b>Add Cards</b></a></li>
+                        <li class="nav-item"><a class="nav-link" href="{%url 'loan_interface:viewcard'%}" style="font-family: Arial, Helvetica, sans-serif;"><b>view card</b></a></li>
+                       
+                        <li class="nav-item"><a class="nav-link" href=""style="font-family: Arial, Helvetica, sans-serif;"><b>Edit Profile</b></a></li>
+                        </ul>
+				</div>
+			</div>
+		</nav>
+	</header>
+    <!-- End header -->
+    
+    <div class="limiter">
+		<div style=" width: 100%;  
+        min-height: 100vh;
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -moz-box;
+        display: -ms-flexbox;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        padding: 15px;
+        background: #f14e1c;
+        background: -webkit-linear-gradient(-135deg,darkorange, #e5e7e7);
+        background: -o-linear-gradient(-135deg, darkorange, #f9fbfc);
+        background: -moz-linear-gradient(-135deg,darkorange, #f4f7f8);
+        background: linear-gradient(-135deg,darkorange, #e9eef0);">
+			<div class="wrap-login100">
+				<div class="wrapper">
+                    <div class="card">
+                      <h1>
+                        <span class="enclosed">money left</span>{{price}}/-
+                      </h1>
+                    </div>
+                  </div>
+            {% ifequal price value %}
+               
+                <form class="login100-form validate-form" action="{% url 'loan_interface:card'%}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.path }}  
+					<span class="login100-form-title" >
+                        <h2 style="color: darkorange;"> <b>Add Cards For Loans</b></h2> 	
+                    </span>
+                    <h1 style="color:darkorange;"><b> please add money to your wallet</b></h1>
+
+					
+					<div class="wrap-input100 validate-input" data-validate = "money is required">
+						<input class="input100" type="number" name="cards" placeholder="cards to be added" required >
+						<span class="focus-input100"></span>
+						<span class="symbol-input100">
+							<i class="fa-check" aria-hidden="true"></i>
+						</span>
+					</div>
+
+					<div class="wrap-input100 validate-input" data-validate = "money is required">
+                        
+                        <select id="price" name="money"class="input100">
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="75">75</option>
+                            <option value="100">100</option>
+                            <option value="125">125</option>
+                            <option value="150">150</option>
+                            <option value="175">175</option>
+                            <option value="200">200</option>
+                          </select>
+						<span class="focus-input100"></span>
+						<span class="symbol-input100">
+							<i class="fa-check" aria-hidden="true"></i>
+						</span>
+                    </div>
+                  
+					<div class="container-login100-form-btn">
+						<button class="login100-form-btn"style="background-color:darkorange;" disabled>
+							Add to Card
+						</button>
+                    </div>
+                
+                    {% else %}
+                    <form class="login100-form validate-form" action="{% url 'loan_interface:card'%}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ form.path }}  
+                        <span class="login100-form-title">
+                           <h2 style="color: darkorange;"> <b>Add Cards For Loans</b></h2> 
+                        </span>
+    
+                        
+                        <div class="wrap-input100 validate-input" data-validate = "money is required">
+                            <input class="input100" type="number" name="cards" placeholder="cards to be added" required >
+                            <span class="focus-input100"></span>
+                            <span class="symbol-input100">
+                                <i class="fa-check" aria-hidden="true"></i>
+                            </span>
+                        </div>
+    
+                        <div class="wrap-input100 validate-input" data-validate = "money is required">
+                            
+                            <select id="price" name="money"class="input100">
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="75">75</option>
+                                <option value="100">100</option>
+                                <option value="125">125</option>
+                                <option value="150">150</option>
+                                <option value="175">175</option>
+                                <option value="200">200</option>
+                              </select>
+                            <span class="focus-input100"></span>
+                            <span class="symbol-input100">
+                                <i class="fa-check" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                      
+                    <div class="container-login100-form-btn">
+						<button class="login100-form-btn"style="background-color:darkorange;" >
+							Add to Card
+						</button>
+                    </div>
+                    {% endifequal %}
+					</div>
+
+					
+				</form>
+			</div>
+		</div>
+	</div>
+    <footer class="footer" style="background-color:black">
+        <div class="container" >
+            <div class="row">
+                <div class="col-lg-4 col-md-6 col-xs-12">
+                    <div class="widget clearfix">
+                        <div class="widget-title">
+                            <img src="{% static 'images/logo-light.png' %}" alt="">
+                        </div>
+                        <h3 style="color: aliceblue;"><b> I choose is an E-Commerce Website which provides platform to buyers ,sellers,lenders.Sellers can start their business with zero inverstment with the help of lenders</b></h3>
+                        
+                    </div><!-- end clearfix -->
+                </div><!-- end col -->
+				
+				<div class="col-lg-2 col-md-6 col-xs-12">
+                    <div class="widget clearfix">
+                        <div class="widget-title">
+                            <h3 style="color:white">Information</h3>
+                        </div >
+                        <ul class="footer-links" >
+                            <li><a href="#" style="color:darkorange">Home</a></li>
+                            <li><a href="#" style="color:darkorange">about</a></li>
+                            <li><a href="#" style="color:darkorange">services</a></li>
+							<li><a href="#" style="color:darkorange">contact</a></li>
+							<li><a href="#" style="color:darkorange">Faq</a></li>
+							
+                        </ul><!-- end links -->
+                    </div><!-- end clearfix -->
+                </div><!-- end col -->
+
+                <div class="col-lg-3 col-md-6 col-xs-12">
+                    <div class="widget clearfix">
+						<div class="widget-title">
+							<h3 style="color:white"> Services</h3>
+						</div>
+						<p style="color:darkorange">Main services offered are offline wallet service, pooling service,customization service</p>
+						<div class="news-box">
+							
+						</div>
+						
+                        <div class="widget-title">
+                            <h3 style="color:white">Social</h3>
+                        </div>
+                        <ul class="footer-links social-md">
+                            <li><a class="fb btn-a" title="Facebook" data-tippy-animation="scale" href="#"><i class="fa fa-facebook"></i></a></li>
+                            <li><a class="gi btn-a" title="Github" data-tippy-animation="scale" href="#"><i class="fa fa-github"></i> </a></li>
+                            <li><a class="tw btn-a" title="Twitter" data-tippy-animation="scale" href="#"><i class="fa fa-twitter"></i> </a></li>
+                            <li><a class="dr btn-a" title="Dribbble" data-tippy-animation="scale" href="#"><i class="fa fa-dribbble"></i> </a></li>
+                            <li><a class="pi btn-a" title="Pinterest" data-tippy-animation="scale" href="#"><i class="fa fa-pinterest"></i> </a></li>
+                        </ul><!-- end links -->
+                    </div><!-- end clearfix -->
+                </div><!-- end col -->
+				
+				<div class="col-lg-3 col-md-6 col-xs-12">
+                    <div class="widget clearfix">
+                        <div class="widget-title">
+                            <h3 style="color:white">Contact Details</h3>
+                        </div>
+
+                        <ul class="footer-links">
+                            <li ><a href="mailto:#" style="color:darkorange">info@yoursite.com</a></li>
+                            <li><a href="#" style="color:darkorange">www.yoursite.com</a></li>
+                            <li style="color:darkorange"> PO Box 16122 Collins Street West Victoria 8007 Australia</li>
+                            <li style="color:darkorange">+61 3 8376 6284</li>
+                        </ul><!-- end links -->
+                    </div><!-- end clearfix -->
+                </div><!-- end col -->
+				
+            </div><!-- end row -->
+        </div><!-- end container -->
+    </footer><!-- end footer -->
+	
+    <a href="#" id="scroll-to-top" class="dmtop global-radius" style="background-color: darkorange;"><i class="fa fa-angle-up"></i></a>
+
+    <!-- ALL JS FILES -->
+    <script src="{% static 'ilend/js/all.js' %}"></script>
+    <!-- ALL PLUGINS -->
+	<script src="{% static 'ilend/js/tippy.all.min.js' %}"></script>
+    <script src="{% static 'ilend/js/custom.js' %}"></script>
+	
+	<script src="{% static 'ilend/js/jquery.ba-cond.min.js' %}"></script>
+	<script src="{% static 'ilend/js/jquery.slitslider.js' %}"></script>
+	<script type="text/javascript">	
+			$(function() {
+			
+				var Page = (function() {
+
+					var $nav = $( '#nav-dots > span' ),
+						slitslider = $( '#slider' ).slitslider( {
+							onBeforeChange : function( slide, pos ) {
+
+								$nav.removeClass( 'nav-dot-current' );
+								$nav.eq( pos ).addClass( 'nav-dot-current' );
+
+							}
+						} ),
+
+						init = function() {
+
+							initEvents();
+							
+						},
+						initEvents = function() {
+
+							$nav.each( function( i ) {
+							
+								$( this ).on( 'click', function( event ) {
+									
+									var $dot = $( this );
+									
+									if( !slitslider.isActive() ) {
+
+										$nav.removeClass( 'nav-dot-current' );
+										$dot.addClass( 'nav-dot-current' );
+									
+									}
+									
+									slitslider.jump( i + 1 );
+									return false;
+								
+								} );
+								
+							} );
+
+						};
+
+						return { init : init };
+
+				})();
+
+				Page.init();
+			
+			});
+		</script>
+		
+		<script>
+			tippy('.btn-a')
+		</script>
+
+
+    <script src="{% static 'vendor1/jquery/jquery-3.2.1.min.js' %}"></script>
+    <!--===============================================================================================-->
+        <script src="{% static 'vendor1/bootstrap/js/popper.js' %}"></script>
+        <script src="{% static 'vendor1/bootstrap/js/bootstrap.min.js' %}"></script>
+    <!--===============================================================================================-->
+        <script src="{% static 'vendor1/select2/select2.min.js' %}"></script>
+    <!--===============================================================================================-->
+        <script src="{% static 'vendor1/tilt/tilt.jquery.min.js' %}"></script>
+        <script >
+            $('.js-tilt').tilt({
+                scale: 1.1
+            })
+        </script>
+    <!--===============================================================================================-->
+        <script src="{% static 'js1/main.js' %}"></script>
+        
+
+</body>
+</html>
