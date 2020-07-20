@@ -25,12 +25,26 @@ def test_verification_application(user):
 @login_required(login_url='/login/')
 def isell_home(request):
 
+    days_selected_time_filter = ""
+    time_filter_dict = {'1':0, '3':1,'7':2,'30':3,'100':4}
+    time_filter_list=["","","","","selected"]
+
+    if request.method == 'POST':
+        if request.POST.get('time') and (request.POST.get('time') in time_filter_dict.keys()):
+            days_selected_time_filter = request.POST.get('time')
+            time_filter_list=["","","","",""]   
+            time_filter_list[time_filter_dict[request.POST.get('time')]] = "selected"
+
     seller=sellers.objects.filter(seller=request.user)
     pending_orders=[]
     try:
         for each in seller[0].order_list:
             if each.delivery_status==False:
-                pending_orders.append(each)
+                if days_selected_time_filter != "" and days_selected_time_filter != "100":
+                    if (datetime.now() - each.date_of_order).days < int(days_selected_time_filter):
+                        pending_orders.append(each)
+                else:     
+                    pending_orders.append(each)
     except:
         pass
     count = 0
@@ -40,7 +54,7 @@ def isell_home(request):
                 count += 1
     except:
         pass
-    return render(request, 'index3.html',{'pending_orders':pending_orders,'count':count,'date':datetime.datetime.now()})
+    return render(request, 'index3.html',{'pending_orders':pending_orders,'count':count,'date':datetime.datetime.now(),'time_filter_list':time_filter_list})
 
 
 
@@ -104,7 +118,22 @@ def verification_request(request):
 def add_products(request):
     user = request.user
 
-    products = product.objects.filter(seller=sellers.objects.get(seller=user)).order_by('-date_of_post') if len(product.objects.filter(seller=sellers.objects.get(seller=user))) > 0 else []
+    time_filter_dict = {'1':0, '3':1,'7':2,'30':3,'100':4}
+    time_filter_list=["","","","","selected"]
+
+    if request.method == 'POST':
+        
+        if request.POST.get('time') and (request.POST.get('time') in time_filter_dict.keys()):
+            time_filter_list=["","","","",""]   
+            time_filter_list[time_filter_dict[request.POST.get('time')]] = "selected"
+        
+        if request.POST.get('time')!="100":
+            products = product.objects.filter(seller=sellers.objects.get(seller=user), date_of_post__gte=datetime.datetime.now()-datetime.timedelta(days=int(request.POST.get('time')))).order_by('-date_of_post') if len(product.objects.filter(seller=sellers.objects.get(seller=user), date_of_post__gte=datetime.datetime.now()-datetime.timedelta(days=int(request.POST.get('time'))))) > 0 else []
+        else:
+            products = product.objects.filter(seller=sellers.objects.get(seller=user)).order_by('-date_of_post') if len(product.objects.filter(seller=sellers.objects.get(seller=user))) > 0 else []
+    else:
+        products = product.objects.filter(seller=sellers.objects.get(seller=user)).order_by('-date_of_post') if len(product.objects.filter(seller=sellers.objects.get(seller=user))) > 0 else []
+
 
     count = 0
     seller = sellers.objects.get(seller=user)
@@ -112,7 +141,7 @@ def add_products(request):
         if each.accept_status == False and each.reject_status == False :
             count+=1
 
-    return render(request, 'add_products.html', {'products': products,'count':count,'date':datetime.datetime.now()})
+    return render(request, 'add_products.html', {'products': products,'count':count,'date':datetime.datetime.now(),'time_filter_list':time_filter_list})
 
 
 
