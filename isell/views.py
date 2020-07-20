@@ -332,31 +332,64 @@ def show_product(request):
 @login_required(login_url='/login/')
 @user_passes_test(test_verification,login_url='/isell/home/')
 def delivered_products(request):
+
+    days_selected_time_filter = ""
+    time_filter_dict = {'1':0, '3':1,'7':2,'30':3,'100':4}
+    time_filter_list=["","","","","selected"]
+
+    if request.method == 'POST':
+        if request.POST.get('time') and (request.POST.get('time') in time_filter_dict.keys()):
+            days_selected_time_filter = request.POST.get('time')
+            time_filter_list=["","","","",""]   
+            time_filter_list[time_filter_dict[request.POST.get('time')]] = "selected"
+
     seller = sellers.objects.get(seller=request.user)
     delivered_orders = []
 
     for each in seller.order_list:
         if each.delivery_status == True:
-            delivered_orders.append(each)
+            if days_selected_time_filter != "" and days_selected_time_filter != "100":
+                if (datetime.now() - each.date_of_order).days < int(days_selected_time_filter):
+                    delivered_orders.append(each)
+            else:     
+                delivered_orders.append(each)
     count=0
     for each in seller.customization_requests_list:
         if each.accept_status == False and each.reject_status == False:
             count += 1
 
-    return render(request, 'delivered_products.html', {'delivered_orders': delivered_orders,'count': count, 'date': datetime.datetime.now()})
+    return render(request, 'delivered_products.html', {'delivered_orders': delivered_orders,'count': count, 'date': datetime.datetime.now(), 'time_filter_list':time_filter_list})
 
 @login_required(login_url='/login/')
 @user_passes_test(test_verification,login_url='/isell/home/')
 def applied_loans(request):
+
+    days_selected_time_filter = ""
+    time_filter_dict = {'1':0, '3':1,'7':2,'30':3,'100':4}
+    time_filter_list=["","","","","selected"]
+
+    if request.method == 'POST':
+        if request.POST.get('time') and (request.POST.get('time') in time_filter_dict.keys()):
+            days_selected_time_filter = request.POST.get('time')
+            time_filter_list=["","","","",""]   
+            time_filter_list[time_filter_dict[request.POST.get('time')]] = "selected"
+
     seller = sellers.objects.get(seller=request.user)
-    applied_loans = seller.loan_list
+    applied_loans = []
+
+    for each in seller.loan_list:
+        if days_selected_time_filter != "" and days_selected_time_filter != "100":
+            if (datetime.now() - each.loan_applied_date).days < int(days_selected_time_filter):
+                applied_loans.append(each)
+        else:     
+            applied_loans.append(each)
 
     count = 0
     for each in seller.customization_requests_list:
         if each.accept_status == False and each.reject_status == False:
             count += 1
 
-    return render(request, 'applied_loans.html', {'applied_loans': applied_loans,'count': count, 'date': datetime.datetime.now()})
+    return render(request, 'applied_loans.html', {'applied_loans': applied_loans,'count': count, 'date': datetime.datetime.now(), 'time_filter_list':time_filter_list})
 
 
 @login_required(login_url='/login/')
