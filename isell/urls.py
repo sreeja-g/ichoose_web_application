@@ -20,4 +20,6 @@ urlpatterns = [
     path('isell/applied_loans/', applied_loans, name='applied_loans'),
     path('isell/show_order/', show_order, name='show_order'),
     path('isell/apply_loan/', apply_loan, name='apply_loan'),
+
+    path('isell/export_data/', export_data, name='export_data'),
 ]

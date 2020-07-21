@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect, HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required,user_passes_test
 from isell.models import seller_verification_process,sellers,product
 from ichoose.models import buyers,customization,order,ratings_comments,loan
@@ -6,7 +6,7 @@ from django.core.files.storage import FileSystemStorage
 from django.urls import reverse
 import datetime,json
 from django.contrib import messages
-
+import csv
 
 def test_verification(user):
     if user.verification_status==True:
@@ -21,6 +21,33 @@ def test_verification_application(user):
         return False
 
 
+@login_required(login_url='/login/')
+def export_data(request):
+
+    if request.method == "POST":
+        user = request.user
+        
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="ichoose_data.csv"'
+
+        writer = csv.writer(response, delimiter=',')
+
+        if request.POST.get('export_data_type') == "add_products":
+
+            if request.POST.get('export_data_time_selected') and request.POST.get('export_data_time_selected')!="" and request.POST.get('export_data_time_selected')!="100":
+                items = product.objects.filter(seller=sellers.objects.get(seller=user), date_of_post__gte=datetime.datetime.now()-datetime.timedelta(days=int(request.POST.get('export_data_time_selected'))-1)).order_by('-date_of_post') if len(product.objects.filter(seller=sellers.objects.get(seller=user), date_of_post__gte=datetime.datetime.now()-datetime.timedelta(days=int(request.POST.get('export_data_time_selected'))-1))) > 0 else []
+            else:
+                items = product.objects.filter(seller=sellers.objects.get(seller=user)).order_by('-date_of_post') if len(product.objects.filter(seller=sellers.objects.get(seller=user))) > 0 else []
+
+
+            writer.writerow(['Product_title', 'Product_category_1', 'Product_category_2', 'Product_final_price', 'Product_date_of_post', 'Product_number_of_orders'])
+
+            for obj in items:
+                writer.writerow([obj.product_title, obj.category_1, obj.category_2, obj.product_final_price, obj.date_of_post, len(obj.order_list) ])
+
+        return response
+
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 @login_required(login_url='/login/')
 def isell_home(request):
@@ -121,14 +148,17 @@ def add_products(request):
     time_filter_dict = {'1':0, '3':1,'7':2,'30':3,'100':4}
     time_filter_list=["","","","","selected"]
 
+    time_selected = "100"
+
     if request.method == 'POST':
         
         if request.POST.get('time') and (request.POST.get('time') in time_filter_dict.keys()):
             time_filter_list=["","","","",""]   
             time_filter_list[time_filter_dict[request.POST.get('time')]] = "selected"
+            time_selected = request.POST.get('time')
         
         if request.POST.get('time')!="100":
-            products = product.objects.filter(seller=sellers.objects.get(seller=user), date_of_post__gte=datetime.datetime.now()-datetime.timedelta(days=int(request.POST.get('time')))).order_by('-date_of_post') if len(product.objects.filter(seller=sellers.objects.get(seller=user), date_of_post__gte=datetime.datetime.now()-datetime.timedelta(days=int(request.POST.get('time'))))) > 0 else []
+            products = product.objects.filter(seller=sellers.objects.get(seller=user), date_of_post__gte=datetime.datetime.now()-datetime.timedelta(days=int(request.POST.get('time'))-1)).order_by('-date_of_post') if len(product.objects.filter(seller=sellers.objects.get(seller=user), date_of_post__gte=datetime.datetime.now()-datetime.timedelta(days=int(request.POST.get('time'))-1))) > 0 else []
         else:
             products = product.objects.filter(seller=sellers.objects.get(seller=user)).order_by('-date_of_post') if len(product.objects.filter(seller=sellers.objects.get(seller=user))) > 0 else []
     else:
@@ -141,7 +171,7 @@ def add_products(request):
         if each.accept_status == False and each.reject_status == False :
             count+=1
 
-    return render(request, 'add_products.html', {'products': products,'count':count,'date':datetime.datetime.now(),'time_filter_list':time_filter_list})
+    return render(request, 'add_products.html', {'products': products,'count':count,'date':datetime.datetime.now(),'time_filter_list':time_filter_list, 'time_selected': time_selected})
 
 
 

@@ -205,8 +205,13 @@
                     <div class="row">
                         <div class="col-md-12">
                             <h3 class="title-5 m-b-35">Your Products</h3>
-                            <p style="float:right"><button class="au-btn-filter" style="background-color:green;color:white">
-                                        <i class="zmdi zmdi-download"></i>Download</button></p><br><br>
+                            <form method="post" action="{% url 'isell:export_data' %}" style="float:right">
+                                {% csrf_token %}
+                                        <input name="export_data_type" type="hidden" value="add_products" >
+                                        <input name="export_data_time_selected" type="hidden" value={{ time_selected }} >
+                                        <button class="au-btn-filter" style="background-color:green;color:white">
+                                        <i class="zmdi zmdi-download" type="submit"></i>Download</button>
+                            </form><br><br>
                             <div class="table-data__tool">
                                 <div class="table-data__tool-left">
 
@@ -288,7 +293,7 @@
                         </div>
                     </div>
                 </div>
-            </section>
+            </section><br><br><br>
 
 
 
