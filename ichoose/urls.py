@@ -11,6 +11,7 @@ urlpatterns = [
     path('remove/<int:id>/',remove ,name='remove'),
     path('search/',search, name='search'),
     path('add_comments/<int:id>/',add_comment ,name='add_comment'),
+    path('shipping_details/',shipping_details ,name='shipping_details'),
 
 
 ]
