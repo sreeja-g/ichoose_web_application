@@ -1498,6 +1498,7 @@
 										<tr>
 											<td>{{ product.product_title }}</td>
 											<td>{{ product.product_final_price }}</td>
+											
 										</tr>
 										{% endfor %}
 										{% endif %}
@@ -1556,10 +1557,17 @@
 									<input type="checkbox" id="checked-order" name="checked-order" checked>
 									<label for="checked-order">I’ve read and accept the terms & conditions *</label>
 								</div><!-- /.checkbox -->
-								<div class="btn-order">
-									<a href="#" class="order" title="">Place Order</a>
-								</div><!-- /.btn-order -->
+								
+								<script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+								 data-key={{key}}
+								 data-name="ONLINE WALLET"
+								 data-description="payment to orders"
+								
+								 data-allow-remember-me="false"
+								 data-label="PAYMENT">
+							</script>
 							</form>
+
 						</div><!-- /.cart-totals style2 -->
 					</div><!-- /.col-md-5 -->
 				</div><!-- /.row -->

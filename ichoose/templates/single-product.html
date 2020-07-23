@@ -1411,7 +1411,7 @@
 															
 								</div>
 								<div class="info-text">
-								 delivary in {{ product.product_remaining_details.0.product_delivery_days }} days
+								delivary in {{ product.product_remaining_details.0.product_delivery_days }} days
 								</div>
 								
 							</div><!-- /.content-detail -->
@@ -1513,14 +1513,17 @@
 					<div class="col-md-12">
 						<div class="tecnical-specs">
 							<h4 class="name">
-								Warch 42 mm Smart Watches
+								{{ product.product_name }}
 							</h4>
 							<table>
 								<tbody>
+									{% for k,v in product_details.product_remaining_details.0.items %}
 									<tr>
-										<td>Height</td>
-										<td>38.6mm</td>
+										<td>k</td>
+										<td>v</td>
+
 									</tr>
+									{% endfor %}
 									<tr>
 										<td>Meterial</td>
 										<td>Stainless Stee</td>
