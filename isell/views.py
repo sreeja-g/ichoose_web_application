@@ -165,9 +165,9 @@ def statistics(request):
 
     products_chart = get_chart(product_chart_data_month_year_filtered,'Your Products')
 
-    print(products_chart.as_html)
+    print(products_chart.as_html())
     
-    return render(request, 'statistics.html',{'products_chart':products_chart})
+    return render(request, 'statistics.html',{'products_chart':products_chart, 'hello':'hi'})
 
 
 @login_required(login_url='/login/')

@@ -85,12 +85,12 @@
                                 </ul>
                             </li>
                             <li>
-                                <a href="#" style="font-size: large;">
+                                <a href="{% url 'isell:statistics' %}" style="color: #E37E06;font-size: large;">
                                     <i class="fas fa-line-chart"></i>
-                                    <span class="bot-line"></span>Statistics</a>
+                                    <span class="bot-line" style="background-color: #E37E06;transform: scale(1); opacity: 1;"></span>Statistics</a>
                             </li>
                             <li>
-                                <a href="#" style="font-size: large;">
+                                <a href="{% url 'registration:home' %}" style="font-size: large;">
                                     <i class="fas fa-home"></i>
                                     <span class="bot-line"></span>Home</a>
                             </li>
@@ -203,12 +203,12 @@
                   <div class="card-body">
                     
 
-
                     
                         <script type="text/javascript" src="https://www.google.com/jsapi"></script>
                    <script type="text/javascript">
                        google.load("visualization", "1", {packages:["corechart"]});
-                   </script>                               {{ products_chart.as_html }}
+                   </script>  
+                                                {{ products_chart.as_html }} 
                                         
 
 
