@@ -1493,14 +1493,16 @@
 										</tr>
 									</thead>
 									<tbody>
+										{% if products %}
+										{% for product in products %}
 										<tr>
-											<td>Apple iPad Mini<br />G2356</td>
-											<td>$99.00</td>
+											<td>{{ product.product_title }}</td>
+											<td>{{ product.product_final_price }}</td>
 										</tr>
-										<tr>
-											<td>Beats Pill + Portable<br />Speaker</td>
-											<td>$100.00</td>
-										</tr>
+										{% endfor %}
+										{% endif %}
+										
+										
 									</tbody>
 								</table><!-- /.product -->
 								<table>

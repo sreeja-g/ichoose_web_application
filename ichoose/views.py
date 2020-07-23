@@ -190,11 +190,11 @@ def add_comment(request,id):
 
 
 def shipping_details(request):
-    if request.method == 'POST':
-        shipping = buyers()
-        ship = shipping.shipping_details()
-        ship.first_name = request.POST.get('first-name-2')
+    inital = {"items":[],"price":0.0,"count":0}
+    sess = request.session.get("data", inital)
+    products = product.objects.filter(id__in=sess["items"])
+    
+    context = {"products": products,
+            }
+    return render(request,'shop-checkout.html',context)
 
-        
-
-    return render(request,'shop-checkout.html')
