@@ -20,7 +20,7 @@
     <link href="{% static 'isell/vendor/font-awesome-5/css/fontawesome-all.min.css' %}" rel="stylesheet" media="all">
     <link href="{% static 'isell/vendor/mdi-font/css/material-design-iconic-font.min.css' %}" rel="stylesheet" media="all">
 
-    <!-- Bootstrap CSS-->
+       <!-- Bootstrap CSS-->
     <link href="{% static 'isell/vendor/bootstrap-4.1/bootstrap.min.css' %}" rel="stylesheet" media="all">
 
     <!-- Vendor CSS-->
@@ -34,12 +34,19 @@
 
     <!-- Main CSS-->
     <link href="{% static 'isell/css/theme.css' %}" rel="stylesheet" media="all">
+    <style>
+
+
+
+    </style>
 
 </head>
 
 <body class="animsition">
     <div class="page-wrapper" style="padding-bottom:0px">
         <!-- HEADER DESKTOP-->
+
+
         <header class="header-desktop3 d-none d-lg-block">
             <div class="section__content section__content--p35">
                 <div class="header3-wrap">
@@ -52,20 +59,21 @@
                         <ul class="list-unstyled">
                             <li class="has-sub">
                                 <a href="{% url 'isell:isell_home' %}" style="font-size: large;">
-                                    <i class="fas fa-tachometer-alt" ></i>Dashboard
+                                    <i class="fas fa-tachometer-alt"></i>Dashboard
                                     <span class="bot-line"></span>
                                 </a>
 
                             </li>
                             <li>
-                                <a href="{% url 'isell:add_products' %}" style="font-size: large;">
+                                <a href="{% url 'isell:add_products' %}" >
                                     <i class="fas fa-rupee-sign"></i>
-                                    <span class="bot-line"></span>Add Products</a>
+                                    <span class="bot-line" ></span>
+                                    Add Products</a>
                             </li>
                             <li class="has-sub">
-                                <a href="#" style="color: #E37E06;font-size: large;">
+                                <a href="#" style="font-size: large;">
                                     <i class="fas fa-copy"></i>
-                                    <span class="bot-line" style="background-color: #E37E06;transform: scale(1); opacity: 1;"></span>
+                                    <span class="bot-line"></span>
                                     History</a>
                                 <ul class="header3-sub-list list-unstyled">
                                     <li>
@@ -89,7 +97,7 @@
                         </ul>
                     </div>
                     <div class="header__tool">
-                        <div class="header-button-item has-noti js-item-menu">
+                         <div class="header-button-item has-noti js-item-menu">
                             <i class="zmdi zmdi-notifications"></i>
 
                             <div class="notifi-dropdown notifi-dropdown--no-bor js-dropdown">
@@ -117,6 +125,7 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="account-wrap">
                             <div class="account-item account-item--style2 clearfix js-item-menu">
                                 <div class="image" style="border-radius: 0;padding: 3px">
@@ -161,116 +170,52 @@
             <!-- END BREADCRUMB-->
 
             <!-- WELCOME-->
-            <section class="welcome p-t-10">
+            <section class="welcome p-t-10" >
                 <div class="container"style="margin-top: 4vh">
                     <div class="row">
                         <div class="col-md-12">
                             <h1 class="title-4">Hey
-                                <span>{{request.user.username}}!!</span>
+                                <span>{{request.user}}!!</span> 
                             </h1>
                             <hr class="line-seprate">
                         </div>
                     </div>
                 </div>
             </section>
-            <!-- END WELCOME-->
-
-
-            <section class="p-t-20" style="margin-top: 30px;padding-bottom: 40px">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <h3 class="title-5 m-b-35">Delivered Products</h3>
-                            <div class="table-data__tool">
-                                <div class="table-data__tool-left">
-
-                                    <form method="post" action="{% url 'isell:delivered_products' %}">
-                                            {% csrf_token %}
-                                    <div class="rs-select2--light rs-select2--sm">
-                                    <input class="time_value_filter" type="hidden" value={{ time }} >
-
-
-                                        <select class="js-select2 time_filter" name="time" onchange="this.form.submit()">
-                                            <option value="1" {{ time_filter_list.0 }}>Today</option>
-                                            <option value="3" {{ time_filter_list.1 }}>3 Days</option>
-                                            <option value="7" {{ time_filter_list.2 }}>1 Week</option>
-                                            <option value="30" {{ time_filter_list.3 }}>1 Month</option>
-                                            <option value="100" {{ time_filter_list.4 }}>All</option>
-                                        </select>
-                                        <div class="dropDownSelect2 time_filter_show"></div>
-                                    </div></form>
-                                </div>
-                                <div class="table-data__tool-right">
-                                    <form method="post" action="{% url 'isell:export_data' %}" style="float:right">
-                                        {% csrf_token %}
-                                        <input name="export_data_type" type="hidden" value="delivered_products" >
-                                        <input name="export_data_time_selected" type="hidden" value={{ days_selected_time_filter }} >
-                                        <button class="au-btn-filter" style="background-color:green;color:white">
-                                        <i class="zmdi zmdi-download" type="submit"></i>Download</button>
-                                    </form>
-                                </div>
-                            </div>
-                            <div class="table-responsive table-responsive-data2">
-                                <table class="table table-data2">
-                                    <thead>
-
-
-                                            <th  style="font-size: medium;font-weight : bold">S.no</th>
-                                            <th style="font-size: medium;font-weight: bold">Image</th>
-                                            <th style="font-size: medium;font-weight: bold">Order</th>
-                                            <th style="font-size: medium;font-weight: bold">price</th>
-                                            <th style="font-size: medium;font-weight: bold">quantity</th>
-                                            <th style="font-size: medium;font-weight: bold">total</th>
-                                            <th style="font-size: medium;font-weight: bold">order date</th>
-                                            <th style="font-size: medium;font-weight: bold">delivery status</th>
-                                            <th style="font-size: medium;font-weight: bold">delivery date</th>
-
-                                    </thead>
 
 
 
-                                    {% for each in delivered_orders %}
-                                        <tbody>
-                                        <tr class="tr-shadow">
-                                            <td style="font-size: medium;font-weight : bold;text-align: center;padding-top:60px">{{ forloop.counter }}</td>
-                                            <td>
-                                                <span class="block-email"><img  style="width:100px;height: 100px"  src="/media/{{each.order_details.images.0}}" alt="John Smith"></span>
-                                            </td>
-                                            <td class="desc" style="font-size: medium">
+<br><br>
 
-                                                <form method="get" action="{% url 'isell:show_order' %}">
-                                                        <input type="hidden" value={{ each.order_id }} name="order_pk">
-                                                        <button type="submit" style="color: #e37e06;font-size: medium"><span style="font-size: x-large">{{ each.order_details.product_title|capfirst }}</span><br>{{ each.order_details.product_name|capfirst }}</button></form>
-
-                                            </td>
-                                            <td style="font-size: medium">{{ each.order_details.product_final_price }}</td>
-                                            <td style="text-align: center;font-size: medium">{{ each.quantity }}</td>
-                                            <td style="font-size: medium">{{ each.total_price }}</td>
-                                            <td style="font-size: medium">{{ each.date_of_order }}</td>
-                                            <td style="font-size: medium;color: green;font-weight: bold">delivered</td>
-                                            <td style="font-size: medium">{{ each.date_of_delivery }}</td>
-                                        </tr>
-
-                                        </tbody>
-                                    {% endfor %}
+        <div class="section__content section__content--p30" style="width: 80%">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-md-12">
 
 
-
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section><br><br><br><br><br>
+                <div class="card">
+                  <div class="card-header">
+                      <strong class="card-title" style="font-size: large">STATISTICS<span style="float: right">
+</span></strong>
+                  </div>
 
 
-            <!-- DATA TABLE-->
-                       <!-- END DATA TABLE-->
+                  <div class="card-body">
+                    
 
 
-        </div>
+                    
+                        <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+                   <script type="text/javascript">
+                       google.load("visualization", "1", {packages:["corechart"]});
+                   </script>                               {{ products_chart.as_html }}
+                                        
 
-    </div>
+
+                      
+
+                  </div></div></div></div></div></div></div></div>
+
 
     <!-- Jquery JS-->
     <script src="{% static 'isell/vendor/jquery-3.2.1.min.js' %}"></script>

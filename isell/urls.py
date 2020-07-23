@@ -22,4 +22,5 @@ urlpatterns = [
     path('isell/apply_loan/', apply_loan, name='apply_loan'),
 
     path('isell/export_data/', export_data, name='export_data'),
+    path('isell/statistics/', statistics, name='statistics'),
 ]

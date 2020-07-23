@@ -352,9 +352,13 @@ body {font-family: Arial, Helvetica, sans-serif;}
                                     </div></form>
                                 </div>
                                 <div class="table-data__tool-right">
-
-                                    <button class="au-btn-filter" style="background-color:green;color:white">
-                                        <i class="zmdi zmdi-download"></i>Download</button>
+                                    <form method="post" action="{% url 'isell:export_data' %}" style="float:right">
+                                            {% csrf_token %}
+                                        <input name="export_data_type" type="hidden" value="pending_orders" >
+                                        <input name="export_data_time_selected" type="hidden" value={{ days_selected_time_filter }} >
+                                        <button class="au-btn-filter" style="background-color:green;color:white">
+                                        <i class="zmdi zmdi-download" type="submit"></i>Download</button>
+                                    </form>
                                 </div>
                             </div>
                             <div class="table-responsive table-responsive-data2">

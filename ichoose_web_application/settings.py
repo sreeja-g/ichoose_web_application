@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'ichoose',
     'isell',
     'ilend',
+    'graphos',
 ]
 
 MIDDLEWARE = [

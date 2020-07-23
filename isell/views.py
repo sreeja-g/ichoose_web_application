@@ -7,6 +7,8 @@ from django.urls import reverse
 import datetime,json
 from django.contrib import messages
 import csv
+from .graphs import get_chart
+from django.db.models import Count
 
 def test_verification(user):
     if user.verification_status==True:
@@ -35,7 +37,7 @@ def export_data(request):
         if request.POST.get('export_data_type') == "add_products":
 
             if request.POST.get('export_data_time_selected') and request.POST.get('export_data_time_selected')!="" and request.POST.get('export_data_time_selected')!="100":
-                items = product.objects.filter(seller=sellers.objects.get(seller=user), date_of_post__gte=datetime.datetime.now()-datetime.timedelta(days=int(request.POST.get('export_data_time_selected'))-1)).order_by('-date_of_post') if len(product.objects.filter(seller=sellers.objects.get(seller=user), date_of_post__gte=datetime.datetime.now()-datetime.timedelta(days=int(request.POST.get('export_data_time_selected'))-1))) > 0 else []
+                items = product.objects.filter(seller=sellers.objects.get(seller=user), date_of_post__gte=datetime.datetime.now()-datetime.timedelta(days=int(request.POST.get('export_data_time_selected')))).order_by('-date_of_post') if len(product.objects.filter(seller=sellers.objects.get(seller=user), date_of_post__gte=datetime.datetime.now()-datetime.timedelta(days=int(request.POST.get('export_data_time_selected'))))) > 0 else []
             else:
                 items = product.objects.filter(seller=sellers.objects.get(seller=user)).order_by('-date_of_post') if len(product.objects.filter(seller=sellers.objects.get(seller=user))) > 0 else []
 
@@ -44,6 +46,70 @@ def export_data(request):
 
             for obj in items:
                 writer.writerow([obj.product_title, obj.category_1, obj.category_2, obj.product_final_price, obj.date_of_post, len(obj.order_list) ])
+
+        if request.POST.get('export_data_type') == "delivered_products":
+
+            days_selected_time_filter =  request.POST.get('export_data_time_selected') 
+
+            seller = sellers.objects.get(seller=request.user)
+            items = []
+
+            for each in seller.order_list:
+                if each.delivery_status == True:
+                    if days_selected_time_filter != "" and days_selected_time_filter != "100":
+                        if (datetime.now() - each.date_of_order).days < int(days_selected_time_filter):
+                            items.append(each)
+                    else:     
+                        items.append(each)
+
+            writer.writerow(['Product_title', 'Product_category_1', 'Product_category_2', 'Product_final_price', 'Product_date_of_post', 'Product_number_of_orders'])
+
+            for obj in items:
+                writer.writerow([obj.product_title, obj.category_1, obj.category_2, obj.product_final_price, obj.date_of_post, len(obj.order_list) ])
+
+        if request.POST.get('export_data_type') == "applied_loans":
+
+            days_selected_time_filter =  request.POST.get('export_data_time_selected') 
+
+            seller = sellers.objects.get(seller=request.user)
+            items = []
+
+            for each in seller.loan_list:
+                if days_selected_time_filter != "" and days_selected_time_filter != "100":
+                    if (datetime.now() - each.loan_applied_date).days < int(days_selected_time_filter):
+                        items.append(each)
+                else:     
+                    items.append(each)
+
+
+            writer.writerow(['Order_id', 'loan amount', 'interest', 'loan status', 'loan applied date time', 'loan returned status', 'loan returned date time'])
+
+            for obj in items:
+                writer.writerow([obj.order_id, obj.loan_amount, obj.loan_intrest, obj.loan_status, obj.loan_applied_date, obj.loan_returned_status, obj.loan_returned_date ])
+
+        if request.POST.get('export_data_type') == "pending_orders":
+
+            days_selected_time_filter =  request.POST.get('export_data_time_selected') 
+
+            seller=sellers.objects.filter(seller=request.user)
+            items=[]
+            try:
+                for each in seller[0].order_list:
+                    if each.delivery_status==False:
+                        if days_selected_time_filter != "" and days_selected_time_filter != "100":
+                            if (datetime.now() - each.date_of_order).days < int(days_selected_time_filter):
+                                items.append(each)
+                        else:     
+                            items.append(each)
+            except:
+                pass
+
+
+            writer.writerow(['Order product title', 'Order product name', 'price', 'quantity', 'total', 'order time', 'delivery deadline'])
+
+            for obj in items:
+                writer.writerow([obj.order_details.product_title, obj.order_details.product_name, obj.order_details.product_final_price, obj.quantity, obj.total_price, obj.date_of_order, obj.told_date_of_order ])
+
 
         return response
 
@@ -81,8 +147,27 @@ def isell_home(request):
                 count += 1
     except:
         pass
-    return render(request, 'index3.html',{'pending_orders':pending_orders,'count':count,'date':datetime.datetime.now(),'time_filter_list':time_filter_list})
 
+    return render(request, 'index3.html',{'pending_orders':pending_orders,'count':count,'date':datetime.datetime.now(),'time_filter_list':time_filter_list, 'days_selected_time_filter':days_selected_time_filter})
+
+@login_required(login_url='/login/')
+def statistics(request):
+    
+    product_chart_data = product.objects.filter(seller=sellers.objects.get(seller=request.user)).values('date_of_post').annotate(Count('id')).order_by('date_of_post')
+    print(product_chart_data[0])
+    product_chart_data = product_chart_data[:100] if len(product_chart_data) > 100 else product_chart_data
+    product_chart_data_month_year_filtered = {}
+    for each in product_chart_data:
+        if str(each['date_of_post'].day)+'_'+str(each['date_of_post'].month)+'_'+str(each['date_of_post'].year) in product_chart_data_month_year_filtered.keys():
+            product_chart_data_month_year_filtered[str(each['date_of_post'].day)+'_'+str(each['date_of_post'].month)+'_'+str(each['date_of_post'].year)] += each['id__count']
+        else:
+            product_chart_data_month_year_filtered[str(each['date_of_post'].day)+'_'+str(each['date_of_post'].month)+'_'+str(each['date_of_post'].year)] = each['id__count']
+
+    products_chart = get_chart(product_chart_data_month_year_filtered,'Your Products')
+
+    print(products_chart.as_html)
+    
+    return render(request, 'statistics.html',{'products_chart':products_chart})
 
 
 @login_required(login_url='/login/')
@@ -158,7 +243,7 @@ def add_products(request):
             time_selected = request.POST.get('time')
         
         if request.POST.get('time')!="100":
-            products = product.objects.filter(seller=sellers.objects.get(seller=user), date_of_post__gte=datetime.datetime.now()-datetime.timedelta(days=int(request.POST.get('time'))-1)).order_by('-date_of_post') if len(product.objects.filter(seller=sellers.objects.get(seller=user), date_of_post__gte=datetime.datetime.now()-datetime.timedelta(days=int(request.POST.get('time'))-1))) > 0 else []
+            products = product.objects.filter(seller=sellers.objects.get(seller=user), date_of_post__gte=datetime.datetime.now()-datetime.timedelta(days=int(request.POST.get('time')))).order_by('-date_of_post') if len(product.objects.filter(seller=sellers.objects.get(seller=user), date_of_post__gte=datetime.datetime.now()-datetime.timedelta(days=int(request.POST.get('time'))))) > 0 else []
         else:
             products = product.objects.filter(seller=sellers.objects.get(seller=user)).order_by('-date_of_post') if len(product.objects.filter(seller=sellers.objects.get(seller=user))) > 0 else []
     else:
@@ -388,7 +473,7 @@ def delivered_products(request):
         if each.accept_status == False and each.reject_status == False:
             count += 1
 
-    return render(request, 'delivered_products.html', {'delivered_orders': delivered_orders,'count': count, 'date': datetime.datetime.now(), 'time_filter_list':time_filter_list})
+    return render(request, 'delivered_products.html', {'delivered_orders': delivered_orders,'count': count, 'date': datetime.datetime.now(), 'time_filter_list':time_filter_list, 'days_selected_time_filter': days_selected_time_filter})
 
 @login_required(login_url='/login/')
 @user_passes_test(test_verification,login_url='/isell/home/')
@@ -419,7 +504,7 @@ def applied_loans(request):
         if each.accept_status == False and each.reject_status == False:
             count += 1
 
-    return render(request, 'applied_loans.html', {'applied_loans': applied_loans,'count': count, 'date': datetime.datetime.now(), 'time_filter_list':time_filter_list})
+    return render(request, 'applied_loans.html', {'applied_loans': applied_loans,'count': count, 'date': datetime.datetime.now(), 'time_filter_list':time_filter_list, 'days_selected_time_filter':days_selected_time_filter})
 
 
 @login_required(login_url='/login/')
