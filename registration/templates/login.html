@@ -33,7 +33,6 @@
 
     <!-- Main CSS-->
     <link href="{% static 'isell/css/theme.css' %}" rel="stylesheet" media="all">
-     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <style>
 .fa {
   padding: 20px;
@@ -131,7 +130,7 @@
 {#                                        <a href="#">Forgotten Password?</a>#}
 {#                                    </label>#}
 {#                                </div>#}
-                                <div class="col-md-12 form-group" style="">
+                                <div class="col-md-12 form-group">
                                     <a href="{% url 'registration:forgot_password' %}"><u>Forgot Password?</u></a>
                                                                 </div>
                                 <button class="au-btn au-btn--block au-btn--blue m-b-20" type="submit">login</button>
@@ -145,7 +144,7 @@
 
                                 <a href="{% url 'social:begin' 'facebook' %}" style="color: white" class="fa fa-facebook"></a>
 
-                                <a href="{% url 'social:begin' 'twitter' %}" style="color: white-space: nowrap;e" class="fa fa-twitter"></a>
+                                <a href="{% url 'social:begin' 'twitter' %}" style="color: white" class="fa fa-twitter"></a>
                             </div>
                         </div>
 
