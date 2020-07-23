@@ -1436,68 +1436,43 @@
 									</tr>
 								</thead>
 								<tbody>
+									{% if products %}
+									{% for product in products %}
 									<tr>
 										<td>
+
 											<div class="img-product">
-												<img src="{% static 'images/product/other/12.jpg' %}" alt="">
+												<img src="/media/{{ product.images.0 }}" alt="">
 											</div>
 											<div class="name-product">
-												Apple iPad Mini <br />G2356
+												{{ product.product_title }}
 											</div>
 											<div class="price">
-												$1,250.00
+												{{ product.product_final_price }}
 											</div>
 											<div class="clearfix"></div>
 										</td>
 										<td>
 											<div class="quanlity">
 												<span class="btn-down"></span>
-												<input type="number" name="number" value="5" min="1" max="100" placeholder="Quanlity">
+												<input type="number" name="number" value="1" min="1" max="100" placeholder="Quanlity">
 												<span class="btn-up"></span>
 											</div>
 										</td>
 										<td>
 											<div class="total">
-												$6,250.00
+												{{ product.product_final_price }}
 											</div>
 										</td>
 										<td>
-											<a href="#" title="">
+											<a href="{% url 'ichoose:remove' product.id %}" title="">
 												<img src="{% static 'images/icons/delete.png' %}" alt="">
 											</a>
 										</td>
 									</tr>
-									<tr>
-										<td>
-											<div class="img-product">
-												<img src="{% static 'images/product/other/11.jpg' %}" alt="">
-											</div>
-											<div class="name-product">
-												Beats Pill+ Portable<br />Speaker
-											</div>
-											<div class="price">
-												$1,250.00
-											</div>
-											<div class="clearfix"></div>
-										</td>
-										<td>
-											<div class="quanlity">
-												<span class="btn-down"></span>
-												<input type="number" name="number" value="5" min="1" max="100" placeholder="Quanlity">
-												<span class="btn-up"></span>
-											</div>
-										</td>
-										<td>
-											<div class="total">
-												$6,250.00
-											</div>
-										</td>
-										<td>
-											<span>
-												<img src="{% static 'images/icons/delete.png' %}" alt="">
-											</span>
-										</td>
-									</tr>
+									{% endfor %}
+									{% endif %}
+									
 								</tbody>
 							</table>
 							<div class="form-coupon">
@@ -1543,8 +1518,8 @@
 									</tbody>
 								</table>
 								<div class="btn-cart-totals">
-									<a href="#" class="update" title="">Update Cart</a>
-									<a href="#" class="checkout" title="">Proceed to Checkout</a>
+									<a href="{% url 'ichoose:ichoose_product_grid' %}" class="update" title="">Update Cart</a>
+									<a href="{% url 'ichoose:shipping_details' %}" class="checkout" title="">Proceed to Checkout</a>
 								</div><!-- /.btn-cart-totals -->
 							</form><!-- /form -->
 						</div><!-- /.cart-totals -->
@@ -1552,7 +1527,7 @@
 				</div><!-- /.row -->
 			</div><!-- /.container -->
 		</section><!-- /.flat-shop-cart -->
-
+    
 		<section class="flat-row flat-iconbox style3">
 			<div class="container">
 				<div class="row">

@@ -1,10 +1,17 @@
 from django.shortcuts import HttpResponse, get_object_or_404, redirect, render
 from .models import *
 from isell.models import *
+from ilend.models import *
 from datetime import datetime
 from django.contrib import messages
 from django.urls import reverse
 from django.http import HttpResponseRedirect
+import stripe
+from django.conf import settings
+from django.views.generic.base import TemplateView
+from django.db.models import Q
+# Create your views here.
+stripe.api_key ='sk_test_51H85ctJGt48B5LYp9cViFLQ9g8LtffZM4oAKsbu6ImxJ68NMZpkzuOq8sj2VbL7HBB0dHvBmthZG6RQkspKnUE7R00Uv7mugNb'
 
 def index(request):
     inital = {"items":[],"price":0.0,"count":0}
@@ -59,7 +66,7 @@ def single_product(request, id=None):
 
 def search(request):
     q = request.GET["search"]
-    products = product.objects.filter(product_title__icontains=q)
+    products = product.objects.filter(Q(product_title__icontains=q) | Q(product_name__icontains=q))
     inital = {"items":[],"price":0.0,"count":0}
     session = request.session.get("data", inital)
     product_wish = product.objects.filter(id__in=session["items"])
@@ -94,6 +101,7 @@ def show_wishlist(request):
     sess = request.session.get("mywishlist", inital)
     products = product.objects.filter(id__in=sess["items"])
     
+
     context = {"products": products,
             }
     return render(request, "wishlist.html", context)
@@ -143,6 +151,24 @@ def mycart(request):
             }
     return render(request, "shop-cart.html", context)
 
+def remove_wish(request,id):
+    inital = {"items":[],"price":0.0,"count":0}
+
+    session = request.session.get("mywishlist", inital)
+    product_ = product.objects.get(id=id)
+    if id in session["items"]:
+        session["items"].remove(id)
+        session["price"] -= float(product_.product_final_price)
+        session["count"] -= 1
+        request.session["mywishlist"] = session
+    
+    products = product.objects.filter(id__in=session["items"])
+    
+    context = {"products": products,
+            }
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
 def remove(request,id):
     inital = {"items":[],"price":0.0,"count":0}
 
@@ -190,11 +216,51 @@ def add_comment(request,id):
 
 
 def shipping_details(request):
+    inital = {"items":[],"price":0.0,"count":0}
+    sess = request.session.get("data", inital)
+    products = product.objects.filter(id__in=sess["items"])
+    
+    context = {"products": products,
+        }
+    return render(request,'shop-checkout.html',context)
+class HomePageView(TemplateView):
+    template_name = 'shop-checkout.html'
+
+    def get_context_data(self, **kwargs): # new
+        context = super().get_context_data(**kwargs)
+        context['key'] ='pk_test_51H85ctJGt48B5LYpJLPUNMnBk8F9AQdGn4Jt2MBhIA2G104PM6ke8DmL7ghTYmMyUbJK6YBYhecT029wgk4ikcZe00zFOfCNl6'
+       
+        return context
+
+def charge(request): # new
+    print('923888888888888888888888888888888')
     if request.method == 'POST':
-        shipping = buyers()
-        ship = shipping.shipping_details()
-        ship.first_name = request.POST.get('first-name-2')
-
+        inital = {"items":[],"price":0.0,"count":0}
+        sess = request.session.get("data", inital)
+        charge = stripe.Charge.create(
+            amount= sess["price"] *100,
+            currency='inr',
+            description='A Django charge',
+            source=request.POST['stripeToken']
+        )
         
-
-    return render(request,'shop-checkout.html')
+        products = product.objects.filter(id__in=sess["items"])
+        for p in products:
+            order_create = order()
+            order_create.buyer = request.user
+            order_create.product = p
+            order_create.date_of_order = datetime(now)
+            order_create.told_date_of_order = date.now() + 14
+            order_create.quantity = 1
+            order_create.total_price = p.product_final_price * order_create.quantity
+            order_create.payment_status = True
+            order_create.save()
+        
+        a=offlinewallet.objects.get(user=User.objects.filter(is_superuser=True)[0])
+        a.price=a.price+sess["price"]
+        a.save(update_fields=['price'])
+        context={'price':sess["price"]}
+        print('923888888888888888888888888888888')
+        return render(request, 'order-tracking.html',context=context)
+    print('---------------')
+    print(settings.STRIPE_PUBLISHABLE_KEY)

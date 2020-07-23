@@ -1396,27 +1396,7 @@
 			</div><!-- /.header-bottom -->
 		</section><!-- /#header -->
 
-		<section class="flat-breadcrumb">
-			<div class="container">
-				<div class="row">
-					<div class="col-md-12">
-						<ul class="breadcrumbs">
-							<li class="trail-item">
-								<a href="#" title="">Home</a>
-								<span><img src="{% static 'images/icons/arrow-right.png' %}" alt=""></span>
-							</li>
-							<li class="trail-item">
-								<a href="#" title="">Shop</a>
-								<span><img src="{% static 'images/icons/arrow-right.png' %}" alt=""></span>
-							</li>
-							<li class="trail-end">
-								<a href="#" title="">Smartphones</a>
-							</li>
-						</ul><!-- /.breacrumbs -->
-					</div><!-- /.col-md-12 -->
-				</div><!-- /.row -->
-			</div><!-- /.container -->
-		</section><!-- /.flat-breadcrumb -->
+		<!-- /.flat-breadcrumb -->
 
 		<section class="flat-wishlist">
 			<div class="container">
@@ -1432,35 +1412,34 @@
 										<tr>
 											<th>Product Name</th>
 											<th>Unit Price</th>
-											<th>Stock Status</th>
+											
 											<th></th>
 										</tr>
 									</thead>
 									<tbody>
+										{% if products %}
+									{% for product in products %}
 										<tr>
+
 											<td>
 												<div class="delete">
-													<a href="#" title=""><img src="{% static 'images/icons/delete.png' %}" alt=""></a>
+													<a href="{% url 'ichoose:remove_wish' product.id %}" title=""><img src="{% static 'images/icons/delete.png' %}" alt=""></a>
 												</div>
 												<div class="product">
 													<div class="image">
-														<img src="{% static 'images/product/other/01.jpg' %}" alt="">
+														<img src="/media/{{ product.images.0 }}" alt="">
 													</div>
 													<div class="name">
-														Tablet Red Elite Book <br />Revolve 810 G2
+														{{ product.product_title }}
 													</div>
 												</div>
 											</td>
 											<td>
 												<div class="price">
-													$6,250.00
+													{{ product.product_final_price }}
 												</div>
 											</td>
-											<td>
-												<div class="status-product">
-													<span>In stock</span>
-												</div>
-											</td>
+											
 											<td>
 											
 												<div class="add-cart">
@@ -1471,70 +1450,9 @@
 												
 											</td>
 										</tr>
-										<tr>
-											<td>
-												<div class="delete">
-													<a href="#" title=""><img src="{% static 'images/icons/delete.png' %}" alt=""></a>
-												</div>
-												<div class="product">
-													<div class="image">
-														<img src="{% static 'images/product/other/01.jpg' %}" alt="">
-													</div>
-													<div class="name">
-														Tablet Red Elite Book <br />Revolve 810 G2
-													</div>
-												</div>
-											</td>
-											<td>
-												<div class="price">
-													$6,250.00
-												</div>
-											</td>
-											<td>
-												<div class="status-product">
-													<span>In stock</span>
-												</div>
-											</td>
-											<td>
-												<div class="add-cart">
-													<a href="#" title="">
-														<img src="{% static 'images/icons/add-cart.png' %}" alt="">Add to Cart
-													</a>
-												</div>
-											</td>
-										</tr>
-										<tr>
-											<td>
-												<div class="delete">
-													<a href="#" title=""><img src="{% static 'images/icons/delete.png' %}" alt=""></a>
-												</div>
-												<div class="product">
-													<div class="image">
-														<img src="{% static 'images/product/other/01.jpg' %}" alt="">
-													</div>
-													<div class="name">
-														Tablet Red Elite Book <br />Revolve 810 G2
-													</div>
-												</div>
-											</td>
-											<td>
-												<div class="price">
-													$6,250.00
-												</div>
-											</td>
-											<td>
-												<div class="status-product">
-													<span>In stock</span>
-												</div>
-											</td>
-											<td>
-												<div class="add-cart">
-													<a href="#" title="">
-														<img src="{% static 'images/icons/add-cart.png' %}" alt="">Add to Cart
-													</a>
-												</div>
-											</td>
-										</tr>
+										{% endfor %}
+										{% endif %}
+										
 									</tbody>
 								</table><!-- /.table-wishlist -->
 							</div><!-- /.wishlist-content -->
