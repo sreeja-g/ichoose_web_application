@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.conf import settings 
 from .models import *
+from ichoose.models import sellers
 from django.views.generic.base import TemplateView
 
 import stripe
@@ -96,10 +97,11 @@ def viewcard(request):
 
 def addcard(request):
    loan_money=0
-   if request.method == 'POST':
+   
+   if request.method == 'POST': 
+
         cards = request.POST.get('cards')
         money=request.POST.get('money') 
-        
         g=offlinewallet.objects.all()
         
         print(lcards.objects.all())
@@ -125,6 +127,8 @@ def addcard(request):
                     print(a)
                     a.price+=(int(cards)*int(money))
                     a.save(update_fields=['price'])
+                    p.remain_priceforloans=(p.remain_priceforloans-(int(cards)*int(money)))
+                    p.save()
                    
                     y[0].save(update_fields=['no_of_cards'])
                  else:
@@ -135,7 +139,8 @@ def addcard(request):
                     a=offlinewallet.objects.get(user=User.objects.filter(is_superuser=True)[0])
                     a.price+=(int(cards)*int(money))
                     a.save(update_fields=['price'])
-                   
+                    p.remain_priceforloans=(p.remain_priceforloans-(int(cards)*int(money)))
+                    p.save()
                     y[0].save()
                           
 
@@ -151,11 +156,12 @@ def addcard(request):
                     
                     a.price+=(int(cards)*int(money))
                     a.save(update_fields=['price'])
-                   
+                    p.remain_priceforloans=(p.remain_priceforloans-(int(cards)*int(money)))
+                    p.save()
 
                     lcards.objects.create(lender=lenders.objects.get(lender=request.user),money=[int(money)],no_of_cards=[int(cards)])
 
-
+                    
         
             return render(request,'loan_interface/loan_home.html')
         
@@ -191,9 +197,10 @@ def charge(request): # new
         if len(p)>0:
             p1=offlinewallet.objects.get(user=lenders.objects.get(lender=request.user).lender) 
             p1.price = p1.price+int(price)
-            p1.save(update_fields=['price'])
+            p1.remain_priceforloans=p1.price
+            p1.save()
         else:
-            p=offlinewallet(username=username,price=price)
+            p=offlinewallet(username=username,price=price,remain_priceforloans=price)
             p.save()
       
         context={'price':request.POST.get('price')}
@@ -327,7 +334,11 @@ def  money_loan(p):
    
     a1=offlinewallet.objects.get(user=User.objects.filter(is_superuser=True)[0])
     a1.price=a1.price-p
-    a1.save(update_fields=['price'])               
+    a1.save(update_fields=['price'])
+    k=offlinewallet.objects.get(user=sellers.objects.get(seller=order_.product).seller) 
+    print(k.price)
+    k.price=k.price+p
+    k.save()        
 
 from ichoose.models import order,loan
 import datetime
@@ -335,6 +346,7 @@ import datetime
 def loan_taken(order_id,amount,accept):
 
     order_=order.objects.get(pk=order_id)
+    print(order_id,amount,accept)
 
     if accept==False:
         p=float(order_.total_price)/2
@@ -348,12 +360,12 @@ def loan_taken(order_id,amount,accept):
     if accept==False:
 
         if (a.price > p):
-            print("**********")
-            print(p, mylist)
-            print("************")
+        
+           
             # print(p in mylist)
             flag = 0
             for i in mylist:
+            
                 if (p == i):
                     print("money is detecting")
                     flag = 1
@@ -363,24 +375,27 @@ def loan_taken(order_id,amount,accept):
             if (flag == 0):
                 for i in mylist:
                     if p < i:
+                    
                         print("money has to add")
                         return (False, i)
+                    if(i==mylist[-1] and p>i):
+                        return(False,i)
 
             else:
+                
                 return (False, p)
 
 
 
         else:
+
             return (False, a.price)
 
     else:
+        
 
         if (a.price > p):
-            print("**********")
-            print(p, mylist)
-            print("************")
-            # print(p in mylist)
+            
             flag = 0
             for i in mylist:
                 if (p == i):
@@ -397,7 +412,7 @@ def loan_taken(order_id,amount,accept):
                         new_loan = loan()
                         new_loan.order = order_
                         new_loan.seller = order_.product.seller
-
+                        new_loan.loan_intrest=5
                         new_loan.loan_applied_date = datetime.datetime.now()
                         new_loan.loan_status = True
                         new_loan.loan_amount = i
@@ -416,7 +431,7 @@ def loan_taken(order_id,amount,accept):
                 new_loan = loan()
                 new_loan.order = order_
                 new_loan.seller = order_.product.seller
-
+                new_loan.loan_intrest=5
                 new_loan.loan_applied_date = datetime.datetime.now()
                 new_loan.loan_status = True
                 new_loan.loan_amount = p
@@ -435,7 +450,7 @@ def loan_taken(order_id,amount,accept):
             new_loan = loan()
             new_loan.order = order_
             new_loan.seller = order_.product.seller
-
+            new_loan.loan_intrest=5
             new_loan.loan_applied_date = datetime.datetime.now()
             new_loan.loan_status = True
             new_loan.loan_amount = a.price

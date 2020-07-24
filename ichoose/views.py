@@ -335,8 +335,12 @@ def charge(request): # new
                 request.session["data"] = session
         count_cart = session["count"]
         a=offlinewallet.objects.get(user=User.objects.filter(is_superuser=True)[0])
-        a.price=a.price+int(session["price"])
-        a.save(update_fields=int(session['price']))
+        print("afterorderrrrrrrrrr")
+        print(a.price)
+        a.price=a.price+price_
+        print(a.price)
+        a.save()
+        
         context={'price':session["price"],"count_cart":count_cart,'categories' : categories,}
         
         return render(request, 'order-tracking.html',context=context)
