@@ -41,826 +41,172 @@
 			
 			<section id="header" class="header">
 				
-			<div class="header-middle">
-				<div class="container">
-					<div class="row">
-						<div class="col-md-3">
-							<div id="logo" class="logo">
-								<a href="{% url 'ichoose:ichoose_home' %}" title="">
-									<img src="{% static 'images/logos/logo.png' %}" alt="">
-								</a>
-							</div><!-- /#logo -->
-						</div><!-- /.col-md-3 -->
-						<div class="col-md-6">
-							<div class="top-search">
-								<form action="/ichoose/search/" method="get" class="form-search" accept-charset="utf-8">
-									<!-- /.cat-wrap -->
-									<div class="box-search">
-										<input type="text" name="search" placeholder="Search what you looking for ?" style="padding-left:75px!important">
-										<span class="btn-search">
-											<button type="submit" class="waves-effect"><img src="{% static 'images/icons/search.png' %}" alt=""></button>
-										</span>
-										<!-- /.search-suggestions -->
-									</div><!-- /.box-search -->
-								</form><!-- /.form-search -->
-							</div><!-- /.top-search -->
-						</div><!-- /.col-md-6 -->
-						<div class="col-md-3">
-							<div class="box-cart">
-								<div class="inner-box" style="margin-right: 19px;">
-									<a href="#">
-										<div class="icon-cart">
-											<img src="/static/images/icons/user.png" alt="">
-											
-											
-											
-										</div>
-										
+				<div class="header-middle">
+					<div class="container">
+						<div class="row">
+							<div class="col-md-3">
+								<div id="logo" class="logo">
+									<a href="{% url 'ichoose:ichoose_home' %}" title="">
+										<img src="{% static 'images/logos/logo.png' %}" alt="">
 									</a>
-									<div class="dropdown-box" >
-										<div class="btn-cart">
-											{% if user.is_authenticated %}
-											<a href="#" class="view-cart" title=""> {{ request.user }} </a>
-											<a href="{% url 'registration:logout' %}" class="check-out" title=""> logout </a>
-											{% else %}
-											<a href="{% url 'registration:login' %}" class="view-cart" title=""> Login </a>
-											<a href="{% url 'registration:signup' %}" class="check-out" title="">Sign up</a>
+								</div><!-- /#logo -->
+							</div><!-- /.col-md-3 -->
+							<div class="col-md-6">
+								<div class="top-search">
+									<form action="/ichoose/search/" method="get" class="form-search" accept-charset="utf-8">
+										<!-- /.cat-wrap -->
+										<div class="box-search">
+											<input type="text" name="search" placeholder="Search what you looking for ?" style="padding-left:75px!important">
+											<span class="btn-search">
+												<button type="submit" class="waves-effect"><img src="{% static 'images/icons/search.png' %}" alt=""></button>
+											</span>
+											<!-- /.search-suggestions -->
+										</div><!-- /.box-search -->
+									</form><!-- /.form-search -->
+								</div><!-- /.top-search -->
+							</div><!-- /.col-md-6 -->
+							<div class="col-md-3">
+								<div class="box-cart">
+									<div class="inner-box" style="margin-right: 19px;">
+										<a href="#">
+											<div class="icon-cart">
+												<img src="/static/images/icons/user.png" alt="">
+												
+												
+												
+											</div>
 											
-											{% endif %}
+										</a>
+										<div class="dropdown-box" >
+											<div class="btn-cart">
+												{% if user.is_authenticated %}
+												<a href="#" class="view-cart" title=""> {{ request.user }} </a>
+												<a href="{% url 'registration:logout' %}" class="check-out" title=""> logout </a>
+												{% else %}
+												<a href="{% url 'registration:login' %}" class="view-cart" title=""> Login </a>
+												<a href="{% url 'registration:signup' %}" class="check-out" title="">Sign up</a>
+												
+												{% endif %}
+											</div>
+											
 										</div>
-										
 									</div>
-								</div>
-								<div class="inner-box">
-									<ul class="menu-compare-wishlist">
-										
-										<li class="wishlist">
-											<a href="/ichoose/show_wishlist" title="">
-												<img src="{% static 'images/icons/wishlist.png' %}" alt="">
-											</a>
-										</li>
-									</ul><!-- /.menu-compare-wishlist -->
-								</div><!-- /.inner-box -->
-								<div class="inner-box">
-									<a href="{% url 'ichoose:mycart' %}" title="">
-										<div class="icon-cart">
-											<img src="{% static 'images/icons/cart.png' %}" alt="">
+									<div class="inner-box">
+										<ul class="menu-compare-wishlist">
 											
-											<span>{{ count_cart }}</span>
+											<li class="wishlist">
+												<a href="/ichoose/show_wishlist" title="">
+													<img src="{% static 'images/icons/wishlist.png' %}" alt="">
+												</a>
+											</li>
+										</ul><!-- /.menu-compare-wishlist -->
+									</div><!-- /.inner-box -->
+									<div class="inner-box">
+										<a href="{% url 'ichoose:mycart' %}" title="">
+											<div class="icon-cart">
+												<img src="{% static 'images/icons/cart.png' %}" alt="">
+												
+												<span>{{ count_cart }}</span>
+												
+											</div>
 											
+										</a>
+										<div class="dropdown-box">
+											<ul>
+											{% for cart_item in product_wish %}
+												<li>
+													<div class="img-product">
+														<img src="/media/{{ cart_item.images.0}}" alt="">
+													</div>
+													<div class="info-product">
+														<div class="name">
+															{{ cart_item.product_title }}
+														</div>
+														<div class="price">
+															
+															<span>{{ cart_item.product_final_price }}</span>
+														</div>
+													</div>
+													<div class="clearfix"></div>
+													<a href="{% url 'ichoose:remove' cart_item.id %}"><span class="delete">x</span></a>
+												</li>
+												{% endfor %}
+												
+											</ul>
+											<div class="total">
+												<span>Subtotal:</span>
+												<span class="price">{{ cart_price }}</span>
+											</div>
+											<div class="btn-cart">
+												<a href="{% url 'ichoose:mycart' %}" class="view-cart" title="">View Cart</a>
+												<a href="{% url 'ichoose:shipping_details' %}" class="check-out" title="">Checkout</a>
+											</div>
 										</div>
-										
-									</a>
-									<div class="dropdown-box">
-										<ul>
-										{% for cart_item in product_wish %}
+									</div><!-- /.inner-box -->
+								</div><!-- /.box-cart -->
+							</div><!-- /.col-md-3 -->
+						</div><!-- /.row -->
+					</div><!-- /.container -->
+				</div><!-- /.header-middle -->
+					<div class="header-bottom">
+						<div class="container">
+							<div class="row">
+								<div class="col-md-3 col-2">
+									<div id="mega-menu">
+										<div class="btn-mega"><span></span>ALL CATEGORIES</div>
+										<ul class="menu">
+											{% for k,v in categories.items %}
 											<li>
-												<div class="img-product">
-													<img src="{% static 'images/product/other/img-cart-1.jpg' %}" alt="">
-												</div>
-												<div class="info-product">
-													<div class="name">
-														{{ cart_item.product_title }}
+												<a href="../shop/?category_1={{k}}&category_2= " title="" class="dropdown">
+													<span class="menu-img">
+														<img src="{% static 'images/icons/menu/01.png' %}" alt="">
+													</span>
+													<span class="menu-title">
+														{{ k }}
+													</span>
+												</a>
+												<div class="drop-menu">
+													<div class="one-third">
+														<div class="cat-title">
+															{{ k }}
+														</div>
+														<ul>
+															{% for each in v %}
+															<li>
+																<a href="../shop/?category_1={{k}}&category_2={{ each }}" title="">{{ each }}</a>
+															</li>
+															{% endfor %}
+															
+														</ul>
+														<div class="show">
+															<a href="../shop/?category_1={{k}}&category_2=" title="">Shop All</a>
+														</div>
 													</div>
-													<div class="price">
-														
-														<span>{{ cart_item.product_final_price }}</span>
-													</div>
-												</div>
-												<div class="clearfix"></div>
-												<a href="{% url 'ichoose:remove' cart_item.id %}"><span class="delete">x</span></a>
+													
+													
+												</div><!-- /.drop-menu -->
 											</li>
 											{% endfor %}
 											
-										</ul>
-										<div class="total">
-											<span>Subtotal:</span>
-											<span class="price">{{ cart_price }}</span>
-										</div>
-										<div class="btn-cart">
-											<a href="{% url 'ichoose:mycart' %}" class="view-cart" title="">View Cart</a>
-											<a href="{% url 'ichoose:shipping_details' %}" class="check-out" title="">Checkout</a>
-										</div>
-									</div>
-								</div><!-- /.inner-box -->
-							</div><!-- /.box-cart -->
-						</div><!-- /.col-md-3 -->
-					</div><!-- /.row -->
-				</div><!-- /.container -->
-			</div><!-- /.header-middle -->
-				<div class="header-bottom">
-					<div class="container">
-						<div class="row">
-							<div class="col-md-3 col-2">
-								<div id="mega-menu">
-									<div class="btn-mega"><span></span>ALL CATEGORIES</div>
-									<ul class="menu">
-										<li>
-											<a href="#" title="" class="dropdown">
-												<span class="menu-img">
-													<img src="{% static 'images/icons/menu/01.png' %}" alt="">
-												</span>
-												<span class="menu-title">
-													Laptops & Mac
-												</span>
-											</a>
-											<div class="drop-menu">
-												<div class="one-third">
-													<div class="cat-title">
-														Laptop And Computer
-													</div>
-													<ul>
-														<li>
-															<a href="#" title="">Networking & Internet Devices</a>
-														</li>
-														<li>
-															<a href="#" title="">Laptops, Desktops & Monitors</a>
-														</li>
-														<li>
-															<a href="#" title="">Hard Drives & Memory Cards</a>
-														</li>
-														<li>
-															<a href="#" title="">Printers & Ink</a>
-														</li>
-														<li>
-															<a href="#" title="">Networking & Internet Devices</a>
-														</li>
-														<li>
-															<a href="#" title="">Computer Accessories</a>
-														</li>
-														<li>
-															<a href="#" title="">Software</a>
-														</li>
-													</ul>
-													<div class="show">
-														<a href="#" title="">Shop All</a>
-													</div>
-												</div>
-												<div class="one-third">
-													<div class="cat-title">
-														Audio & Video
-													</div>
-													<ul>
-														<li>
-															<a href="#" title="">Headphones & Speakers</a>
-														</li>
-														<li>
-															<a href="#" title="">Home Entertainment Systems</a>
-														</li>
-														<li>
-															<a href="#" title="">MP3 & Media Players</a>
-														</li>
-													</ul>
-													<div class="show">
-														<a href="#" title="">Shop All</a>
-													</div>
-												</div>
-												<div class="one-third">
-													<ul class="banner">
-														<li>
-															<div class="banner-text">
-																<div class="banner-title">
-																	Headphones
-																</div>
-																<div class="more-link">
-																	<a href="#" title="">Shop Now <img src="{% static 'images/icons/right-2.png' %}" alt=""></a>
-																</div>
-															</div>
-															<div class="banner-img">
-																<img src="{% static 'images/banner_boxes/menu-01.png' %}" alt="">
-															</div>
-															<div class="clearfix"></div>
-														</li>
-														<li>
-															<div class="banner-text">
-																<div class="banner-title">
-																	TV & Audio
-																</div>
-																<div class="more-link">
-																	<a href="#" title="">Shop Now <img src="{% static 'images/icons/right-2.png' %}" alt=""></a>
-																</div>
-															</div>
-															<div class="banner-img">
-																<img src="{% static 'images/banner_boxes/menu-02.png' %}" alt="">
-															</div>
-															<div class="clearfix"></div>
-														</li>
-														<li>
-															<div class="banner-text">
-																<div class="banner-title">
-																	Computers
-																</div>
-																<div class="more-link">
-																	<a href="#" title="">Shop Now <img src="{% static 'images/icons/right-2.png' %}" alt=""></a>
-																</div>
-															</div>
-															<div class="banner-img">
-																<img src="{% static 'images/banner_boxes/menu-03.png' %}" alt="">
-															</div>
-															<div class="clearfix"></div>
-														</li>
-													</ul>	
-												</div>
-											</div><!-- /.drop-menu -->
-										</li>
-										<li>
-											<a href="#" title="" class="dropdown">
-												<span class="menu-img">
-													<img src="{% static 'images/icons/menu/02.png' %}" alt="">
-												</span>
-												<span class="menu-title">
-													Mobile & Tablet
-												</span>
-											</a>
-											<div class="drop-menu">
-												<div class="one-third">
-													<div class="cat-title">
-														Laptop And Computer
-													</div>
-													<ul>
-														<li>
-															<a href="#" title="">Networking & Internet Devices</a>
-														</li>
-														<li>
-															<a href="#" title="">Laptops, Desktops & Monitors</a>
-														</li>
-														<li>
-															<a href="#" title="">Hard Drives & Memory Cards</a>
-														</li>
-														<li>
-															<a href="#" title="">Printers & Ink</a>
-														</li>
-														<li>
-															<a href="#" title="">Networking & Internet Devices</a>
-														</li>
-														<li>
-															<a href="#" title="">Computer Accessories</a>
-														</li>
-														<li>
-															<a href="#" title="">Software</a>
-														</li>
-													</ul>
-													<div class="show">
-														<a href="#" title="">Shop All</a>
-													</div>
-												</div>
-												<div class="one-third">
-													<div class="cat-title">
-														Audio & Video
-													</div>
-													<ul>
-														<li>
-															<a href="#" title="">Headphones & Speakers</a>
-														</li>
-														<li>
-															<a href="#" title="">Home Entertainment Systems</a>
-														</li>
-														<li>
-															<a href="#" title="">MP3 & Media Players</a>
-														</li>
-													</ul>
-													<div class="show">
-														<a href="#" title="">Shop All</a>
-													</div>
-												</div>
-												<div class="one-third">
-													<ul class="banner">
-														<li>
-															<div class="banner-text">
-																<div class="banner-title">
-																	Headphones
-																</div>
-																<div class="more-link">
-																	<a href="#" title="">Shop Now <img src="{% static 'images/icons/right-2.png' %}" alt=""></a>
-																</div>
-															</div>
-															<div class="banner-img">
-																<img src="{% static 'images/banner_boxes/menu-01.png' %}" alt="">
-															</div>
-															<div class="clearfix"></div>
-														</li>
-														<li>
-															<div class="banner-text">
-																<div class="banner-title">
-																	TV & Audio
-																</div>
-																<div class="more-link">
-																	<a href="#" title="">Shop Now <img src="{% static 'images/icons/right-2.png' %}" alt=""></a>
-																</div>
-															</div>
-															<div class="banner-img">
-																<img src="{% static 'images/banner_boxes/menu-02.png' %}" alt="">
-															</div>
-															<div class="clearfix"></div>
-														</li>
-														<li>
-															<div class="banner-text">
-																<div class="banner-title">
-																	Computers
-																</div>
-																<div class="more-link">
-																	<a href="#" title="">Shop Now <img src="{% static 'images/icons/right-2.png' %}" alt=""></a>
-																</div>
-															</div>
-															<div class="banner-img">
-																<img src="{% static 'images/banner_boxes/menu-03.png' %}" alt="">
-															</div>
-															<div class="clearfix"></div>
-														</li>
-													</ul>	
-												</div>
-											</div><!-- /.drop-menu -->
-										</li>
-										<li>
-											<a href="#" title="" class="dropdown">
-												<span class="menu-img">
-													<img src="{% static 'images/icons/menu/03.png' %}" alt="">
-												</span>
-												<span class="menu-title">
-													Home Devices
-												</span>
-											</a>
-											<div class="drop-menu">
-												<div class="one-third">
-													<div class="cat-title">
-														Laptop And Computer
-													</div>
-													<ul>
-														<li>
-															<a href="#" title="">Networking & Internet Devices</a>
-														</li>
-														<li>
-															<a href="#" title="">Laptops, Desktops & Monitors</a>
-														</li>
-														<li>
-															<a href="#" title="">Hard Drives & Memory Cards</a>
-														</li>
-														<li>
-															<a href="#" title="">Printers & Ink</a>
-														</li>
-														<li>
-															<a href="#" title="">Networking & Internet Devices</a>
-														</li>
-														<li>
-															<a href="#" title="">Computer Accessories</a>
-														</li>
-														<li>
-															<a href="#" title="">Software</a>
-														</li>
-													</ul>
-													<div class="show">
-														<a href="#" title="">Shop All</a>
-													</div>
-												</div>
-												<div class="one-third">
-													<div class="cat-title">
-														Audio & Video
-													</div>
-													<ul>
-														<li>
-															<a href="#" title="">Headphones & Speakers</a>
-														</li>
-														<li>
-															<a href="#" title="">Home Entertainment Systems</a>
-														</li>
-														<li>
-															<a href="#" title="">MP3 & Media Players</a>
-														</li>
-													</ul>
-													<div class="show">
-														<a href="#" title="">Shop All</a>
-													</div>
-												</div>
-												<div class="one-third">
-													<ul class="banner">
-														<li>
-															<div class="banner-text">
-																<div class="banner-title">
-																	Headphones
-																</div>
-																<div class="more-link">
-																	<a href="#" title="">Shop Now <img src="{% static 'images/icons/right-2.png' %}" alt=""></a>
-																</div>
-															</div>
-															<div class="banner-img">
-																<img src="{% static 'images/banner_boxes/menu-01.png' %}" alt="">
-															</div>
-															<div class="clearfix"></div>
-														</li>
-														<li>
-															<div class="banner-text">
-																<div class="banner-title">
-																	TV & Audio
-																</div>
-																<div class="more-link">
-																	<a href="#" title="">Shop Now <img src="{% static 'images/icons/right-2.png' %}" alt=""></a>
-																</div>
-															</div>
-															<div class="banner-img">
-																<img src="{% static 'images/banner_boxes/menu-02.png' %}" alt="">
-															</div>
-															<div class="clearfix"></div>
-														</li>
-														<li>
-															<div class="banner-text">
-																<div class="banner-title">
-																	Computers
-																</div>
-																<div class="more-link">
-																	<a href="#" title="">Shop Now <img src="{% static 'images/icons/right-2.png' %}" alt=""></a>
-																</div>
-															</div>
-															<div class="banner-img">
-																<img src="{% static 'images/banner_boxes/menu-03.png' %}" alt="">
-															</div>
-															<div class="clearfix"></div>
-														</li>
-													</ul>	
-												</div>
-											</div><!-- /.drop-menu -->
-										</li>
-										<li>
-											<a href="#" title="">
-												<span class="menu-img">
-													<img src="{% static 'images/icons/menu/04.png' %}" alt="">
-												</span>
-												<span class="menu-title">
-													Software
-												</span>
-											</a>
-										</li>
-										<li>
-											<a href="#" title="">
-												<span class="menu-img">
-													<img src="{% static 'images/icons/menu/05.png' %}" alt="">
-												</span>
-												<span class="menu-title">
-													TV & Audio
-												</span>
-											</a>
-										</li>
-										<li>
-											<a href="#" title="">
-												<span class="menu-img">
-													<img src="{% static 'images/icons/menu/06.png' %}" alt="">
-												</span>
-												<span class="menu-title">
-													Sports & Fitness
-												</span>
-											</a>
-										</li>
-										<li>
-											<a href="#" title="" class="dropdown">
-												<span class="menu-img">
-													<img src="{% static 'images/icons/menu/07.png' %}" alt="">
-												</span>
-												<span class="menu-title">
-													Games & Toys
-												</span>
-											</a>
-											<div class="drop-menu">
-												<div class="one-third">
-													<div class="cat-title">
-														Laptop And Computer
-													</div>
-													<ul>
-														<li>
-															<a href="#" title="">Networking & Internet Devices</a>
-														</li>
-														<li>
-															<a href="#" title="">Laptops, Desktops & Monitors</a>
-														</li>
-														<li>
-															<a href="#" title="">Hard Drives & Memory Cards</a>
-														</li>
-														<li>
-															<a href="#" title="">Printers & Ink</a>
-														</li>
-														<li>
-															<a href="#" title="">Networking & Internet Devices</a>
-														</li>
-														<li>
-															<a href="#" title="">Computer Accessories</a>
-														</li>
-														<li>
-															<a href="#" title="">Software</a>
-														</li>
-													</ul>
-													<div class="show">
-														<a href="#" title="">Shop All</a>
-													</div>
-												</div>
-												<div class="one-third">
-													<div class="cat-title">
-														Audio & Video
-													</div>
-													<ul>
-														<li>
-															<a href="#" title="">Headphones & Speakers</a>
-														</li>
-														<li>
-															<a href="#" title="">Home Entertainment Systems</a>
-														</li>
-														<li>
-															<a href="#" title="">MP3 & Media Players</a>
-														</li>
-													</ul>
-													<div class="show">
-														<a href="#" title="">Shop All</a>
-													</div>
-												</div>
-												<div class="one-third">
-													<ul class="banner">
-														<li>
-															<div class="banner-text">
-																<div class="banner-title">
-																	Headphones
-																</div>
-																<div class="more-link">
-																	<a href="#" title="">Shop Now <img src="{% static 'images/icons/right-2.png' %}" alt=""></a>
-																</div>
-															</div>
-															<div class="banner-img">
-																<img src="{% static 'images/banner_boxes/menu-01.png' %}" alt="">
-															</div>
-															<div class="clearfix"></div>
-														</li>
-														<li>
-															<div class="banner-text">
-																<div class="banner-title">
-																	TV & Audio
-																</div>
-																<div class="more-link">
-																	<a href="#" title="">Shop Now <img src="{% static 'images/icons/right-2.png' %}" alt=""></a>
-																</div>
-															</div>
-															<div class="banner-img">
-																<img src="{% static 'images/banner_boxes/menu-02.png' %}" alt="">
-															</div>
-															<div class="clearfix"></div>
-														</li>
-														<li>
-															<div class="banner-text">
-																<div class="banner-title">
-																	Computers
-																</div>
-																<div class="more-link">
-																	<a href="#" title="">Shop Now <img src="{% static 'images/icons/right-2.png' %}" alt=""></a>
-																</div>
-															</div>
-															<div class="banner-img">
-																<img src="{% static 'images/banner_boxes/menu-03.png' %}" alt="">
-															</div>
-															<div class="clearfix"></div>
-														</li>
-													</ul>	
-												</div>
-											</div><!-- /.drop-menu -->
-										</li>
-										<li>
-											<a href="#" title="">
-												<span class="menu-img">
-													<img src="{% static 'images/icons/menu/08.png' %}" alt="">
-												</span>
-												<span class="menu-title">
-													Video Cameras
-												</span>
-											</a>
-										</li>
-										<li>
-											<a href="#" title="" class="dropdown">
-												<span class="menu-img">
-													<img src="{% static 'images/icons/menu/09.png' %}" alt="">
-												</span>
-												<span class="menu-title">
-													Accessories
-												</span>
-											</a>
-											<div class="drop-menu">
-												<div class="one-third">
-													<div class="cat-title">
-														Laptop And Computer
-													</div>
-													<ul>
-														<li>
-															<a href="#" title="">Networking & Internet Devices</a>
-														</li>
-														<li>
-															<a href="#" title="">Laptops, Desktops & Monitors</a>
-														</li>
-														<li>
-															<a href="#" title="">Hard Drives & Memory Cards</a>
-														</li>
-														<li>
-															<a href="#" title="">Printers & Ink</a>
-														</li>
-														<li>
-															<a href="#" title="">Networking & Internet Devices</a>
-														</li>
-														<li>
-															<a href="#" title="">Computer Accessories</a>
-														</li>
-														<li>
-															<a href="#" title="">Software</a>
-														</li>
-													</ul>
-													<div class="show">
-														<a href="#" title="">Shop All</a>
-													</div>
-												</div>
-												<div class="one-third">
-													<div class="cat-title">
-														Audio & Video
-													</div>
-													<ul>
-														<li>
-															<a href="#" title="">Headphones & Speakers</a>
-														</li>
-														<li>
-															<a href="#" title="">Home Entertainment Systems</a>
-														</li>
-														<li>
-															<a href="#" title="">MP3 & Media Players</a>
-														</li>
-													</ul>
-													<div class="show">
-														<a href="#" title="">Shop All</a>
-													</div>
-												</div>
-												<div class="one-third">
-													<ul class="banner">
-														<li>
-															<div class="banner-text">
-																<div class="banner-title">
-																	Headphones
-																</div>
-																<div class="more-link">
-																	<a href="#" title="">Shop Now <img src="{% static 'images/icons/right-2.png' %}" alt=""></a>
-																</div>
-															</div>
-															<div class="banner-img">
-																<img src="{% static 'images/banner_boxes/menu-01.png' %}" alt="">
-															</div>
-															<div class="clearfix"></div>
-														</li>
-														<li>
-															<div class="banner-text">
-																<div class="banner-title">
-																	TV & Audio
-																</div>
-																<div class="more-link">
-																	<a href="#" title="">Shop Now <img src="{% static 'images/icons/right-2.png' %}" alt=""></a>
-																</div>
-															</div>
-															<div class="banner-img">
-																<img src="{% static 'images/banner_boxes/menu-02.png' %}" alt="">
-															</div>
-															<div class="clearfix"></div>
-														</li>
-														<li>
-															<div class="banner-text">
-																<div class="banner-title">
-																	Computers
-																</div>
-																<div class="more-link">
-																	<a href="#" title="">Shop Now <img src="{% static 'images/icons/right-2.png' %}" alt=""></a>
-																</div>
-															</div>
-															<div class="banner-img">
-																<img src="{% static 'images/banner_boxes/menu-03.png' %}" alt="">
-															</div>
-															<div class="clearfix"></div>
-														</li>
-													</ul>	
-												</div>
-											</div><!-- /.drop-menu -->
-										</li>
-										<li>
-											<a href="#" title="" class="dropdown">
-												<span class="menu-img">
-													<img src="{% static 'images/icons/menu/10.png' %}" alt="">
-												</span>
-												<span class="menu-title">
-													Security
-												</span>
-											</a>
-											<div class="drop-menu">
-												<div class="one-third">
-													<div class="cat-title">
-														Laptop And Computer
-													</div>
-													<ul>
-														<li>
-															<a href="#" title="">Networking & Internet Devices</a>
-														</li>
-														<li>
-															<a href="#" title="">Laptops, Desktops & Monitors</a>
-														</li>
-														<li>
-															<a href="#" title="">Hard Drives & Memory Cards</a>
-														</li>
-														<li>
-															<a href="#" title="">Printers & Ink</a>
-														</li>
-														<li>
-															<a href="#" title="">Networking & Internet Devices</a>
-														</li>
-														<li>
-															<a href="#" title="">Computer Accessories</a>
-														</li>
-														<li>
-															<a href="#" title="">Software</a>
-														</li>
-													</ul>
-													<div class="show">
-														<a href="#" title="">Shop All</a>
-													</div>
-												</div>
-												<div class="one-third">
-													<div class="cat-title">
-														Audio & Video
-													</div>
-													<ul>
-														<li>
-															<a href="#" title="">Headphones & Speakers</a>
-														</li>
-														<li>
-															<a href="#" title="">Home Entertainment Systems</a>
-														</li>
-														<li>
-															<a href="#" title="">MP3 & Media Players</a>
-														</li>
-													</ul>
-													<div class="show">
-														<a href="#" title="">Shop All</a>
-													</div>
-												</div>
-												<div class="one-third">
-													<ul class="banner">
-														<li>
-															<div class="banner-text">
-																<div class="banner-title">
-																	Headphones
-																</div>
-																<div class="more-link">
-																	<a href="#" title="">Shop Now <img src="{% static 'images/icons/right-2.png' %}" alt=""></a>
-																</div>
-															</div>
-															<div class="banner-img">
-																<img src="{% static 'images/banner_boxes/menu-01.png' %}" alt="">
-															</div>
-															<div class="clearfix"></div>
-														</li>
-														<li>
-															<div class="banner-text">
-																<div class="banner-title">
-																	TV & Audio
-																</div>
-																<div class="more-link">
-																	<a href="#" title="">Shop Now <img src="{% static 'images/icons/right-2.png' %}" alt=""></a>
-																</div>
-															</div>
-															<div class="banner-img">
-																<img src="{% static 'images/banner_boxes/menu-02.png' %}" alt="">
-															</div>
-															<div class="clearfix"></div>
-														</li>
-														<li>
-															<div class="banner-text">
-																<div class="banner-title">
-																	Computers
-																</div>
-																<div class="more-link">
-																	<a href="#" title="">Shop Now <img src="{% static 'images/icons/right-2.png' %}" alt=""></a>
-																</div>
-															</div>
-															<div class="banner-img">
-																<img src="{% static 'images/banner_boxes/menu-03.png' %}" alt="">
-															</div>
-															<div class="clearfix"></div>
-														</li>
-													</ul>	
-												</div>
-											</div><!-- /.drop-menu -->
-										</li>
-									</ul><!-- /.menu -->
-								</div><!-- /.mega-menu -->
-							</div><!-- /.col-md-3 -->
-							<div class="col-md-9 col-10">
-							<div class="nav-wrap">
-								<div id="mainnav" class="mainnav">
-									<!-- /.menu -->
-								</div><!-- /.mainnav -->
-							</div><!-- /.nav-wrap -->
-							<!-- /.today-deal -->
-							<div class="btn-menu">
-	                            <span></span>
-	                        </div><!-- //mobile menu button -->
-						</div><!-- /.col-md-9 -->
-						</div><!-- /.row -->
-					</div><!-- /.container -->
-				</div><!-- /.header-bottom -->
-			</section><!-- /#header -->
+											
+										</ul><!-- /.menu -->
+									</div><!-- /.mega-menu -->
+								</div><!-- /.col-md-3 -->
+								<div class="col-md-9 col-10">
+								<div class="nav-wrap">
+									<div id="mainnav" class="mainnav">
+										<!-- /.menu -->
+									</div><!-- /.mainnav -->
+								</div><!-- /.nav-wrap -->
+								<!-- /.today-deal -->
+								<div class="btn-menu">
+									<span></span>
+								</div><!-- //mobile menu button -->
+							</div><!-- /.col-md-9 -->
+							</div><!-- /.row -->
+						</div><!-- /.container -->
+					</div><!-- /.header-bottom -->
+				</section><!-- /#header -->
 
 			<div class="divider35"></div>
 
