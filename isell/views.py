@@ -171,8 +171,10 @@ def statistics(request):
     products_chart = get_chart(product_chart_data_month_year_filtered,'Your Products')
 
     print(products_chart.as_html())
+
+    walet_value = offlinewallet.objects.filter(user=lenders.objects.get(lender=request.user).lender)[0].price if offlinewallet.objects.filter(user=lenders.objects.get(lender=request.user).lender)[0].price else 0
     
-    return render(request, 'statistics.html',{'products_chart':products_chart, 'hello':'hi'})
+    return render(request, 'statistics.html',{'products_chart':products_chart, 'walet_value':walet_value})
 
 
 @login_required(login_url='/login/')
@@ -261,7 +263,9 @@ def add_products(request):
         if each.accept_status == False and each.reject_status == False :
             count+=1
 
-    return render(request, 'add_products.html', {'products': products,'count':count,'date':datetime.datetime.now(),'time_filter_list':time_filter_list, 'time_selected': time_selected})
+    walet_value = offlinewallet.objects.filter(user=lenders.objects.get(lender=request.user).lender)[0].price if offlinewallet.objects.filter(user=lenders.objects.get(lender=request.user).lender)[0].price else 0
+    
+    return render(request, 'add_products.html', {'products': products,'count':count,'date':datetime.datetime.now(),'time_filter_list':time_filter_list, 'time_selected': time_selected, 'walet_value': walet_value})
 
 
 
@@ -337,7 +341,10 @@ def add_new_product(request):
             if each.accept_status == False and each.reject_status == False:
                 count += 1
 
-        return render(request, 'add_product_form.html',{'count':count,'date':datetime.datetime.now(), 'categories' : categories})
+        walet_value = offlinewallet.objects.filter(user=lenders.objects.get(lender=request.user).lender)[0].price if offlinewallet.objects.filter(user=lenders.objects.get(lender=request.user).lender)[0].price else 0
+    
+
+        return render(request, 'add_product_form.html',{'count':count,'date':datetime.datetime.now(), 'categories' : categories, 'walet_value':walet_value})
 
 
 @login_required(login_url='/login/')
@@ -414,7 +421,9 @@ def edit_product(request):
             if each.accept_status == False and each.reject_status == False:
                 count += 1
 
-        return render(request, 'edit_product_form.html', {'product_to_edit': product_to_edit,'count': count, 'date': datetime.datetime.now()})
+        walet_value = offlinewallet.objects.filter(user=lenders.objects.get(lender=request.user).lender)[0].price if offlinewallet.objects.filter(user=lenders.objects.get(lender=request.user).lender)[0].price else 0
+
+        return render(request, 'edit_product_form.html', {'product_to_edit': product_to_edit,'count': count, 'date': datetime.datetime.now(), 'walet_value':walet_value})
 
 
 
@@ -447,7 +456,9 @@ def show_product(request):
 
     data=zip(buyer_usernames,product_details[0].ratings_comments)
 
-    return render(request, 'show_product.html', {'product_details': product_details[0],'data':data,'count': count, 'date': datetime.datetime.now(),'buyer_usernames':buyer_usernames})
+    walet_value = offlinewallet.objects.filter(user=lenders.objects.get(lender=request.user).lender)[0].price if offlinewallet.objects.filter(user=lenders.objects.get(lender=request.user).lender)[0].price else 0
+
+    return render(request, 'show_product.html', {'product_details': product_details[0],'data':data,'count': count, 'date': datetime.datetime.now(),'buyer_usernames':buyer_usernames, 'walet_value' : walet_value})
 
 @login_required(login_url='/login/')
 @user_passes_test(test_verification,login_url='/isell/home/')
@@ -478,7 +489,10 @@ def delivered_products(request):
         if each.accept_status == False and each.reject_status == False:
             count += 1
 
-    return render(request, 'delivered_products.html', {'delivered_orders': delivered_orders,'count': count, 'date': datetime.datetime.now(), 'time_filter_list':time_filter_list, 'days_selected_time_filter': days_selected_time_filter})
+    walet_value = offlinewallet.objects.filter(user=lenders.objects.get(lender=request.user).lender)[0].price if offlinewallet.objects.filter(user=lenders.objects.get(lender=request.user).lender)[0].price else 0
+
+
+    return render(request, 'delivered_products.html', {'delivered_orders': delivered_orders,'count': count, 'date': datetime.datetime.now(), 'time_filter_list':time_filter_list, 'days_selected_time_filter': days_selected_time_filter, 'walet_value' : walet_value})
 
 @login_required(login_url='/login/')
 @user_passes_test(test_verification,login_url='/isell/home/')
@@ -509,7 +523,9 @@ def applied_loans(request):
         if each.accept_status == False and each.reject_status == False:
             count += 1
 
-    return render(request, 'applied_loans.html', {'applied_loans': applied_loans,'count': count, 'date': datetime.datetime.now(), 'time_filter_list':time_filter_list, 'days_selected_time_filter':days_selected_time_filter})
+    walet_value = offlinewallet.objects.filter(user=lenders.objects.get(lender=request.user).lender)[0].price if offlinewallet.objects.filter(user=lenders.objects.get(lender=request.user).lender)[0].price else 0
+
+    return render(request, 'applied_loans.html', {'applied_loans': applied_loans,'count': count, 'date': datetime.datetime.now(), 'time_filter_list':time_filter_list, 'days_selected_time_filter':days_selected_time_filter, 'walet_value' : walet_value})
 
 
 @login_required(login_url='/login/')
@@ -528,7 +544,9 @@ def show_order(request):
         if each.accept_status == False and each.reject_status == False:
             count += 1
 
-    return render(request,'show_order.html',{'order_details':order_details,'buyer_name':buyer.username,'buyer_email':buyer.email,'buyer_mobile':buyer.mobile,'count': count, 'date': datetime.datetime.now()})
+    walet_value = offlinewallet.objects.filter(user=lenders.objects.get(lender=request.user).lender)[0].price if offlinewallet.objects.filter(user=lenders.objects.get(lender=request.user).lender)[0].price else 0
+
+    return render(request,'show_order.html',{'order_details':order_details,'buyer_name':buyer.username,'buyer_email':buyer.email,'buyer_mobile':buyer.mobile,'count': count, 'date': datetime.datetime.now(), 'walet_value': walet_value})
 
 @login_required(login_url='/login/')
 @user_passes_test(test_verification,login_url='/isell/home/')
@@ -565,7 +583,10 @@ def customization_requests(request):
         if each.accept_status == False and each.reject_status == False:
             count += 1
 
-    return render(request, 'customization_requests.html',{'data':data,'req_code':request.POST.get('req_code'),'count':count,'date':datetime.datetime.now()})
+    walet_value = offlinewallet.objects.filter(user=lenders.objects.get(lender=request.user).lender)[0].price if offlinewallet.objects.filter(user=lenders.objects.get(lender=request.user).lender)[0].price else 0
+
+
+    return render(request, 'customization_requests.html',{'data':data,'req_code':request.POST.get('req_code'),'count':count,'date':datetime.datetime.now(), 'walet_value':walet_value})
 
 @login_required(login_url='/login/')
 @user_passes_test(test_verification,login_url='/isell/home/')
@@ -633,9 +654,11 @@ def write_reply(request):
 
     data = zip(buyer_usernames, product_details[0].ratings_comments)
 
+    walet_value = offlinewallet.objects.filter(user=lenders.objects.get(lender=request.user).lender)[0].price if offlinewallet.objects.filter(user=lenders.objects.get(lender=request.user).lender)[0].price else 0
+
     return render(request, 'show_product.html',
                   {'product_details': product_details[0], 'data': data, 'count': count, 'date': datetime.datetime.now(),
-                   'buyer_usernames': buyer_usernames})
+                   'buyer_usernames': buyer_usernames, 'walet_value' : walet_value})
 
 
 @login_required(login_url='/login/')
@@ -656,8 +679,10 @@ def loan_details(request):
 
     loan_details=loan.objects.get(order=order.objects.get(pk=int(request.GET.get('order_pk'))))
 
+    walet_value = offlinewallet.objects.filter(user=lenders.objects.get(lender=request.user).lender)[0].price if offlinewallet.objects.filter(user=lenders.objects.get(lender=request.user).lender)[0].price else 0
+
     return render(request, 'show_loan_details.html',
-                  {'order_details': order_details, 'buyer_name': buyer.username, 'buyer_email': buyer.email,
+                  {'order_details': order_details, 'buyer_name': buyer.username, 'buyer_email': buyer.email, 'walet_value' : walet_value,
                    'buyer_mobile': buyer.mobile, 'count': count, 'date': datetime.datetime.now(),'loan_details':loan_details})
 
 from ilend.views import loan_taken
@@ -695,8 +720,10 @@ def apply_loan(request):
     except:
         pass
 
+    walet_value = offlinewallet.objects.filter(user=lenders.objects.get(lender=request.user).lender)[0].price if offlinewallet.objects.filter(user=lenders.objects.get(lender=request.user).lender)[0].price else 0
+
     return render(request, 'index3.html',
-                  {'pending_orders': pending_orders, 'order_id': order_id, 'acceptance': acceptance, 'amount': amount, 'count': count, 'date': datetime.datetime.now()})
+                  {'pending_orders': pending_orders, 'order_id': order_id, 'acceptance': acceptance, 'amount': amount, 'count': count, 'date': datetime.datetime.now(), 'walet_value':walet_value})
 
 
 
