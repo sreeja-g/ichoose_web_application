@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import HttpResponse, get_object_or_404, redirect, render
 from .models import *
 from isell.models import *
@@ -41,11 +42,20 @@ def flutter_verify(request):
     p.Verification_step_1 = final_dictionary['Verification_step_1']
     p.Verification_step_2 = final_dictionary['Verification_step_2']
     p.Verification_step_3 = final_dictionary['Verification_step_3']
+    if p.Verification_step_1 == p.Verification_step_2 == p.Verification_step_3 == 'True':
+        User.verification_status = 'True'
+    else:
+        User.verification_status = 'False'
     p.save()
     return None
 
+@login_required(login_url='/login/')
 def profile(request):
-    return render(request, 'profile.html')
+    buyer_profile = buyers.objects.all()
+    context = {
+        'buyer_profile': buyer_profile
+    }
+    return render(request, 'profile.html',context)
 
 
 

@@ -23,4 +23,5 @@ urlpatterns = [
 
     path('isell/export_data/', export_data, name='export_data'),
     path('isell/statistics/', statistics, name='statistics'),
+    path('isell/profile/', seller_profile,name ='seller_profile')
 ]

@@ -80,7 +80,8 @@
 									<div class="dropdown-box" >
 										<div class="btn-cart">
 											{% if user.is_authenticated %}
-											<a href="#" class="view-cart" title=""> {{ request.user }} </a>
+											<a href="http://127.0.0.1:8000/home/" class="view-cart" title="" style="margin-bottom: 20px"> {{ request.user }} </a>
+                                                <a href="{% url 'ichoose:profile' %}" class="view-cart" title=""> Profile </a>
 											<a href="{% url 'registration:logout' %}" class="check-out" title=""> logout </a>
 											{% else %}
 											<a href="{% url 'registration:login' %}" class="view-cart" title=""> Login </a>

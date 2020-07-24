@@ -67,6 +67,7 @@
 						<div class="wizard-navigation">
 							<ul>
 	                            <li><a href="#about" data-toggle="tab">About</a></li>
+	                            <li><a href="#address" data-toggle="tab">Address</a></li>
 	                        </ul>
 
 						</div>
@@ -86,22 +87,26 @@
                                   </div>
                                   <div class="col-sm-6">
                                       <div class="form-group">
-                                        <label>First Name <small>(required)</small></label>
-                                        <input name="{{ buyer_profile.buyer.username }}" type="text" class="form-control" placeholder="First Name">
+                                        <label>Name <small>(required)</small></label>
+                                        <input name="{{ sell_profile.seller.username }}" type="text" class="form-control" placeholder="Name">
                                       </div>
                                       <div class="form-group">
                                         <label>Mobile Number <small>(required)</small></label>
-                                        <input name="{{ buyer_profile.buyer.mobile }}" type="text" class="form-control" placeholder="Last Name">
+                                        <input name="{{ sell_profile.seller.mobile }}" type="text" class="form-control" placeholder="Mobile">
                                       </div>
                                       <div class="form-group">
-                                            <label>Address</label>
-                                            <input type="text" class="form-control" name="{{ buyer_profile.buyer.address }}" placeholder="Address">
+                                        <label>Address<small>(required)</small></label>
+                                        <input name="{{ sell_profile.seller.address }}" type="text" class="form-control" placeholder="Addresss">
+                                      </div>
+                                      <div class="form-group">
+                                        <label>Number of orders<small>(required)</small></label>
+                                        <input name="{{ len_order }}" type="text" class="form-control" placeholder="#Orders">
                                       </div>
                                   </div>
                                   <div class="col-sm-10 col-sm-offset-1">
                                       <div class="form-group">
                                           <label>Email <small>(required)</small></label>
-                                          <input name="{{ buyer_profile.buyer.email }}" type="email" class="form-control" placeholder="anything@gmail.com">
+                                          <input name="{{ sell_profile.seller.email }}" type="email" class="form-control" placeholder="anything@gmail.com">
                                       </div>
                                   </div>
                               </div>
