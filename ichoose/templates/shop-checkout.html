@@ -69,30 +69,31 @@
 						</div><!-- /.col-md-6 -->
 						<div class="col-md-3">
 							<div class="box-cart">
-								<div class="inner-box" style="margin-right: 19px;">
-									<a href="#">
-										<div class="icon-cart">
-											<img src="/static/images/icons/user.png" alt="">
-											
-											
-											
+								<div class="inner-box" style="margin-right: 19px;"><b style="font-size:small">{{ request.user }}&nbsp;</b>
+										<a href="#">
+											<div class="icon-cart">
+												<img src="/static/images/icons/user.png" alt="">
+
+
+
+											</div>
+
+										</a>
+										<div class="dropdown-box" >
+											<div class="btn-cart">
+												{% if user.is_authenticated %}
+												<a href="{% url 'ichoose:profile' %}" class="view-cart" title=""> Account </a>
+												<a href="{% url 'registration:logout' %}" class="check-out" title=""> logout </a>
+												{% else %}
+												<a href="{% url 'registration:login' %}" class="view-cart" title=""> Login </a>
+												<a href="{% url 'registration:signup' %}" class="check-out" title="">Sign up</a>
+
+												{% endif %}
+											</div>
+
+
 										</div>
-										
-									</a>
-									<div class="dropdown-box" >
-										<div class="btn-cart">
-											{% if user.is_authenticated %}
-											<a href="#" class="view-cart" title=""> {{ request.user }} </a>
-											<a href="{% url 'registration:logout' %}" class="check-out" title=""> logout </a>
-											{% else %}
-											<a href="{% url 'registration:login' %}" class="view-cart" title=""> Login </a>
-											<a href="{% url 'registration:signup' %}" class="check-out" title="">Sign up</a>
-											
-											{% endif %}
-										</div>
-										
 									</div>
-								</div>
 								<div class="inner-box">
 									<ul class="menu-compare-wishlist">
 										
