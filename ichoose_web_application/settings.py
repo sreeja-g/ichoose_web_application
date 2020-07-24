@@ -25,7 +25,7 @@ SECRET_KEY = '$f#=^@-m3)6i+@u6-$8x5qdo0xav8q_3j0#q((apb4%n6h@e5m'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['192.168.43.129', 'localhost', '127.0.0.1', '10.0.2.2:8000', '*']
 
 
 # Application definition
@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'isell',
     'ilend',
     'graphos',
+    'delivery',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [

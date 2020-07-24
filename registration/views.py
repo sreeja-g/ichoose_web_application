@@ -11,6 +11,15 @@ from .forms import UserForm
 from django.shortcuts import render,redirect
 from .models import User
 from django.contrib.auth.decorators import login_required
+from rest_framework import generics,filters
+from registration.models import User
+from registration.serializers import UserSerializer
+
+
+
+class OrderAPIView(generics.ListCreateAPIView):
+    queryset = User.objects.filter(staff=True)
+    serializer_class = UserSerializer
 
 def index(request):
     
