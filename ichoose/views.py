@@ -11,10 +11,45 @@ from django.conf import settings
 from django.views.generic.base import TemplateView
 from django.db.models import Q
 from .category_types import categories
+from rest_framework import generics,filters
+from ichoose.serializers import SellerVerify,SellUserVerify
+from ichoose.models import seller_verification_process
+from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 stripe.api_key ='sk_test_51H85ctJGt48B5LYp9cViFLQ9g8LtffZM4oAKsbu6ImxJ68NMZpkzuOq8sj2VbL7HBB0dHvBmthZG6RQkspKnUE7R00Uv7mugNb'
 #home page
+
+
+
+class SellerVerifyAPI(generics.ListCreateAPIView):
+    filter_backends = (filters.SearchFilter,)
+    queryset = seller_verification_process.objects.all()
+    serializer_class = SellerVerify
+
+
+class  SellVerifyAPI(generics.ListCreateAPIView):
+    filter_backends = (filters.SearchFilter,)
+    queryset = seller_verification_process.objects.all()
+    serializer_class = SellUserVerify
+
+@csrf_exempt
+def flutter_verify(request):
+    body_unicode = request.body.decode('utf-8')
+    final_dictionary = eval(body_unicode)
+    p=seller_verification_process.objects.filter(name=final_dictionary['name'])[0]
+    p.Verification_step_1 = final_dictionary['Verification_step_1']
+    p.Verification_step_2 = final_dictionary['Verification_step_2']
+    p.Verification_step_3 = final_dictionary['Verification_step_3']
+    p.save()
+    return None
+
+def profile(request):
+    return render(request, 'profile.html')
+
+
+
+
 def index(request):
     inital = {"items":[],"price":0.0,"count":0}
     session = request.session.get("data", inital)

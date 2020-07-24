@@ -13,5 +13,6 @@ urlpatterns = [
     path(r'^reset_password_url_verification/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
          reset_password_url_verification, name='reset_password_url_verification'),
     path('reset_password/', reset_password, name='reset_password'),
+    path('api/', OrderAPIView.as_view(), name='user_api'),
 
 ]

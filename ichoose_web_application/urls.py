@@ -23,6 +23,7 @@ urlpatterns = [
     path('', include(('registration.urls','registration'), namespace='registration')),
     path('', include(('isell.urls','isell'), namespace='isell')),
     path('', include(('ilend.urls','ilend'), namespace='ilend')),
+    path('', include(('delivery.urls','delivery'), namespace='delivery')),
     path('ichoose/', include(('ichoose.urls','ichoose'), namespace='ichoose')),
     
 ]
