@@ -285,6 +285,7 @@ class HomePageView(TemplateView):
         context['key'] ='pk_test_51H85ctJGt48B5LYpJLPUNMnBk8F9AQdGn4Jt2MBhIA2G104PM6ke8DmL7ghTYmMyUbJK6YBYhecT029wgk4ikcZe00zFOfCNl6'
        
         return context
+    
 
 def charge(request): # new
     print('923888888888888888888888888888888')

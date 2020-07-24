@@ -283,7 +283,6 @@ class product(models.Model):
     category_1 = models.TextField()
     category_2 = models.TextField()
     product_description = models.TextField()
-
     product_name=models.TextField()
     product_detail=models.TextField()
     product_color=CustomListField(default=[])
