@@ -14,15 +14,6 @@ from ichoose.category_types import categories
 from ilend.models import offlinewallet, lenders
 
 
-@login_required(login_url='/login/')
-def seller_profile(request):
-    sell_profile = sellers.objects.all()
-    len_order = len(sell_profile.order_list)
-    context ={
-        'sell_profile': sell_profile, 'len_order': len_order
-    }
-    return render(request,'seller_profile.html',context)
-
 def test_verification(user):
     if user.verification_status==True:
         return True

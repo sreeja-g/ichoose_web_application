@@ -47,13 +47,15 @@ def flutter_verify(request):
     else:
         User.verification_status = 'False'
     p.save()
-    return None
+    return render(request, '')
+
+
 
 @login_required(login_url='/login/')
 def profile(request):
-    buyer_profile = buyers.objects.all()
+    profile = User.objects.all()
     context = {
-        'buyer_profile': buyer_profile
+        'profile': profile,
     }
     return render(request, 'profile.html',context)
 
@@ -141,7 +143,7 @@ def wishlist(request,id=None):
     inital = {"items":[],"price":0.0,"count":0}
     session1 = request.session.get("data", inital)
     session2 = request.session.get("mywishlist",inital)
-    cart_count = seaaion1["count"]
+    cart_count = session1["count"]
     product_ = product.objects.get(id=id)
     if id in session1["items"]:
         messages.error(request, "Already in cart")

@@ -5,4 +5,5 @@ from .views import *
 
 urlpatterns = [
     path('order/', OrderAPIView.as_view(), name="order"),
+    path('deliver/', deliver_verify,name ="deliver"),
 ]

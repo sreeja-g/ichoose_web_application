@@ -11,5 +11,5 @@ urlpatterns = [
     path('ilend/card/', views.addcard, name='card'),
     path('ilend/display_card/', views.displaycard, name='displaycard'),
     path('ilend/view_card/', views.viewcard, name='viewcard'),
-    path('ilend/profile/', views.ilend_profile, name='ilend_profile')
+
 ]

@@ -9,14 +9,6 @@ import stripe
 # stripe.api_key = settings.STRIPE_SECRET_KEY
 stripe.api_key ='sk_test_51H85ctJGt48B5LYp9cViFLQ9g8LtffZM4oAKsbu6ImxJ68NMZpkzuOq8sj2VbL7HBB0dHvBmthZG6RQkspKnUE7R00Uv7mugNb'
 
-@login_required(login_url='/login/')
-def ilend_profile(request):
-    lend_profile = lenders.objects.all()
-    context ={
-        'lend_profile':lend_profile
-    }
-    return render(request,'loan_interface/ilend_profile.html', context)
-
 
 def display_home(request):
     loan_money=0
