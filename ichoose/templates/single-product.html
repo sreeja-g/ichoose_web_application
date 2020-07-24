@@ -343,7 +343,7 @@
 									</div>
 									<div class="compare-wishlist">
 										
-										<a href="{% url 'ichoose:add_to_cart' product.pk }" class="wishlist" title=""><img src="{% static 'images/icons/wishlist.png' %}" alt="">Wishlist</a>
+										<a href="{% url 'ichoose:add_to_cart' product.pk %}" class="wishlist" title=""><img src="{% static 'images/icons/wishlist.png' %}" alt="">Wishlist</a>
 									</div>
 								</div><!-- /.box-cart -->
 								<div class="social-single">
@@ -669,18 +669,28 @@
 							<h4 class="name">
 								customise
 							</h4>
-							<table>
+							<form action="{% url 'ichoose:customization_requests_buyer' %}" method="post">
+								{% csrf_token %}
+							<table style="font-size:medium">
+								<input type="hidden" name="product_id" value={{ product.pk }}>
 								<tbody>
-									
+									{% for item,options_avail in customisations_available.items %}
 									<tr>
-										<td></td>
-										<td></td>
+										<td>{{ item }}</td>
+											{% for each in options_avail %}
+												<td><input type="radio" name="{{ item }}" id="{{ forloop.counter }}_{{ forloop.parentloop.counter }}" value={{ each }}>&nbsp;&emsp;{{ each }}</td>
+											{% endfor %}
+										
 
 									</tr>
-									
+									{% endfor %}
+									<tr style="text-align:center">
+									<td colspan="4"><button type="submit">Create customization Request</button></td>
+									</tr>
 									
 								</tbody>
 							</table><!-- /.table -->
+							</form>
 						</div><!-- /.tecnical-specs -->
 					</div><!-- /.col-md-12 -->
 				</div>

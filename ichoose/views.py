@@ -1,4 +1,4 @@
-from django.shortcuts import HttpResponse, get_object_or_404, redirect, render
+from django.shortcuts import HttpResponse, get_object_or_404, redirect, render, HttpResponseRedirect
 from .models import *
 from isell.models import *
 from ilend.models import *
@@ -101,10 +101,18 @@ def single_product(request, id=None):
     product_wish = product.objects.filter(id__in=session["items"])
     count_cart= session["count"]
     cart_price = session["price"] 
+
+    customisations_available = {}
+
+    for k,v in instance.product_customisation_available[0].items():
+        customisations_available[k] = v.split(',')
+        customisations_available[k].append('None')
+
     context={
         'product':instance,
         'data':data,
         'product_wish':product_wish,'count_cart':count_cart,
+        'customisations_available' : customisations_available
     }
     return render(request,'single-product.html',context)
 
@@ -333,3 +341,19 @@ def charge(request): # new
         return render(request, 'order-tracking.html',context=context)
     print('---------------')
     print(settings.STRIPE_PUBLISHABLE_KEY)
+
+def customization_requests_buyer(request):
+
+    if request.method == 'POST':
+
+        this_product = product.objects.get(pk = int(request.POST.get('product_id')))
+        
+        requested_customizations = {}
+
+        for each in this_product.product_customisation_available[0].keys():
+            requested_customizations[each] = request.POST.get('each') 
+
+        print(requested_customizations)
+
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+

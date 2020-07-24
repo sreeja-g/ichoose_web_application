@@ -20,6 +20,8 @@ urlpatterns = [
     path('seller_api/', SellerVerifyAPI.as_view(), name='seller_verify'),
     path('verify_api/', SellVerifyAPI.as_view(), name='sell_verify'),
     path('flutter/', flutter_verify, name='flutter'),
-    path('profile/', profile, name='profile')
+    path('profile/', profile, name='profile'),
+
+    path('customization_requests_buyer/', customization_requests_buyer, name='customization_requests_buyer')
 
 ]
