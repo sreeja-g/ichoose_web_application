@@ -60,7 +60,7 @@ def export_data(request):
             for each in seller.order_list:
                 if each.delivery_status == True:
                     if days_selected_time_filter != "" and days_selected_time_filter != "100":
-                        if (datetime.now() - each.date_of_order).days < int(days_selected_time_filter):
+                        if (datetime.datetime.now() - each.date_of_order).days < int(days_selected_time_filter):
                             items.append(each)
                     else:     
                         items.append(each)
@@ -79,7 +79,7 @@ def export_data(request):
 
             for each in seller.loan_list:
                 if days_selected_time_filter != "" and days_selected_time_filter != "100":
-                    if (datetime.now() - each.loan_applied_date).days < int(days_selected_time_filter):
+                    if (datetime.datetime.now() - each.loan_applied_date).days < int(days_selected_time_filter):
                         items.append(each)
                 else:     
                     items.append(each)
@@ -100,7 +100,7 @@ def export_data(request):
                 for each in seller[0].order_list:
                     if each.delivery_status==False:
                         if days_selected_time_filter != "" and days_selected_time_filter != "100":
-                            if (datetime.now() - each.date_of_order).days < int(days_selected_time_filter):
+                            if (datetime.datetime.now() - each.date_of_order).days < int(days_selected_time_filter):
                                 items.append(each)
                         else:     
                             items.append(each)
@@ -137,7 +137,7 @@ def isell_home(request):
         for each in seller[0].order_list:
             if each.delivery_status==False:
                 if days_selected_time_filter != "" and days_selected_time_filter != "100":
-                    if (datetime.now() - each.date_of_order).days < int(days_selected_time_filter):
+                    if (datetime.datetime.now() - each.date_of_order).days < int(days_selected_time_filter):
                         pending_orders.append(each)
                 else:     
                     pending_orders.append(each)
@@ -480,7 +480,7 @@ def delivered_products(request):
     for each in seller.order_list:
         if each.delivery_status == True:
             if days_selected_time_filter != "" and days_selected_time_filter != "100":
-                if (datetime.now() - each.date_of_order).days < int(days_selected_time_filter):
+                if (datetime.datetime.now() - each.date_of_order).days < int(days_selected_time_filter):
                     delivered_orders.append(each)
             else:     
                 delivered_orders.append(each)
@@ -513,7 +513,7 @@ def applied_loans(request):
 
     for each in seller.loan_list:
         if days_selected_time_filter != "" and days_selected_time_filter != "100":
-            if (datetime.now() - each.loan_applied_date).days < int(days_selected_time_filter):
+            if (datetime.datetime.now() - each.loan_applied_date).days < int(days_selected_time_filter):
                 applied_loans.append(each)
         else:     
             applied_loans.append(each)
