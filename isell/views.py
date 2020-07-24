@@ -254,8 +254,8 @@ def verification_request(request):
         verification_process.save()
         user.verification_applied=True
         #________________del_________________
-        user.verification_status = True
-        sellers.objects.create(seller=user)
+        # user.verification_status = True
+        # sellers.objects.create(seller=user)
         # _________________________________
         user.save()
 
