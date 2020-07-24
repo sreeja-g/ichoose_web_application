@@ -11,6 +11,8 @@ from .graphs import get_chart
 from django.db.models import Count
 from ichoose.category_types import categories
 
+from ilend.models import offlinewallet, lenders
+
 def test_verification(user):
     if user.verification_status==True:
         return True
@@ -149,7 +151,9 @@ def isell_home(request):
     except:
         pass
 
-    return render(request, 'index3.html',{'pending_orders':pending_orders,'count':count,'date':datetime.datetime.now(),'time_filter_list':time_filter_list, 'days_selected_time_filter':days_selected_time_filter})
+    walet_value = offlinewallet.objects.filter(user=lenders.objects.get(lender=request.user).lender)[0].price if offlinewallet.objects.filter(user=lenders.objects.get(lender=request.user).lender)[0].price else 0
+
+    return render(request, 'index3.html',{'pending_orders':pending_orders,'count':count,'date':datetime.datetime.now(),'time_filter_list':time_filter_list, 'days_selected_time_filter':days_selected_time_filter, 'walet_value' : walet_value})
 
 @login_required(login_url='/login/')
 def statistics(request):
@@ -679,6 +683,7 @@ def apply_loan(request):
 
     else:
         order_id = int(request.GET.get('order_pk'))
+        print(loan_taken(order_id, 0, False))
         (acceptance, amount) = loan_taken(order_id, 0, False)
 
 

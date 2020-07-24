@@ -5,7 +5,8 @@ from django.views.generic.base import TemplateView
 
 import stripe
 # Create your views here.
-stripe.api_key = settings.STRIPE_SECRET_KEY
+# stripe.api_key = settings.STRIPE_SECRET_KEY
+stripe.api_key ='sk_test_51H85ctJGt48B5LYp9cViFLQ9g8LtffZM4oAKsbu6ImxJ68NMZpkzuOq8sj2VbL7HBB0dHvBmthZG6RQkspKnUE7R00Uv7mugNb'
 
 
 def display_home(request):
@@ -171,7 +172,7 @@ class HomePageView(TemplateView):
 
     def get_context_data(self, **kwargs): # new
         context = super().get_context_data(**kwargs)
-        context['key'] = settings.STRIPE_PUBLISHABLE_KEY
+        context['key'] = 'pk_test_51H85ctJGt48B5LYpJLPUNMnBk8F9AQdGn4Jt2MBhIA2G104PM6ke8DmL7ghTYmMyUbJK6YBYhecT029wgk4ikcZe00zFOfCNl6'#settings.STRIPE_PUBLISHABLE_KEY
         
         
         return context
