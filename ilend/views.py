@@ -1,8 +1,12 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.conf import settings 
-from .models import *
+from ilend.models import lender_details,lenders,offlinewallet,lcards
+from ichoose.models import sellers,order
 from django.views.generic.base import TemplateView
+from registration.models import User
+from datetime import datetime
+import copy
 
 import stripe
 # Create your views here.
@@ -97,10 +101,11 @@ def viewcard(request):
 
 def addcard(request):
    loan_money=0
-   if request.method == 'POST':
+   
+   if request.method == 'POST': 
+
         cards = request.POST.get('cards')
         money=request.POST.get('money') 
-        
         g=offlinewallet.objects.all()
         
         print(lcards.objects.all())
@@ -126,6 +131,8 @@ def addcard(request):
                     print(a)
                     a.price+=(int(cards)*int(money))
                     a.save(update_fields=['price'])
+                    p.remain_priceforloans=(p.remain_priceforloans-(int(cards)*int(money)))
+                    p.save()
                    
                     y[0].save(update_fields=['no_of_cards'])
                  else:
@@ -136,7 +143,8 @@ def addcard(request):
                     a=offlinewallet.objects.get(user=User.objects.filter(is_superuser=True)[0])
                     a.price+=(int(cards)*int(money))
                     a.save(update_fields=['price'])
-                   
+                    p.remain_priceforloans=(p.remain_priceforloans-(int(cards)*int(money)))
+                    p.save()
                     y[0].save()
                           
 
@@ -152,11 +160,12 @@ def addcard(request):
                     
                     a.price+=(int(cards)*int(money))
                     a.save(update_fields=['price'])
-                   
+                    p.remain_priceforloans=(p.remain_priceforloans-(int(cards)*int(money)))
+                    p.save()
 
                     lcards.objects.create(lender=lenders.objects.get(lender=request.user),money=[int(money)],no_of_cards=[int(cards)])
 
-
+                    
         
             return render(request,'loan_interface/loan_home.html')
         
@@ -192,9 +201,10 @@ def charge(request): # new
         if len(p)>0:
             p1=offlinewallet.objects.get(user=lenders.objects.get(lender=request.user).lender) 
             p1.price = p1.price+int(price)
-            p1.save(update_fields=['price'])
+            p1.remain_priceforloans=p1.price
+            p1.save()
         else:
-            p=offlinewallet(username=username,price=price)
+            p=offlinewallet(username=username,price=price,remain_priceforloans=price)
             p.save()
       
         context={'price':request.POST.get('price')}
@@ -273,7 +283,7 @@ print(mylist)
 #                         k=i
 #                         print("k",k)
 #                 return money_loan(mon-25,lost_cards,p)
-def  money_loan(p):
+def  money_loan(p,order_,order_id):
     print(p)              
     subsets=sub_lists(possible_money2)
     sum_subsets=[]
@@ -295,45 +305,66 @@ def  money_loan(p):
         for j in range(len(m1[i].no_of_cards)):
             for k in range((m1[i].no_of_cards[j])):
 
-                nested_cards[i].append(m1[i].money[j])
+                nested_cards[i].append([m1[i].money[j],m1[i].lender_id])
+    
     print(nested_cards)
+    nested_cards_copy=ccopy.deepcopy(nested_cards)
+    print(nested_cards_copy)
     count=0
     for i in sorted(actual_card):
+        
         print(i)
-        if(count==len(nested_cards)):
+        if(count==len(nested_cards_copy[0])):
             print("if")
             count=0
-            nested_cards[count].remove(i)
+            nested_cards_copy[0][count].remove(i)
             count=count+1
         else:
              print("else")
-             if i in nested_cards[count]:
-                nested_cards[count].remove(i)
+             if i in nested_cards_copy[0][count]:
+                print(i,nested_cards_copy[0][count])
+                nested_cards_copy[0][count].remove(i)
                 count=count+1
              else:
-                if(count<len(nested_cards)-1):
+                if(count<len(nested_cards_copy)-1):
                  count=count+1
-                 nested_cards[count].remove(i)
+                 nested_cards_copy[0][count].remove(i)
                 else:
                     count=0
-                    nested_cards[count].remove(i)
+                    nested_cards_copy[0][count].remove(i)
 
-                 
+        print("nested_cards")       
+        print(nested_cards_copy)
         print(nested_cards)
+    for i in range(len(nested_cards_copy[0])):
+        
+        if(len(nested_cards_copy[0][i])==1):
+            x=lender_details(lender=nested_cards_copy[0][i][0],loan_amount=nested_cards[0][i][0],loan_on_order_id=order_id)
+            x.save()
+             
         for i in range(len(m1)):
             for j in m1[i].money:
-                 m1[i].no_of_cards[m1[i].money.index(j)]=nested_cards[i].count(j)
-                 m1[i].save(update_fields=['no_of_cards'])
-
-   
+                 m1[i].no_of_cards[m1[i].money.index(j)]=nested_cards_copy[i][0].count(j)
+                 m1[i].save()
+    
+    print(order_.product.seller.seller_id)
+    print(User.objects.get(pk=order_.product.seller.seller_id))
+    k=offlinewallet.objects.get(user=User.objects.get(pk=order_.product.seller.seller_id)) 
+    print(k)
+    print(k.price)
+    k.price=k.price+p
+    k.save() 
     a1=offlinewallet.objects.get(user=User.objects.filter(is_superuser=True)[0])
     a1.price=a1.price-p
-    a1.save(update_fields=['price'])               
+    a1.save(update_fields=['price'])
+
+           
 
 from ichoose.models import order,loan
 import datetime
 
 def loan_taken(order_id,amount,accept):
+    print(order_id,amount,accept)
 
     order_=order.objects.get(pk=order_id)
 
@@ -347,25 +378,29 @@ def loan_taken(order_id,amount,accept):
     a=offlinewallet.objects.get(user=User.objects.filter(is_superuser=True)[0])
 
     if accept==False:
-
+        print("1")
         if (a.price > p):
-            print("**********")
-            print(p, mylist)
-            print("************")
+            
             # print(p in mylist)
             flag = 0
             for i in mylist:
+                print(p,i)
                 if (p == i):
                     print("money is detecting")
                     flag = 1
-                    money_loan(p)
+                    money_loan(p,order_,order_id)
 
                     break
             if (flag == 0):
+                print("2")
                 for i in mylist:
+                    print(p,i)
                     if p < i:
                         print("money has to add")
                         return (False, i)
+                    if(i==mylist[-1] and p>i):
+                        return(False,i)
+
 
             else:
                 return (False, p)
@@ -378,27 +413,27 @@ def loan_taken(order_id,amount,accept):
     else:
 
         if (a.price > p):
-            print("**********")
-            print(p, mylist)
-            print("************")
+            print("hii")
             # print(p in mylist)
             flag = 0
             for i in mylist:
                 if (p == i):
                     print("money is detecting")
                     flag = 1
-                    money_loan(p)
+                    money_loan(p,order_,order_id)
 
                     break
             if (flag == 0):
                 for i in mylist:
+                    print("hii1")
+
                     if p < i:
                         print("money has to add")
 
                         new_loan = loan()
                         new_loan.order = order_
                         new_loan.seller = order_.product.seller
-
+                        new_loan.loan_intrest=5
                         new_loan.loan_applied_date = datetime.datetime.now()
                         new_loan.loan_status = True
                         new_loan.loan_amount = i
@@ -413,11 +448,12 @@ def loan_taken(order_id,amount,accept):
 
 
             else:
+                print("hii2")
 
                 new_loan = loan()
                 new_loan.order = order_
                 new_loan.seller = order_.product.seller
-
+                new_loan.loan_intrest=5
                 new_loan.loan_applied_date = datetime.datetime.now()
                 new_loan.loan_status = True
                 new_loan.loan_amount = p
@@ -432,11 +468,12 @@ def loan_taken(order_id,amount,accept):
 
 
         else:
+            print("hii3")
 
             new_loan = loan()
             new_loan.order = order_
             new_loan.seller = order_.product.seller
-
+            new_loan.loan_intrest=5
             new_loan.loan_applied_date = datetime.datetime.now()
             new_loan.loan_status = True
             new_loan.loan_amount = a.price
@@ -449,7 +486,54 @@ def loan_taken(order_id,amount,accept):
             return (True, a.price)
 
 
+def money_return(order_id=1):
+    order_=order.objects.get(pk=order_id)
+    p=float(order_.total_price)-1.05*int(loan.objects.get(order=order_).loan_amount)
+    if(order_.delivery_status==True):
+           
+            k=offlinewallet.objects.get(user=User.objects.get(pk=order_.product.seller.seller_id)) 
+            print(k)
+            print(k.price)
+            k.price=k.price+p
+            k.save() 
+            q=lender_details.objects.all()
+            print(q)
+            if(len(q)>0):
+                
+                lenders_list=[]
+                money_list=[]
+                q1=lender_details.objects.filter(loan_on_order_id=13)
+                print(q1)
+                for i in range(len(q1)):
+                    
+                    lenders_list.append(q1[i].lender)
+                    money_list.append(q1[i].loan_amount)
+                
+                for i in range(len(lenders_list)):
+                      k1=offlinewallet.objects.get(user=User.objects.get(pk=lenders_list[i]))
+                      k1.price=k1.price+1.05*int(money_list[i])
+                      k1.save()
+                a=offlinewallet.objects.get(user=User.objects.filter(is_superuser=True)[0])
+                a.price=a.price-float(order_.total_price)
+                a.save()
+            
+                
+                loan_change = loan.objects.get(order=order_)
+                loan_change.loan_returned_status = True
+                loan_change.loan_returned_date = datetime.datetime.now()
+                loan_change.save() 
+                # k=seller.objects.filter(seller=order_.product.seller.seller).values()
+                # print(k)
+                # print(k.loan_list)
+                # for i in k.loan_list:
+                #     print(i)
+                #     if(i.order_id==order_id):
+                #         i.loan_returned_status=True;
+                        
+                #         i.loan_returned_date=datetime.datetime.now()
+                #         i.save()
 
-    
+                
 
-   
+     
+money_return()

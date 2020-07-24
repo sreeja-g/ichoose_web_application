@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import HttpResponse, get_object_or_404, redirect, render
+from django.shortcuts import HttpResponse, get_object_or_404, redirect, render, HttpResponseRedirect
 from .models import *
 from isell.models import *
 from ilend.models import *
@@ -16,7 +16,7 @@ from rest_framework import generics,filters
 from ichoose.serializers import SellerVerify,SellUserVerify
 from ichoose.models import seller_verification_process
 from django.views.decorators.csrf import csrf_exempt
-
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 stripe.api_key ='sk_test_51H85ctJGt48B5LYp9cViFLQ9g8LtffZM4oAKsbu6ImxJ68NMZpkzuOq8sj2VbL7HBB0dHvBmthZG6RQkspKnUE7R00Uv7mugNb'
 #home page
@@ -68,8 +68,9 @@ def index(request):
     product_wish = product.objects.filter(id__in=session["items"])
     count_cart= session["count"]
     cart_price = session["price"]
+    product_ = product.objects.all().order_by('date_of_post')[:10]
     context ={
-        'product_wish':product_wish,'count_cart':count_cart,'categories' : categories,
+        'product_wish':product_wish,'count_cart':count_cart,'categories' : categories,"product":product_
     }
     return render(request, 'index-v2.html',context)
 
@@ -113,10 +114,18 @@ def single_product(request, id=None):
     product_wish = product.objects.filter(id__in=session["items"])
     count_cart= session["count"]
     cart_price = session["price"] 
+
+    customisations_available = {}
+
+    for k,v in instance.product_customisation_available[0].items():
+        customisations_available[k] = v.split(',')
+        customisations_available[k].append('None')
+
     context={
         'product':instance,
         'data':data,
         'product_wish':product_wish,'count_cart':count_cart,
+        'customisations_available' : customisations_available
     }
     return render(request,'single-product.html',context)
 
@@ -279,7 +288,7 @@ def add_comment(request,id):
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
-
+# @login_required(login_url='/login/')
 def shipping_details(request):
     inital = {"items":[],"price":0.0,"count":0}
     sess = request.session.get("data", inital)
@@ -297,6 +306,7 @@ class HomePageView(TemplateView):
         context['key'] ='pk_test_51H85ctJGt48B5LYpJLPUNMnBk8F9AQdGn4Jt2MBhIA2G104PM6ke8DmL7ghTYmMyUbJK6YBYhecT029wgk4ikcZe00zFOfCNl6'
        
         return context
+    
 
 def charge(request): # new
     print('923888888888888888888888888888888')
@@ -337,10 +347,51 @@ def charge(request): # new
                 request.session["data"] = session
         count_cart = session["count"]
         a=offlinewallet.objects.get(user=User.objects.filter(is_superuser=True)[0])
-        a.price=a.price+int(session["price"])
-        a.save(update_fields=int(session['price']))
+        print("afterorderrrrrrrrrr")
+        print(a.price)
+        a.price=a.price+price_
+        print(a.price)
+        a.save()
+        
         context={'price':session["price"],"count_cart":count_cart,'categories' : categories,}
         
         return render(request, 'order-tracking.html',context=context)
     print('---------------')
     print(settings.STRIPE_PUBLISHABLE_KEY)
+
+def customization_requests_buyer(request):
+
+    if request.method == 'POST':
+
+        this_product = product.objects.get(pk = int(request.POST.get('product_id')))
+        this_buyer = buyers.objects.get(buyer = request.user)
+        this_seller = sellers.objects.get(seller = this_product.seller.seller)
+        
+        requested_customizations = {}
+
+        for each in this_product.product_customisation_available[0].keys():
+            requested_customizations[each] = request.POST.get(each) 
+
+        print(requested_customizations)
+        customization_val = customization(buyer = buyers.objects.get(buyer = request.user), product = this_product)
+        customization_val.date_time = datetime.now()
+        customization_val.customization_details.append(requested_customizations)
+        customization_val.request_status = True
+        customization_val.save()
+
+        # customization_val_abs = customization_abs(customization_id = customization_val.pk)
+        # customization_val_abs.buyer = customization_val.buyer
+        # customization_val_abs.product = customization_val.product
+        # customization_val_abs.date_time = customization_val.date_time
+        # customization_val_abs.customization_details = customization_val.customization_details
+        # customization_val_abs.request_status = customization_val.request_status
+
+        # # this_product.customization_requests_list.append(customization_val_abs)
+        # # this_product.save()
+        # # this_buyer.customization_requests_list.append(customization_val_abs)
+        # # this_buyer.save()
+        # # this_seller.customization_requests_list.append(customization_val_abs)
+        # # this_seller.save()
+
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+

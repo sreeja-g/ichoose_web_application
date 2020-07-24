@@ -228,16 +228,32 @@
                   <div class="card-body">
                     
 
-                    
+                    <div>
                         <script type="text/javascript" src="https://www.google.com/jsapi"></script>
                    <script type="text/javascript">
                        google.load("visualization", "1", {packages:["corechart"]});
                    </script>  
                                                 {{ products_chart.as_html }} 
-                                        
 
+                        </div>   
 
-                      
+                        <div>
+                        <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+                   <script type="text/javascript">
+                       google.load("visualization", "1", {packages:["corechart"]});
+                   </script>  
+                                                {{ orders_chart.as_html }} 
+
+                        </div>  
+
+                        <div>
+                        <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+                   <script type="text/javascript">
+                       google.load("visualization", "1", {packages:["corechart"]});
+                   </script>  
+                                                {{ orders_delivered_chart.as_html }} 
+
+                        </div>                                                               
 
                   </div></div></div></div></div></div></div></div>
 

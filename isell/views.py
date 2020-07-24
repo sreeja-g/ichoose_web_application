@@ -61,7 +61,7 @@ def export_data(request):
             for each in seller.order_list:
                 if each.delivery_status == True:
                     if days_selected_time_filter != "" and days_selected_time_filter != "100":
-                        if (datetime.now() - each.date_of_order).days < int(days_selected_time_filter):
+                        if (datetime.datetime.now() - each.date_of_order).days < int(days_selected_time_filter):
                             items.append(each)
                     else:     
                         items.append(each)
@@ -77,10 +77,11 @@ def export_data(request):
 
             seller = sellers.objects.get(seller=request.user)
             items = []
-
+            print("********************************************************")
+            print(seller)
             for each in seller.loan_list:
                 if days_selected_time_filter != "" and days_selected_time_filter != "100":
-                    if (datetime.now() - each.loan_applied_date).days < int(days_selected_time_filter):
+                    if (datetime.datetime.now() - each.loan_applied_date).days < int(days_selected_time_filter):
                         items.append(each)
                 else:     
                     items.append(each)
@@ -101,7 +102,7 @@ def export_data(request):
                 for each in seller[0].order_list:
                     if each.delivery_status==False:
                         if days_selected_time_filter != "" and days_selected_time_filter != "100":
-                            if (datetime.now() - each.date_of_order).days < int(days_selected_time_filter):
+                            if (datetime.datetime.now() - each.date_of_order).days < int(days_selected_time_filter):
                                 items.append(each)
                         else:     
                             items.append(each)
@@ -138,7 +139,7 @@ def isell_home(request):
         for each in seller[0].order_list:
             if each.delivery_status==False:
                 if days_selected_time_filter != "" and days_selected_time_filter != "100":
-                    if (datetime.now() - each.date_of_order).days < int(days_selected_time_filter):
+                    if (datetime.datetime.now() - each.date_of_order).days < int(days_selected_time_filter):
                         pending_orders.append(each)
                 else:     
                     pending_orders.append(each)
@@ -169,13 +170,45 @@ def statistics(request):
         else:
             product_chart_data_month_year_filtered[str(each['date_of_post'].day)+'_'+str(each['date_of_post'].month)+'_'+str(each['date_of_post'].year)] = each['id__count']
 
-    products_chart = get_chart(product_chart_data_month_year_filtered,'Your Products')
+    products_chart = get_chart(product_chart_data_month_year_filtered,'your_products')
 
     print(products_chart.as_html())
 
+    orders_chart_data=[]
+    for each in sellers.objects.get(seller=request.user).product_list:
+        orders_chart_data.extend(order.objects.filter(product=each.product_id).values('date_of_order').annotate(Count('id')).order_by('date_of_order'))
+
+    print(orders_chart_data)
+    orders_chart_data_month_year_filtered = {}
+    for each in orders_chart_data : 
+        if str(each['date_of_order'].day)+'_'+str(each['date_of_order'].month)+'_'+str(each['date_of_order'].year) in orders_chart_data_month_year_filtered.keys():
+            orders_chart_data_month_year_filtered[str(each['date_of_order'].day)+'_'+str(each['date_of_order'].month)+'_'+str(each['date_of_order'].year)] += each['id__count']
+        else:
+            orders_chart_data_month_year_filtered[str(each['date_of_order'].day)+'_'+str(each['date_of_order'].month)+'_'+str(each['date_of_order'].year)] = each['id__count']
+
+    orders_chart = get_chart(orders_chart_data_month_year_filtered,'your_orders')
+
+    print(orders_chart.as_html())
+
+    orders_delivered_chart_data=[]
+    for each in sellers.objects.get(seller=request.user).product_list:
+        orders_delivered_chart_data.extend(order.objects.filter(product=each.product_id, delivery_status=True).values('date_of_order').annotate(Count('id')).order_by('date_of_order'))
+
+    print(orders_delivered_chart_data)
+    orders_delivered_chart_data_month_year_filtered = {}
+    for each in orders_delivered_chart_data : 
+        if str(each['date_of_order'].day)+'_'+str(each['date_of_order'].month)+'_'+str(each['date_of_order'].year) in orders_chart_data_month_year_filtered.keys():
+            orders_delivered_chart_data_month_year_filtered[str(each['date_of_order'].day)+'_'+str(each['date_of_order'].month)+'_'+str(each['date_of_order'].year)] += each['id__count']
+        else:
+            orders_delivered_chart_data_month_year_filtered[str(each['date_of_order'].day)+'_'+str(each['date_of_order'].month)+'_'+str(each['date_of_order'].year)] = each['id__count']
+
+    orders_delivered_chart = get_chart(orders_delivered_chart_data_month_year_filtered,'your_delivered_orders')
+
+    print(orders_delivered_chart.as_html())
+
     walet_value = offlinewallet.objects.filter(user=lenders.objects.get(lender=request.user).lender)[0].price if offlinewallet.objects.filter(user=lenders.objects.get(lender=request.user).lender)[0].price else 0
     
-    return render(request, 'statistics.html',{'products_chart':products_chart, 'walet_value':walet_value})
+    return render(request, 'statistics.html',{'products_chart':products_chart,'orders_chart':orders_chart, 'orders_delivered_chart':orders_delivered_chart,'walet_value':walet_value})
 
 
 @login_required(login_url='/login/')
@@ -424,7 +457,7 @@ def edit_product(request):
 
         walet_value = offlinewallet.objects.filter(user=lenders.objects.get(lender=request.user).lender)[0].price if offlinewallet.objects.filter(user=lenders.objects.get(lender=request.user).lender)[0].price else 0
 
-        return render(request, 'edit_product_form.html', {'product_to_edit': product_to_edit,'count': count, 'date': datetime.datetime.now(), 'walet_value':walet_value})
+        return render(request, 'edit_product_form.html', {'product_to_edit': product_to_edit,'categories' : categories,'count': count, 'date': datetime.datetime.now(), 'walet_value':walet_value})
 
 
 
@@ -481,7 +514,7 @@ def delivered_products(request):
     for each in seller.order_list:
         if each.delivery_status == True:
             if days_selected_time_filter != "" and days_selected_time_filter != "100":
-                if (datetime.now() - each.date_of_order).days < int(days_selected_time_filter):
+                if (datetime.datetime.now() - each.date_of_order).days < int(days_selected_time_filter):
                     delivered_orders.append(each)
             else:     
                 delivered_orders.append(each)
@@ -511,10 +544,11 @@ def applied_loans(request):
 
     seller = sellers.objects.get(seller=request.user)
     applied_loans = []
-
+    print("**********************************************")
+    print(seller)
     for each in seller.loan_list:
         if days_selected_time_filter != "" and days_selected_time_filter != "100":
-            if (datetime.now() - each.loan_applied_date).days < int(days_selected_time_filter):
+            if (datetime.datetime.now() - each.loan_applied_date).days < int(days_selected_time_filter):
                 applied_loans.append(each)
         else:     
             applied_loans.append(each)

@@ -125,11 +125,24 @@ STATIC_URL = '/static/'
 
 #-------------------------non default-----------------------------------
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'djongo',
+#         'NAME': 'ichoose_web_app_db',
+#         'Host':'mongodb://127.0.0.1:27017/',
+#     }
+# }
+
+from urllib.parse import quote_plus
+
 DATABASES = {
     'default': {
         'ENGINE': 'djongo',
-        'NAME': 'ichoose_web_app_db',
-        'Host':'mongodb://127.0.0.1:27017/',
+        'NAME': 'ichoose_db',
+
+        'CLIENT': {
+                    'host': 'mongodb+srv://sreeja:'+quote_plus('User754512')+'@firstcluster-qstaz.mongodb.net/<dbname>?retryWrites=true&w=majority'
+                },
     }
 }
 

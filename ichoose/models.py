@@ -111,6 +111,7 @@ class loan_abs(models.Model):
     order_id = models.IntegerField()
     seller_id=models.IntegerField()
 
+
     loan_applied_date = models.DateTimeField()
     loan_status = models.BooleanField(default=False)
     loan_amount = models.IntegerField(default=None)
@@ -283,7 +284,6 @@ class product(models.Model):
     category_1 = models.TextField()
     category_2 = models.TextField()
     product_description = models.TextField()
-
     product_name=models.TextField()
     product_detail=models.TextField()
     product_color=CustomListField(default=[])
