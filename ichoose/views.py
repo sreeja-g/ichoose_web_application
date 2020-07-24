@@ -44,10 +44,11 @@ def flutter_verify(request):
     p.Verification_step_3 = final_dictionary['Verification_step_3']
     if p.Verification_step_1 == p.Verification_step_2 == p.Verification_step_3 == 'True':
         User.verification_status = 'True'
+        sellers.objects.create(sellers=user)
     else:
         User.verification_status = 'False'
     p.save()
-    return render(request, '')
+    return redirect(reverse())
 
 
 
