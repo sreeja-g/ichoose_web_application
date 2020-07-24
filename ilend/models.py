@@ -26,5 +26,8 @@ class lcards(models.Model):
     no_of_cards = models.ListField(default=[])
     money = models.ListField(default=[])
     
-
-
+class lender_details(models.Model):
+    lender = models.IntegerField(default=0)
+    loan_amount=models.IntegerField(default=0)
+    loan_on_order_id=models.IntegerField(default=0)
+    

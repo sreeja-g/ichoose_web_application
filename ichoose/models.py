@@ -111,6 +111,7 @@ class loan_abs(models.Model):
     order_id = models.IntegerField()
     seller_id=models.IntegerField()
 
+
     loan_applied_date = models.DateTimeField()
     loan_status = models.BooleanField(default=False)
     loan_amount = models.IntegerField(default=None)
