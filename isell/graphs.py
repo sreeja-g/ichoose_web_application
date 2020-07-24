@@ -5,6 +5,8 @@ def get_chart(data,type):
 
     data_source=[]
     data_source.append(['Date',type])
+    if(len(data) == 0):
+        data_source.append(['No Data', 0])
     for k,v in data.items():
         # date_=""
         # date_=datetime.datetime.strptime(data.index.values[i].astype(str),'%Y-%m-%dT00:00:00.000000000')
@@ -21,6 +23,6 @@ def get_chart(data,type):
     # </script>                               {{ products_chart.as_html }}
                                             
     chart_name = gchart.LineChart(SimpleDataSource(data=data_source), options=options1,
-                                  html_id='chart_name', width="100%")
+                                  html_id=type, width="100%")
 
     return chart_name
