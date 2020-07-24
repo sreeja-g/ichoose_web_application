@@ -56,9 +56,9 @@ def index(request):
     product_wish = product.objects.filter(id__in=session["items"])
     count_cart= session["count"]
     cart_price = session["price"]
-    product = product.objects.all().order_by('date_of_post')[:10]
+    product_ = product.objects.all().order_by('date_of_post')[:10]
     context ={
-        'product_wish':product_wish,'count_cart':count_cart,'categories' : categories,"product":product
+        'product_wish':product_wish,'count_cart':count_cart,'categories' : categories,"product":product_
     }
     return render(request, 'index-v2.html',context)
 
