@@ -10,6 +10,8 @@ import stripe
 from django.conf import settings
 from django.views.generic.base import TemplateView
 from django.db.models import Q
+from .category_types import categories
+
 # Create your views here.
 stripe.api_key ='sk_test_51H85ctJGt48B5LYp9cViFLQ9g8LtffZM4oAKsbu6ImxJ68NMZpkzuOq8sj2VbL7HBB0dHvBmthZG6RQkspKnUE7R00Uv7mugNb'
 
@@ -65,8 +67,14 @@ def single_product(request, id=None):
 
 
 def search(request):
-    q = request.GET["search"]
-    products = product.objects.filter(Q(product_title__icontains=q) | Q(product_name__icontains=q))
+
+    
+    if request.GET.get('type') == 'search':
+        q = request.GET["search"]
+        products = product.objects.filter(Q(product_title__icontains=q) | Q(product_name__icontains=q))
+    if request.GET.get('type') == 'filter':
+        products = product.objects.filter(category_1=request.GET.get('category_1'),category_2 = request.GET.get('category_2'))
+        
     inital = {"items":[],"price":0.0,"count":0}
     session = request.session.get("data", inital)
     product_wish = product.objects.filter(id__in=session["items"])
@@ -75,7 +83,9 @@ def search(request):
     context = {"product": products,
             'product_wish':product_wish,'count_cart':count_cart,
         'cart_price':cart_price,
-        "title": q + " - search"}  #for title of web page
+         'categories' : categories}  #for title of web page
+    if request.GET.get('type') == 'search':
+        context={["title"]: q + " - search"}
     return render(request, "shop.html", context)
 
 def wishlist(request,id=None):
