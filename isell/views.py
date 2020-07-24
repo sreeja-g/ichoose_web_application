@@ -455,7 +455,7 @@ def edit_product(request):
 
         walet_value = offlinewallet.objects.filter(user=lenders.objects.get(lender=request.user).lender)[0].price if offlinewallet.objects.filter(user=lenders.objects.get(lender=request.user).lender)[0].price else 0
 
-        return render(request, 'edit_product_form.html', {'product_to_edit': product_to_edit,'count': count, 'date': datetime.datetime.now(), 'walet_value':walet_value})
+        return render(request, 'edit_product_form.html', {'product_to_edit': product_to_edit,'categories' : categories,'count': count, 'date': datetime.datetime.now(), 'walet_value':walet_value})
 
 
 
