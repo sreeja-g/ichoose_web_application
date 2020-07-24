@@ -65,6 +65,7 @@ def index(request):
 
 #shop
 def product_grid(request):
+    
     products = None
     inital = {"items":[],"price":0.0,"count":0,"size":[],"color":[]}
     session = request.session.get("data_", inital)
@@ -189,8 +190,7 @@ def add_to_cart(request, id=None):
     
     inital = {"items":[],"size":[],"color":[],"price":0.0,"count":0,}
     session = request.session.get("data_", inital)
-    if session["size"] is None and session["color"] is None :
-        return redirect('single_product',id=id)
+    
     # session["price"] = 0.0
     # session["count"] = 0
     session2 = request.session.get("mywishlist", inital)
@@ -202,11 +202,14 @@ def add_to_cart(request, id=None):
         session["items"].append(id)
         session["price"] += float(product_.product_final_price)
         session["count"] += 1
-        
+        if request.POST.get('color') is None and request.POST.get('size') is None :
+            return redirect('single_product',id=id)
         session["color"] = [request.POST.get('color')]
         session["size"] = [request.POST.get('size')]
         request.session["data_"] = session
     else:
+        if request.POST.get('color') is None and request.POST.get('size') is None :
+            return redirect('single_product',id=id)
         session["color"] = [request.POST.get('color')]
         session["size"] = [request.POST.get('size')]
         session["items"].append(id)
