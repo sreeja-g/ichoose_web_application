@@ -9,6 +9,7 @@ from django.contrib import messages
 import csv
 from .graphs import get_chart
 from django.db.models import Count
+from ichoose.category_types import categories
 
 def test_verification(user):
     if user.verification_status==True:
@@ -332,7 +333,7 @@ def add_new_product(request):
             if each.accept_status == False and each.reject_status == False:
                 count += 1
 
-        return render(request, 'add_product_form.html',{'count':count,'date':datetime.datetime.now()})
+        return render(request, 'add_product_form.html',{'count':count,'date':datetime.datetime.now(), 'categories' : categories})
 
 
 @login_required(login_url='/login/')

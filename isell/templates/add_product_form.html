@@ -217,9 +217,9 @@
                         </div>
                         <div class="col-12 col-md-9">
                            <select name="product_category_1" id="product_category_1" class="form-control" required>
-                              <option value="1">Option #1</option>
-                              <option value="2">Option #2</option>
-                              <option value="3">Option #3</option>
+                              {% for k,v in categories.items %}
+                                 <option value={{ k }}>{{ k }}</option>
+                              {% endfor %}
                            </select>
                         </div>
                      </div>
@@ -229,9 +229,11 @@
                         </div>
                         <div class="col-12 col-md-9">
                            <select name="product_category_2" id="product_category_2" class="form-control" required>
-                              <option value="1">Option #1</option>
-                              <option value="2">Option #2</option>
-                              <option value="3">Option #3</option>
+                              {% for k,v in categories.items %}
+                                 {% for each in v %}
+                                    <option value={{ each }}>{{ each }}</option>
+                                 {% endfor %}
+                              {% endfor %}
                            </select>
                         </div>
                      </div>

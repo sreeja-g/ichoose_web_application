@@ -10,9 +10,11 @@ import stripe
 from django.conf import settings
 from django.views.generic.base import TemplateView
 from django.db.models import Q
+from .category_types import categories
+
 # Create your views here.
 stripe.api_key ='sk_test_51H85ctJGt48B5LYp9cViFLQ9g8LtffZM4oAKsbu6ImxJ68NMZpkzuOq8sj2VbL7HBB0dHvBmthZG6RQkspKnUE7R00Uv7mugNb'
-
+#home page
 def index(request):
     inital = {"items":[],"price":0.0,"count":0}
     session = request.session.get("data", inital)
@@ -20,27 +22,35 @@ def index(request):
     count_cart= session["count"]
     cart_price = session["price"]
     context ={
-        'product_wish':product_wish,'count_cart':count_cart,
+        'product_wish':product_wish,'count_cart':count_cart,'categories' : categories,
     }
     return render(request, 'index-v2.html',context)
 
 
-
+#shop
 def product_grid(request):
-    products = product.objects.all()
+    products = None
     inital = {"items":[],"price":0.0,"count":0}
     session = request.session.get("data", inital)
     product_wish = product.objects.filter(id__in=session["items"])
     count_cart= session["count"]
-    cart_price = session["price"] 
+    cart_price = session["price"]
+    cate = request.GET.get('category_1')
+    cate_2 = request.GET.get('category_2')
+    if cate:
+        products = product.objects.filter(Q(category_1__exact=cate) | Q(category_2__exact=cate_2))
+    else:
+        products = product.objects.all()
     context={
         'product': products,
         'product_wish':product_wish,'count_cart':count_cart,
         'cart_price':cart_price,
+        'categories' : categories,
+        "title": cate 
     } 
     return render(request, 'shop.html',context)
 
-
+# deatil view
 def single_product(request, id=None):
     # instance = product.objects.get(id=1)
     instance = get_object_or_404(product,id=id)
@@ -63,6 +73,7 @@ def single_product(request, id=None):
     }
     return render(request,'single-product.html',context)
 
+#search
 
 def search(request):
     q = request.GET["search"]
@@ -75,14 +86,17 @@ def search(request):
     context = {"product": products,
             'product_wish':product_wish,'count_cart':count_cart,
         'cart_price':cart_price,
-        "title": q + " - search"}  #for title of web page
-    return render(request, "shop.html", context)
+        "title": q + " - search",
+        'categories' : categories,}  #for title of web page
 
+    return render(request, "shop.html", context)
+#wishlist
 def wishlist(request,id=None):
     
     inital = {"items":[],"price":0.0,"count":0}
     session1 = request.session.get("data", inital)
     session2 = request.session.get("mywishlist",inital)
+    cart_count = seaaion1["count"]
     product_ = product.objects.get(id=id)
     if id in session1["items"]:
         messages.error(request, "Already in cart")
@@ -90,19 +104,22 @@ def wishlist(request,id=None):
         session2["items"].append(id)
         request.session["mywishlist"] = session2
     products = product.objects.filter(id__in=session2["items"])
+
     context = {
         'product':products,
-        
+        'count_cart':cart_count,
     }
     return redirect('ichoose:ichoose_product_grid')
 
 def show_wishlist(request):
     inital = {"items":[],"price":0.0,"count":0}
     sess = request.session.get("mywishlist", inital)
+    session = request.session.get("data", inital)
     products = product.objects.filter(id__in=sess["items"])
-    
+    count_cart= session["count"]
 
     context = {"products": products,
+                'count_cart': count_cart,
             }
     return render(request, "wishlist.html", context)
 
@@ -146,8 +163,9 @@ def mycart(request):
     inital = {"items":[],"price":0.0,"count":0}
     sess = request.session.get("data", inital)
     products = product.objects.filter(id__in=sess["items"])
-    
+    count_cart= sess["count"]
     context = {"products": products,
+                "count_cart":count_cart,
             }
     return render(request, "shop-cart.html", context)
 
@@ -219,8 +237,9 @@ def shipping_details(request):
     inital = {"items":[],"price":0.0,"count":0}
     sess = request.session.get("data", inital)
     products = product.objects.filter(id__in=sess["items"])
-    
+    count_cart= sess["count"]
     context = {"products": products,
+    "count_cart":count_cart,'categories' : categories,
         }
     return render(request,'shop-checkout.html',context)
 class HomePageView(TemplateView):
@@ -234,33 +253,47 @@ class HomePageView(TemplateView):
 
 def charge(request): # new
     print('923888888888888888888888888888888')
+    print(request.POST['stripeToken'])
+    inital = {"items":[],"price":0.0,"count":0}
+    session = request.session.get("data", inital)
+    price_ = int(session["price"])
+    print(price_)
     if request.method == 'POST':
-        inital = {"items":[],"price":0.0,"count":0}
-        sess = request.session.get("data", inital)
+        
         charge = stripe.Charge.create(
-            amount= sess["price"] *100,
+            amount= price_ ,
             currency='inr',
             description='A Django charge',
             source=request.POST['stripeToken']
+            
         )
         
-        products = product.objects.filter(id__in=sess["items"])
+        products = product.objects.filter(id__in=session["items"])
         for p in products:
             order_create = order()
-            order_create.buyer = request.user
+            buyer_ = buyers.objects.get(buyer=request.user)
+            order_create.buyer = buyer_
             order_create.product = p
-            order_create.date_of_order = datetime(now)
-            order_create.told_date_of_order = date.now() + 14
+            order_create.date_of_order = datetime.now()
+            
             order_create.quantity = 1
             order_create.total_price = p.product_final_price * order_create.quantity
             order_create.payment_status = True
+            x = order_details_abs(product_title=p.product_title,category_1= p.category_1,category_2=p.category_2,product_description=p.product_description,product_name=p.product_name,product_color=p.product_color,product_detail=p.product_detail,product_size=p.product_size,product_price=p.product_price,product_discount=p.product_discount,product_final_price=p.product_final_price,product_remaining_details=p.product_remaining_details,images=p.images)
+            order_create.order_details = x
             order_create.save()
-        
+            id_ = p.pk
+            if id_ in session["items"]:
+                session["items"].remove(id_)
+                session["price"] -= float(p.product_final_price)
+                session["count"] -= 1
+                request.session["data"] = session
+        count_cart = session["count"]
         a=offlinewallet.objects.get(user=User.objects.filter(is_superuser=True)[0])
-        a.price=a.price+sess["price"]
-        a.save(update_fields=['price'])
-        context={'price':sess["price"]}
-        print('923888888888888888888888888888888')
+        a.price=a.price+int(session["price"])
+        a.save(update_fields=int(session['price']))
+        context={'price':session["price"],"count_cart":count_cart,'categories' : categories,}
+        
         return render(request, 'order-tracking.html',context=context)
     print('---------------')
     print(settings.STRIPE_PUBLISHABLE_KEY)
