@@ -260,7 +260,7 @@
                                             <td>
                                                 <span class="block-email"><img  style="width:100px;height: 100px"  src="/media/{{each.order_details.images.0}}" alt="John Smith"></span>
                                             </td>
-                                            <td class="desc" style="font-size: medium">
+                                            <td class="desc" style="font-size: medium;background-color:white">
 
                                                 <form method="get" action="{% url 'isell:show_order' %}">
                                                         <input type="hidden" value={{ each.order_id }} name="order_pk">
