@@ -15,7 +15,7 @@ from rest_framework import generics,filters
 from ichoose.serializers import SellerVerify,SellUserVerify
 from ichoose.models import seller_verification_process
 from django.views.decorators.csrf import csrf_exempt
-
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 stripe.api_key ='sk_test_51H85ctJGt48B5LYp9cViFLQ9g8LtffZM4oAKsbu6ImxJ68NMZpkzuOq8sj2VbL7HBB0dHvBmthZG6RQkspKnUE7R00Uv7mugNb'
 #home page
@@ -56,8 +56,9 @@ def index(request):
     product_wish = product.objects.filter(id__in=session["items"])
     count_cart= session["count"]
     cart_price = session["price"]
+    product_ = product.objects.all().order_by('date_of_post')[:10]
     context ={
-        'product_wish':product_wish,'count_cart':count_cart,'categories' : categories,
+        'product_wish':product_wish,'count_cart':count_cart,'categories' : categories,"product":product_
     }
     return render(request, 'index-v2.html',context)
 
@@ -275,7 +276,7 @@ def add_comment(request,id):
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
-
+# @login_required(login_url='/login/')
 def shipping_details(request):
     inital = {"items":[],"price":0.0,"count":0}
     sess = request.session.get("data", inital)
