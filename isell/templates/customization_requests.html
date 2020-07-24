@@ -221,11 +221,10 @@
 
                                         <div class="dropDownSelect2"></div>
                                     </div>
-                                    <button class="au-btn-filter">
-                                        <i class="zmdi zmdi-filter-list"></i>filters</button></form>
+                                    </form>
                                 </div>
                                 <div class="table-data__tool-right">
-
+{% comment %} 
                                     <div class="rs-select2--dark rs-select2--sm rs-select2--dark2">
                                         <select class="js-select2" name="type">
                                             <option selected="selected">Export</option>
@@ -233,7 +232,7 @@
                                             <option value="">Option 2</option>
                                         </select>
                                         <div class="dropDownSelect2"></div>
-                                    </div>
+                                    </div> {% endcomment %}
                                 </div>
                             </div>
                             <div class="table-responsive table-responsive-data2">
@@ -259,7 +258,7 @@
                                         <tr class="tr-shadow">
                                             <td style="font-size: medium;font-weight : bold;text-align: center;padding-top:60px">{{ forloop.counter }}</td>
 
-                                            <td class="desc" style="font-size: medium">
+                                            <td class="desc" style="font-size: medium;background-color:white">
 
                                                 <form method="get" action="{% url 'isell:show_product' %}">
                                                         <input type="hidden" name="product_no" value={{ each.product_id }} >
