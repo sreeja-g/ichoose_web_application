@@ -76,7 +76,8 @@ def export_data(request):
 
             seller = sellers.objects.get(seller=request.user)
             items = []
-
+            print("********************************************************")
+            print(seller)
             for each in seller.loan_list:
                 if days_selected_time_filter != "" and days_selected_time_filter != "100":
                     if (datetime.datetime.now() - each.loan_applied_date).days < int(days_selected_time_filter):
@@ -510,7 +511,8 @@ def applied_loans(request):
 
     seller = sellers.objects.get(seller=request.user)
     applied_loans = []
-
+    print("**********************************************")
+    print(seller)
     for each in seller.loan_list:
         if days_selected_time_filter != "" and days_selected_time_filter != "100":
             if (datetime.datetime.now() - each.loan_applied_date).days < int(days_selected_time_filter):
