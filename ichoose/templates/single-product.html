@@ -425,16 +425,29 @@
 								{{ product.product_name }}
 							</h4>
 							<table>
+							<form action="{% url 'ichoose:add_to_cart' product.pk %}" method="post">
+							 {% csrf_token %}
 								<tbody>
-									{% for k,v in product_details.product_remaining_details.items %}
-									<tr>
-										<td>{{k}}</td>
-										<td>{{v}}</td>
-
-									</tr>
-									{% endfor %}
+								<tr>
+									<td>Available Size:</td>
 									
+									{% for ep in product_size %}
+									
+									
+									<td><input type=radio name="size" value="{{ ep }}"> {{ ep }} </td>
+									{% endfor %}
+									</tr>
+									<tr>
+									<td>Available Colors: </td>
+										{% for j in product.product_color %}
+                            <td> <input type=radio name="color" value="{{ j }}">
+							<i class="fa fa-circle" style="color: {{ j }};border: black solid 1px;background-color: {{ j }} ;border-radius: 100%;">  </i>
+							</td>{% endfor %}
+							</tr>
+									
+									<td colspan="4"><button type="submit" name="feild">add</button></td>
 								</tbody>
+								</form>
 							</table><!-- /.table -->
 						</div><!-- /.tecnical-specs -->
 					</div><!-- /.col-md-12 -->

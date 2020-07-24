@@ -64,8 +64,8 @@ def profile(request):
 
 
 def index(request):
-    inital = {"items":[],"price":0.0,"count":0}
-    session = request.session.get("data", inital)
+    inital = {"items":[],"price":0.0,"count":0,"size":[],"color":[]}
+    session = request.session.get("data_", inital)
     product_wish = product.objects.filter(id__in=session["items"])
     count_cart= session["count"]
     cart_price = session["price"]
@@ -78,9 +78,10 @@ def index(request):
 
 #shop
 def product_grid(request):
+    
     products = None
-    inital = {"items":[],"price":0.0,"count":0}
-    session = request.session.get("data", inital)
+    inital = {"items":[],"price":0.0,"count":0,"size":[],"color":[]}
+    session = request.session.get("data_", inital)
     product_wish = product.objects.filter(id__in=session["items"])
     count_cart= session["count"]
     cart_price = session["price"]
@@ -110,13 +111,21 @@ def single_product(request, id=None):
         buyer_usernames.append(buyers.objects.get(pk=each.buyer_id).buyer.username)
     data = zip(instance.ratings_comments,buyer_usernames)
 
-    inital = {"items":[],"price":0.0,"count":0}
-    session = request.session.get("data", inital)
+    inital = {"items":[],"price":0.0,"count":0,"size":[],"color":[]}
+    session = request.session.get("data_", inital)
     product_wish = product.objects.filter(id__in=session["items"])
     count_cart= session["count"]
     cart_price = session["price"] 
 
     customisations_available = {}
+    product_remaining_details = {}
+    product_siz = []
+    product_siz = instance.product_size
+    product_size = product_siz.split(',')
+
+    for each1,each2 in instance.product_remaining_details[0].items():
+        product_remaining_details[each1] = each2.split(',')
+        product_remaining_details[each1].append('None')
 
     for k,v in instance.product_customisation_available[0].items():
         customisations_available[k] = v.split(',')
@@ -126,7 +135,9 @@ def single_product(request, id=None):
         'product':instance,
         'data':data,
         'product_wish':product_wish,'count_cart':count_cart,
-        'customisations_available' : customisations_available
+        'customisations_available' : customisations_available,
+        'product_remaining_details':product_remaining_details,
+        'product_size':product_size
     }
     return render(request,'single-product.html',context)
 
@@ -135,8 +146,8 @@ def single_product(request, id=None):
 def search(request):
     q = request.GET["search"]
     products = product.objects.filter(Q(product_title__icontains=q) | Q(product_name__icontains=q))
-    inital = {"items":[],"price":0.0,"count":0}
-    session = request.session.get("data", inital)
+    inital = {"items":[],"price":0.0,"count":0,"size":[],"color":[]}
+    session = request.session.get("data_", inital)
     product_wish = product.objects.filter(id__in=session["items"])
     count_cart= session["count"]
     cart_price = session["price"] 
@@ -150,8 +161,8 @@ def search(request):
 #wishlist
 def wishlist(request,id=None):
     
-    inital = {"items":[],"price":0.0,"count":0}
-    session1 = request.session.get("data", inital)
+    inital = {"items":[],"price":0.0,"count":0,"size":[],"color":[]}
+    session1 = request.session.get("data_", inital)
     session2 = request.session.get("mywishlist",inital)
     cart_count = session1["count"]
     product_ = product.objects.get(id=id)
@@ -169,9 +180,9 @@ def wishlist(request,id=None):
     return redirect('ichoose:ichoose_product_grid')
 
 def show_wishlist(request):
-    inital = {"items":[],"price":0.0,"count":0}
+    inital = {"items":[],"price":0.0,"count":0,"size":[],"color":[]}
     sess = request.session.get("mywishlist", inital)
-    session = request.session.get("data", inital)
+    session = request.session.get("data_", inital)
     products = product.objects.filter(id__in=sess["items"])
     count_cart= session["count"]
 
@@ -186,12 +197,13 @@ def add_to_cart(request, id=None):
                 "price" : 12342,
                 "count" : 5
                 }
-        request.session["data"] = data
+        request.session["data_"] = data
     """
-        
+    this_product = product.objects.get(pk=id)
     
-    inital = {"items":[],"price":0.0,"count":0}
-    session = request.session.get("data", inital)
+    inital = {"items":[],"size":[],"color":[],"price":0.0,"count":0,}
+    session = request.session.get("data_", inital)
+    
     # session["price"] = 0.0
     # session["count"] = 0
     session2 = request.session.get("mywishlist", inital)
@@ -203,12 +215,20 @@ def add_to_cart(request, id=None):
         session["items"].append(id)
         session["price"] += float(product_.product_final_price)
         session["count"] += 1
-        request.session["data"] = session
+        if request.POST.get('color') is None and request.POST.get('size') is None :
+            return redirect('single_product',id=id)
+        session["color"] = [request.POST.get('color')]
+        session["size"] = [request.POST.get('size')]
+        request.session["data_"] = session
     else:
+        if request.POST.get('color') is None and request.POST.get('size') is None :
+            return redirect('single_product',id=id)
+        session["color"] = [request.POST.get('color')]
+        session["size"] = [request.POST.get('size')]
         session["items"].append(id)
         session["price"] += float(product_.product_final_price)
         session["count"] += 1
-        request.session["data"] = session
+        request.session["data_"] = session
         
     products = product.objects.filter(id__in=session["items"])
     count_cart= session["count"]
@@ -217,8 +237,8 @@ def add_to_cart(request, id=None):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 def mycart(request):
-    inital = {"items":[],"price":0.0,"count":0}
-    sess = request.session.get("data", inital)
+    inital = {"items":[],"price":0.0,"count":0,"size":[],"color":[]}
+    sess = request.session.get("data_", inital)
     products = product.objects.filter(id__in=sess["items"])
     count_cart= sess["count"]
     context = {"products": products,
@@ -227,7 +247,7 @@ def mycart(request):
     return render(request, "shop-cart.html", context)
 
 def remove_wish(request,id):
-    inital = {"items":[],"price":0.0,"count":0}
+    inital = {"items":[],"price":0.0,"count":0,"size":[],"color":[]}
 
     session = request.session.get("mywishlist", inital)
     product_ = product.objects.get(id=id)
@@ -245,15 +265,15 @@ def remove_wish(request,id):
 
 
 def remove(request,id):
-    inital = {"items":[],"price":0.0,"count":0}
+    inital = {"items":[],"price":0.0,"count":0,"size":[],"color":[]}
 
-    session = request.session.get("data", inital)
+    session = request.session.get("data_", inital)
     product_ = product.objects.get(id=id)
     if id in session["items"]:
         session["items"].remove(id)
         session["price"] -= float(product_.product_final_price)
         session["count"] -= 1
-        request.session["data"] = session
+        request.session["data_"] = session
     
     products = product.objects.filter(id__in=session["items"])
     
@@ -291,8 +311,8 @@ def add_comment(request,id):
 
 # @login_required(login_url='/login/')
 def shipping_details(request):
-    inital = {"items":[],"price":0.0,"count":0}
-    sess = request.session.get("data", inital)
+    inital = {"items":[],"price":0.0,"count":0,"size":[],"color":[]}
+    sess = request.session.get("data_", inital)
     products = product.objects.filter(id__in=sess["items"])
     count_cart= sess["count"]
     context = {"products": products,
@@ -312,9 +332,15 @@ class HomePageView(TemplateView):
 def charge(request): # new
     print('923888888888888888888888888888888')
     print(request.POST['stripeToken'])
-    inital = {"items":[],"price":0.0,"count":0}
-    session = request.session.get("data", inital)
+    inital = {"items":[],"price":0.0,"count":0,"size":[],"color":[]}
+    session = request.session.get("data_", inital)
     price_ = int(session["price"])
+    size = session["size"]
+    print(size)
+
+    color = session["color"]
+    print(color)
+
     print(price_)
     if request.method == 'POST':
         
@@ -337,7 +363,7 @@ def charge(request): # new
             order_create.quantity = 1
             order_create.total_price = p.product_final_price * order_create.quantity
             order_create.payment_status = True
-            x = order_details_abs(product_title=p.product_title,category_1= p.category_1,category_2=p.category_2,product_description=p.product_description,product_name=p.product_name,product_color=p.product_color,product_detail=p.product_detail,product_size=p.product_size,product_price=p.product_price,product_discount=p.product_discount,product_final_price=p.product_final_price,product_remaining_details=p.product_remaining_details,images=p.images)
+            x = order_details_abs(product_title=p.product_title,category_1= p.category_1,category_2=p.category_2,product_description=p.product_description,product_name=p.product_name,product_color=color,product_detail=p.product_detail,product_size=size,product_price=p.product_price,product_discount=p.product_discount,product_final_price=p.product_final_price,product_remaining_details=p.product_remaining_details,images=p.images)
             order_create.order_details = x
             order_create.save()
             id_ = p.pk
@@ -345,7 +371,7 @@ def charge(request): # new
                 session["items"].remove(id_)
                 session["price"] -= float(p.product_final_price)
                 session["count"] -= 1
-                request.session["data"] = session
+                request.session["data_"] = session
         count_cart = session["count"]
         a=offlinewallet.objects.get(user=User.objects.filter(is_superuser=True)[0])
         print("afterorderrrrrrrrrr")
