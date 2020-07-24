@@ -347,6 +347,8 @@ def customization_requests_buyer(request):
     if request.method == 'POST':
 
         this_product = product.objects.get(pk = int(request.POST.get('product_id')))
+        this_buyer = buyers.objects.get(buyer = request.user)
+        this_seller = sellers.objects.get(seller = this_product.seller.seller)
         
         requested_customizations = {}
 
@@ -369,6 +371,10 @@ def customization_requests_buyer(request):
 
         this_product.customization_requests_list.append(customization_val_abs)
         this_product.save()
+        this_buyer.customization_requests_list.append(customization_val_abs)
+        this_buyer.save()
+        this_seller.customization_requests_list.append(customization_val_abs)
+        this_seller.save()
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
