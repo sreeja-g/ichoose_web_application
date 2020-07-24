@@ -1,5 +1,6 @@
 from django.urls import path
 from .views import *
+app_name='ichoose'
 urlpatterns = [
     path('', index , name='ichoose_home'),
     path('shop/' ,product_grid ,name='ichoose_product_grid' ),
@@ -13,6 +14,8 @@ urlpatterns = [
     path('add_comments/<int:id>/',add_comment ,name='add_comment'),
     path('shipping_details/',HomePageView.as_view() ,name='shipping_details'), 
     path('remove_wish/<int:id>/',remove_wish ,name='remove_wish'),
+    
+    path('paayment/',charge, name='charge'),
     
 
 ]
