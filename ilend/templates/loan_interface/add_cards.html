@@ -139,13 +139,22 @@ h1 {
 				</button>
 				<div class="collapse navbar-collapse" id="navbars-seo">
 					<ul class="navbar-nav ml-auto">
-						<li class="nav-item"><a class="nav-link" href="{%url 'loan_interface:home'%}" style="font-family: Arial, Helvetica, sans-serif;"  ><b>Home</b></a></li>
+						<li class="nav-item"><a class="nav-link" href="{% url 'registration:home' %}" style="font-family: Arial, Helvetica, sans-serif;"  ><b>Home</b></a></li>
                         <li class="nav-item"><a class="nav-link" href="{%url 'loan_interface:wallet'%}" style="font-family: Arial, Helvetica, sans-serif;" ><b>add money</b></a></li>
                         <li class="nav-item active"><a class="nav-link" href="{%url 'loan_interface:displaycard'%}" style="font-family: Arial, Helvetica, sans-serif;" ><b>Add Cards</b></a></li>
                         <li class="nav-item"><a class="nav-link" href="{%url 'loan_interface:viewcard'%}" style="font-family: Arial, Helvetica, sans-serif;"><b>view card</b></a></li>
-                       
-                        <li class="nav-item"><a class="nav-link" href=""style="font-family: Arial, Helvetica, sans-serif;"><b>Edit Profile</b></a></li>
-                        </ul>
+                        <li class="nav-item "><a class="nav-link" href="{%url 'loan_interface:home'%}">Dashboard</a></li>
+                        <li class="nav-item dropdown">
+							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							  Hi..{{user}}
+							</a>
+							<div class="  dropdown-menu" aria-labelledby="navbarDropdown">
+							  <a class="dropdown-item,nav-link" href="#">Edit Profile</a>
+							  
+							  <div class="dropdown-divider"></div>
+							  <a class="dropdown-item,nav-link" href="#">Logout</a>
+							</div>
+						  </li>                        </ul>
 				</div>
 			</div>
 		</nav>
@@ -254,7 +263,7 @@ h1 {
                                 <i class="fa-check" aria-hidden="true"></i>
                             </span>
                         </div>
-                      
+                        
                     <div class="container-login100-form-btn">
 						<button class="login100-form-btn"style="background-color:darkorange;" >
 							Add to Card
