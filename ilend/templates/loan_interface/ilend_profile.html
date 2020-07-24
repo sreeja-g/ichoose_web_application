@@ -33,9 +33,9 @@
   <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
     <div class="navbar-nav" style="position: absolute; right: 100px; top: 15px">
       <a class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
-      <a class="nav-item nav-link" href="#">Wishlist</a>
-      <a class="nav-item nav-link" href="{% url 'ichoose:profile' %}">Profile</a>
-      <a class="nav-item nav-link disabled" href="">Logout</a>
+      <a class="nav-item nav-link" href="#">History</a>
+      <a class="nav-item nav-link" href="#">Profile</a>
+      <a class="nav-item nav-link disabled" href="#">Logout</a>
     </div>
   </div>
 </nav>
@@ -87,31 +87,21 @@
                                   <div class="col-sm-6">
                                       <div class="form-group">
                                         <label>Name <small>(required)</small></label>
-                                        <input name="{{ profile.username }}" type="text" class="form-control" placeholder="Name">
+                                        <input name="{{ lend_profile.lenders.username }}" type="text" class="form-control" placeholder="First Name">
                                       </div>
                                       <div class="form-group">
-                                        <label>Mobile Number <small>(required)</small></label>
-                                        <input name="{{ profile.mobile }}" type="text" class="form-control" placeholder="Last Name">
+                                        <label>Mobile Number<small>(required)</small></label>
+                                        <input name="{{ lend_profile.lenders.mobile }}" type="text" class="form-control" placeholder="Last Name">
                                       </div>
                                       <div class="form-group">
-                                            <label>Address</label>
-                                            <input type="text" class="form-control" name="{{ profile.address }}" placeholder="Address">
-                                      </div>
-                                  </div>
-                                  <div class="col-sm-10 col-sm-offset-1">
-                                      <div class="form-group" style="width: 250px">
-                                            <label>Product Count</label>
-                                            <input type="number" class="form-control" name="{{ len_product }}" placeholder="Product Count">
-                                      </div>
-                                      <div class="form-group" style="width: 250px;position: absolute;right: 20px;top: 0px">
-                                            <label>Order Count</label>
-                                            <input type="number" class="form-control" name="{{ len_order }}" placeholder="Order Count">
+                                        <label>Address<small>(required)</small></label>
+                                        <input name="{{ lend_profile.lenders.address }}" type="text" class="form-control" placeholder="Last Name">
                                       </div>
                                   </div>
                                   <div class="col-sm-10 col-sm-offset-1">
                                       <div class="form-group">
                                           <label>Email <small>(required)</small></label>
-                                          <input name="{{ profile.email }}" type="email" class="form-control" placeholder="anything@gmail.com">
+                                          <input name="email" type="email" class="form-control" placeholder="anything@gmail.com">
                                       </div>
                                   </div>
                               </div>
@@ -121,6 +111,7 @@
                             <div class="pull-right">
                                 <input type='button' class='btn btn-next btn-fill btn-warning btn-wd btn-sm' name='next' value='Next' />
                                 <input type='button' class='btn btn-finish btn-fill btn-warning btn-wd btn-sm' name='finish' value='Finish' />
+
                             </div>
 
                             <div class="pull-left">
@@ -150,6 +141,13 @@
 
 	<!--  More information about jquery.validate here: http://jqueryvalidation.org/	 -->
 	<script src="{% static 'assets/js/jquery.validate.min.js' %}"></script>
+    <script>
 
+
+        var searchBox = new google.maps.places.SearchBox(document.getElementById('mapsearch1'));
+        var searchBox = new google.maps.places.SearchBox(document.getElementById('mapsearch2'));
+
+  </script>
+ <script src="http://maps.google.com/maps/api/js?key=AIzaSyCe2otGPKiUf4Qq35MmOfDWHaQm-Cjtopw&libraries=places"></script>
 
 </html>

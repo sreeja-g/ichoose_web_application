@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import HttpResponse, get_object_or_404, redirect, render, HttpResponseRedirect
 from .models import *
 from isell.models import *
@@ -41,11 +42,22 @@ def flutter_verify(request):
     p.Verification_step_1 = final_dictionary['Verification_step_1']
     p.Verification_step_2 = final_dictionary['Verification_step_2']
     p.Verification_step_3 = final_dictionary['Verification_step_3']
+    if p.Verification_step_1 == p.Verification_step_2 == p.Verification_step_3 == 'True':
+        User.verification_status = 'True'
+    else:
+        User.verification_status = 'False'
     p.save()
-    return None
+    return render(request, '')
 
+
+
+@login_required(login_url='/login/')
 def profile(request):
-    return render(request, 'profile.html')
+    profile = User.objects.all()
+    context = {
+        'profile': profile,
+    }
+    return render(request, 'profile.html',context)
 
 
 
@@ -140,7 +152,7 @@ def wishlist(request,id=None):
     inital = {"items":[],"price":0.0,"count":0}
     session1 = request.session.get("data", inital)
     session2 = request.session.get("mywishlist",inital)
-    cart_count = seaaion1["count"]
+    cart_count = session1["count"]
     product_ = product.objects.get(id=id)
     if id in session1["items"]:
         messages.error(request, "Already in cart")

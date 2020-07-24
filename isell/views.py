@@ -13,6 +13,7 @@ from ichoose.category_types import categories
 
 from ilend.models import offlinewallet, lenders
 
+
 def test_verification(user):
     if user.verification_status==True:
         return True

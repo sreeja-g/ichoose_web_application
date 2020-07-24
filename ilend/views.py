@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.conf import settings 
 from ilend.models import lender_details,lenders,offlinewallet,lcards

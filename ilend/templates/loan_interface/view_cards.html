@@ -166,19 +166,20 @@ svg {
                         <li class="nav-item"><a class="nav-link" href="{%url 'loan_interface:wallet'%}">add money</a></li>
                         <li class="nav-item"><a class="nav-link" href="{%url 'loan_interface:displaycard'%}">Add Cards</a></li>
                         <li class="nav-item active"><a class="nav-link" href="{%url 'loan_interface:viewcard'%}">view card</a></li>
+
                         <li class="nav-item "><a class="nav-link" href="{%url 'loan_interface:home'%}">Dashboard</a></li>
                         <li class="nav-item dropdown">
 							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 							  Hi..{{user}}
 							</a>
 							<div class="  dropdown-menu" aria-labelledby="navbarDropdown">
-							  <a class="dropdown-item,nav-link" href="#">Edit Profile</a>
+							  <a class="dropdown-item,nav-link" href="{% url 'ichoose:profile' %}">Edit Profile</a>
 							  
 							  <div class="dropdown-divider"></div>
 							  <a class="dropdown-item,nav-link" href="#">Logout</a>
 							</div>
 						  </li>
-						
+
 					</ul>
 				</div>
 			</div>
