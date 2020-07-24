@@ -362,19 +362,19 @@ def customization_requests_buyer(request):
         customization_val.request_status = True
         customization_val.save()
 
-        customization_val_abs = customization_abs(customization_id = customization_val.pk)
-        customization_val_abs.buyer = customization_val.buyer
-        customization_val_abs.product = customization_val.product
-        customization_val_abs.date_time = customization_val.date_time
-        customization_val_abs.customization_details = customization_val.customization_details
-        customization_val_abs.request_status = customization_val.request_status
+        # customization_val_abs = customization_abs(customization_id = customization_val.pk)
+        # customization_val_abs.buyer = customization_val.buyer
+        # customization_val_abs.product = customization_val.product
+        # customization_val_abs.date_time = customization_val.date_time
+        # customization_val_abs.customization_details = customization_val.customization_details
+        # customization_val_abs.request_status = customization_val.request_status
 
-        this_product.customization_requests_list.append(customization_val_abs)
-        this_product.save()
-        this_buyer.customization_requests_list.append(customization_val_abs)
-        this_buyer.save()
-        this_seller.customization_requests_list.append(customization_val_abs)
-        this_seller.save()
+        # # this_product.customization_requests_list.append(customization_val_abs)
+        # # this_product.save()
+        # # this_buyer.customization_requests_list.append(customization_val_abs)
+        # # this_buyer.save()
+        # # this_seller.customization_requests_list.append(customization_val_abs)
+        # # this_seller.save()
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
