@@ -436,10 +436,18 @@
 									
 									<td><input type=radio name="size" value="{{ ep }}"> {{ ep }} </td>
 									{% endfor %}
+									{% for ep in size %}
+									
+									
+									<td><input type=radio name="size" value="{{ ep }}"> {{ ep }} </td>
+									{% endfor %}
 									</tr>
 									<tr>
 									<td>Available Colors: </td>
 										{% for j in product.product_color %}
+                            <td> <input type=radio name="color" value="{{ j }}">
+							<i class="fa fa-circle" style="color: {{ j }};border: black solid 1px;background-color: {{ j }} ;border-radius: 100%;">  </i>
+							</td>{% endfor %}{% for j in color %}
                             <td> <input type=radio name="color" value="{{ j }}">
 							<i class="fa fa-circle" style="color: {{ j }};border: black solid 1px;background-color: {{ j }} ;border-radius: 100%;">  </i>
 							</td>{% endfor %}

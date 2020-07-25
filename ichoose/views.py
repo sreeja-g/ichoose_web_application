@@ -131,13 +131,28 @@ def single_product(request, id=None):
         customisations_available[k] = v.split(',')
         customisations_available[k].append('None')
 
+    color = []
+    size = []
+    for each in buyers.objects.get(buyer=request.user).customization_requests_list:
+        if each.product_id == instance.pk : 
+            try:
+                color.append(each.accepted_details[0]['color'])
+            except:
+                pass
+            try:
+                size.append(each.accepted_details[0]['size'])
+            except:
+                pass
+
     context={
         'product':instance,
         'data':data,
         'product_wish':product_wish,'count_cart':count_cart,
         'customisations_available' : customisations_available,
         'product_remaining_details':product_remaining_details,
-        'product_size':product_size
+        'product_size':product_size,
+        'color':color,
+        'size':size
     }
     return render(request,'single-product.html',context)
 
@@ -217,8 +232,8 @@ def add_to_cart(request, id=None):
         session["count"] += 1
         if request.POST.get('color') is None and request.POST.get('size') is None :
             return redirect('single_product',id=id)
-        session["color"] = [request.POST.get('color')]
-        session["size"] = [request.POST.get('size')]
+        session["color"] = request.POST.get('color')
+        session["size"] = request.POST.get('size')
         request.session["data_"] = session
     else:
         if request.POST.get('color') is None and request.POST.get('size') is None :
