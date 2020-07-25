@@ -131,7 +131,7 @@ def addcard(request):
                     print(a)
                     a.price+=(int(cards)*int(money))
                     a.save(update_fields=['price'])
-                    p.remain_priceforloans=(p.remain_priceforloans-(int(cards)*int(money)))
+                    # p.remain_priceforloans=(p.remain_priceforloans-(int(cards)*int(money)))
                     p.save()
                    
                     y[0].save(update_fields=['no_of_cards'])
@@ -143,7 +143,7 @@ def addcard(request):
                     a=offlinewallet.objects.get(user=User.objects.filter(is_superuser=True)[0])
                     a.price+=(int(cards)*int(money))
                     a.save(update_fields=['price'])
-                    p.remain_priceforloans=(p.remain_priceforloans-(int(cards)*int(money)))
+                    # p.remain_priceforloans=(p.remain_priceforloans-(int(cards)*int(money)))
                     p.save()
                     y[0].save()
                           
@@ -160,7 +160,7 @@ def addcard(request):
                     
                     a.price+=(int(cards)*int(money))
                     a.save(update_fields=['price'])
-                    p.remain_priceforloans=(p.remain_priceforloans-(int(cards)*int(money)))
+                    # p.remain_priceforloans=(p.remain_priceforloans-(int(cards)*int(money)))
                     p.save()
 
                     lcards.objects.create(lender=lenders.objects.get(lender=request.user),money=[int(money)],no_of_cards=[int(cards)])
@@ -201,10 +201,10 @@ def charge(request): # new
         if len(p)>0:
             p1=offlinewallet.objects.get(user=lenders.objects.get(lender=request.user).lender) 
             p1.price = p1.price+int(price)
-            p1.remain_priceforloans=p1.price
+            # p1.remain_priceforloans=p1.price
             p1.save()
         else:
-            p=offlinewallet(username=username,price=price,remain_priceforloans=price)
+            # p=offlinewallet(username=username,price=price,remain_priceforloans=price)
             p.save()
       
         context={'price':request.POST.get('price')}
