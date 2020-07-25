@@ -196,20 +196,21 @@ def add_to_cart(request, id=None):
     session2 = request.session.get("mywishlist", inital)
     product_ = product.objects.get(id=id)
     if id in session["items"]:
-        messages.error(request, "Already added to cart")
+        print('yes')
     elif id in session2["items"]:
+        if request.POST.get('color') is None and request.POST.get('size') is None :
+            return redirect('/')
         session2["items"].remove(id)
         session["items"].append(id)
         session["price"] += float(product_.product_final_price)
         session["count"] += 1
-        if request.POST.get('color') is None and request.POST.get('size') is None :
-            return redirect('single_product',id=id)
+        
         session["color"] = [request.POST.get('color')]
         session["size"] = [request.POST.get('size')]
         request.session["data_"] = session
     else:
         if request.POST.get('color') is None and request.POST.get('size') is None :
-            return redirect('single_product',id=id)
+            return redirect('/')
         session["color"] = [request.POST.get('color')]
         session["size"] = [request.POST.get('size')]
         session["items"].append(id)
@@ -230,6 +231,7 @@ def mycart(request):
     count_cart= sess["count"]
     context = {"products": products,
                 "count_cart":count_cart,
+                "total":sess["price"],
             }
     return render(request, "shop-cart.html", context)
 
@@ -296,7 +298,7 @@ def add_comment(request,id):
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
-# @login_required(login_url='/login/')
+@login_required(login_url='/login/')
 def shipping_details(request):
     inital = {"items":[],"price":0.0,"count":0,"size":[],"color":[]}
     sess = request.session.get("data_", inital)

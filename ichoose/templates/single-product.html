@@ -147,7 +147,9 @@
 										<div class="icon-cart">
 											<img src="{% static 'images/icons/cart.png' %}" alt="">
 											
-											<span>{{ count_cart }}</span>
+											{% if count_cart %}
+												<span>{{ count_cart }}</span>
+												{% endif %}
 											
 										</div>
 										
