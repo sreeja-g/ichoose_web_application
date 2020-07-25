@@ -308,7 +308,7 @@ def  money_loan(p,order_,order_id):
                 nested_cards[i].append([m1[i].money[j],m1[i].lender_id])
     
     print(nested_cards)
-    nested_cards_copy=ccopy.deepcopy(nested_cards)
+    nested_cards_copy=copy.deepcopy(nested_cards)
     print(nested_cards_copy)
     count=0
     for i in sorted(actual_card):
@@ -317,21 +317,35 @@ def  money_loan(p,order_,order_id):
         if(count==len(nested_cards_copy[0])):
             print("if")
             count=0
-            nested_cards_copy[0][count].remove(i)
+            try:
+                nested_cards_copy[0][count].remove(i)
+            except:
+                pass
             count=count+1
         else:
              print("else")
              if i in nested_cards_copy[0][count]:
                 print(i,nested_cards_copy[0][count])
+                # try:
                 nested_cards_copy[0][count].remove(i)
-                count=count+1
+                # except:
+                #     pass
+                # count=count+1
              else:
                 if(count<len(nested_cards_copy)-1):
-                 count=count+1
-                 nested_cards_copy[0][count].remove(i)
+                    count=count+1
+                    try:
+                        nested_cards_copy[0][count].remove(i)
+                    except:
+                        pass
                 else:
                     count=0
-                    nested_cards_copy[0][count].remove(i)
+                    print(nested_cards_copy[0][count])
+                    print(i)
+                    try:
+                        nested_cards_copy[0][count].remove(i)
+                    except:
+                        pass
 
         print("nested_cards")       
         print(nested_cards_copy)

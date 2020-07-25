@@ -230,14 +230,11 @@ def add_to_cart(request, id=None):
         session["items"].append(id)
         session["price"] += float(product_.product_final_price)
         session["count"] += 1
-        if request.POST.get('color') is None and request.POST.get('size') is None :
-            return redirect('single_product',id=id)
         session["color"] = request.POST.get('color')
         session["size"] = request.POST.get('size')
         request.session["data_"] = session
     else:
-        if request.POST.get('color') is None and request.POST.get('size') is None :
-            return redirect('single_product',id=id)
+        
         session["color"] = [request.POST.get('color')]
         session["size"] = [request.POST.get('size')]
         session["items"].append(id)
