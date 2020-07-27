@@ -33,9 +33,14 @@
   <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
     <div class="navbar-nav" style="position: absolute; right: 100px; top: 15px">
       <a class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
-      <a class="nav-item nav-link" href="#">Wishlist</a>
-      <a class="nav-item nav-link" href="{% url 'ichoose:profile' %}">Profile</a>
-      <a class="nav-item nav-link disabled" href="">Logout</a>
+      {% if user.is_authenticated %}
+          <a href="{% url 'ichoose:profile' %}" class="nav-item nav-link" title=""> Account </a>
+          <a href="{% url 'registration:logout' %}" class="nav-item nav-link" title=""> logout </a>
+      {% else %}
+          <a href="{% url 'registration:login' %}" class="nav-item nav-link" title=""> Login </a>
+          <a href="{% url 'registration:signup' %}" class="nav-item nav-link" title="">Sign up</a>
+
+      {% endif %}
     </div>
   </div>
 </nav>
@@ -119,16 +124,14 @@
                         </div>
                         <div class="wizard-footer height-wizard">
                             <div class="pull-right">
-                                <input type='button' class='btn btn-next btn-fill btn-warning btn-wd btn-sm' name='next' value='Next' />
-                                <input type='button' class='btn btn-finish btn-fill btn-warning btn-wd btn-sm' name='finish' value='Finish' />
+                                <input type='button' class='btn  btn-fill btn-warning btn-wd btn-sm' name='finish' value='Finish' />
                             </div>
 
-                            <div class="pull-left">
-                                <input type='button' class='btn btn-previous btn-fill btn-default btn-wd btn-sm' name='previous' value='Previous' />
+                            <div class="pull-left" style="padding-top: -20px;">
+                                <button style="height: 30px" class='btn  btn-fill btn-default btn-wd btn-sm' href="{% url 'loan_interface:wallet' %}" value='wallet'>Wallet</button>
                             </div>
                             <div class="clearfix"></div>
                         </div>
-
                     </form>
                 </div>
             </div> <!-- wizard container -->

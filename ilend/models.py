@@ -18,7 +18,7 @@ class offlinewallet(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='user_id_offlinewallet')
 
     price = models.IntegerField()
-    remain_priceforloans=models.IntegerField(default=0)
+    # remain_priceforloans=models.IntegerField(default=0)
 
 
 class lcards(models.Model):
