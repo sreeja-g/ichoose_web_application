@@ -486,7 +486,8 @@ def loan_taken(order_id,amount,accept):
             return (True, a.price)
 
 
-def money_return(order_id=1):
+def money_return(order_id):
+    print('cvghjkljhgffghjkkjhg')
     order_=order.objects.get(pk=order_id)
     p=float(order_.total_price)-1.05*int(loan.objects.get(order=order_).loan_amount)
     if(order_.delivery_status==True):
@@ -502,7 +503,7 @@ def money_return(order_id=1):
                 
                 lenders_list=[]
                 money_list=[]
-                q1=lender_details.objects.filter(loan_on_order_id=13)
+                q1=lender_details.objects.filter(loan_on_order_id=order_id)
                 print(q1)
                 for i in range(len(q1)):
                     
@@ -516,6 +517,7 @@ def money_return(order_id=1):
                 a=offlinewallet.objects.get(user=User.objects.filter(is_superuser=True)[0])
                 a.price=a.price-float(order_.total_price)
                 a.save()
+                print('kjhgfuioghguhiopiuytrtytuiolkjb vbnklpoiuytrtyuiopknbnn');
             
                 
                 loan_change = loan.objects.get(order=order_)

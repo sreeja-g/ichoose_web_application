@@ -38,7 +38,8 @@ class  SellVerifyAPI(generics.ListCreateAPIView):
 def flutter_verify(request):
     body_unicode = request.body.decode('utf-8')
     final_dictionary = eval(body_unicode)
-    p=seller_verification_process.objects.filter(name=final_dictionary['name'])[0]
+    print(final_dictionary)
+    p=seller_verification_process.objects.filter(seller=User.objects.get(pk=int(final_dictionary['name'])))[0]
     p.Verification_step_1 = final_dictionary['Verification_step_1']
     p.Verification_step_2 = final_dictionary['Verification_step_2']
     p.Verification_step_3 = final_dictionary['Verification_step_3']
@@ -48,6 +49,16 @@ def flutter_verify(request):
         User.verification_status = 'False'
     p.save()
     return render(request, '')
+    if p.Verification_step_1 == p.Verification_step_2 == p.Verification_step_3 == "True":
+        k= User.objects.get(pk=int(final_dictionary['name']))
+        print(k)
+        k.verification_status = "True"
+        k.save()
+        sellers.objects.create(seller=User.objects.get(pk=int(final_dictionary['name'])))
+    else:
+        User.verification_status = 'False'
+    p.save()
+    return redirect(reverse('isell:isell_home'))
 
 
 
