@@ -6,7 +6,7 @@ from ichoose.models import seller_verification_process
 class SellerVerify(serializers.ModelSerializer):
     class Meta:
         model = seller_verification_process
-        fields = ('city','name','address_line_1','address_line_2','seller')
+        fields = ('city','name','address_line_1','address_line_2')
 
 
 class SellUserVerify(serializers.ModelSerializer):

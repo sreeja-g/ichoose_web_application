@@ -161,7 +161,7 @@ def isell_home(request):
 def statistics(request):
     
     product_chart_data = product.objects.filter(seller=sellers.objects.get(seller=request.user)).values('date_of_post').annotate(Count('id')).order_by('date_of_post')
-    # print(product_chart_data[0])
+    print(product_chart_data[0])
     product_chart_data = product_chart_data[:100] if len(product_chart_data) > 100 else product_chart_data
     product_chart_data_month_year_filtered = {}
     for each in product_chart_data:
@@ -172,7 +172,7 @@ def statistics(request):
 
     products_chart = get_chart(product_chart_data_month_year_filtered,'your_products')
 
-    # print(products_chart.as_html())
+    print(products_chart.as_html())
 
     orders_chart_data=[]
     for each in sellers.objects.get(seller=request.user).product_list:
@@ -188,7 +188,7 @@ def statistics(request):
 
     orders_chart = get_chart(orders_chart_data_month_year_filtered,'your_orders')
 
-    # print(orders_chart.as_html())
+    print(orders_chart.as_html())
 
     orders_delivered_chart_data=[]
     for each in sellers.objects.get(seller=request.user).product_list:

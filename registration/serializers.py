@@ -5,5 +5,5 @@ from ichoose.models import seller_verification_process
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('email','password','address','id')
+        fields = ('email','password','address')
 
