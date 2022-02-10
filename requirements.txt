@@ -6,7 +6,7 @@ chardet==3.0.4
 cryptography==2.9
 dataclasses==0.6
 defusedxml==0.6.0
-Django==2.2.12
+Django==2.2.27
 django-graphos==0.3.41
 django-nonrel-enuff==0.4
 djangorestframework==3.11.0
